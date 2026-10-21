@@ -17,13 +17,30 @@ p { margin: 0 0 1rem; }
 .topbar { background: var(--navy); color: #dce5ef; font-size: .74rem; letter-spacing: .035em; }
 .topbar .container { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 36px; }
 .topbar a { color: white; font-weight: 600; }
-.masthead { display: flex; align-items: center; justify-content: space-between; gap: 32px; min-height: 132px; }
+.topbar .container { align-items:flex-start; gap:24px; }
+.topbar .main-nav { flex:1; min-width:0; border:0; background:transparent; }
+.topbar .main-nav .nav-link { color:white; letter-spacing:0; padding:14px 0 !important; }
+.topbar .main-nav .nav-link.active, .topbar .main-nav .nav-link:hover, .topbar .main-nav .nav-link:focus-visible { color:var(--gold); border-bottom-color:var(--gold); }
+.topbar .dropdown-item { color:var(--ink); }
+.manager-login { flex-shrink:0; padding:16px 0; white-space:nowrap; }
+.site-header { background:white; border-bottom:1px solid var(--line); }
+.masthead { display:grid; grid-template-columns:minmax(0,1fr) 290px; align-items:center; gap:20px 28px; min-height:132px; padding-top:20px; padding-bottom:20px; }
+.masthead .site-brand { grid-column:1; grid-row:1; gap:12px; }
+.masthead .identity-logos { gap:8px; }
+.masthead .identity-logos img { width:56px; height:56px; }
+.masthead .brand-title { font-size:1.18rem; }
+.masthead .header-search { grid-column:2; justify-self:end; }
+.header-navigation { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; width:100%; min-width:0; }
 .site-brand { display: flex; align-items: center; gap: 20px; min-width: 0; }
 .site-brand:hover { color: var(--navy); }
 .site-brand>span:last-child { min-width: 0; }
 .brand-monogram { width: 78px; height: 78px; flex: 0 0 78px; border: 1px solid #c3a05b; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: Georgia, serif; font-size: 27px; line-height: 1.15; color: var(--navy); background: #fff; border-radius: 50%; }
 .brand-monogram span { font-family: "Segoe UI", sans-serif; font-size: 7px; letter-spacing: .1em; margin-top: 5px; }
 .brand-logo { object-fit: contain; width: 78px; height: 78px; }
+.identity-logos { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+.identity-logos img { width:78px; height:78px; object-fit:contain; background:white; border-radius:4px; }
+@media(max-width:991.98px){.identity-logos{gap:8px}.identity-logos img{width:56px;height:56px}}
+@media(max-width:480px){.site-brand{gap:10px}.identity-logos{gap:6px}.identity-logos img{width:44px;height:44px}}
 .brand-kicker, .brand-title, .brand-caption { display: block; }
 .brand-kicker { text-transform: uppercase; color: #6a737c; font-size: .66rem; letter-spacing: .2em; font-weight: 650; }
 .brand-title { font-size: clamp(1.2rem, 2vw, 1.7rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.5; }
@@ -32,8 +49,8 @@ p { margin: 0 0 1rem; }
 .header-search input { width: 100%; min-width: 0; border: 0; background: transparent; padding: 12px 0; color: var(--navy); font-size: .8rem; }
 .header-search button { border: 0; padding: 8px 12px; background: transparent; color: var(--navy); }
 .main-nav { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: white; padding: 0; }
-.main-nav .navbar-nav { gap: 20px; }
-.main-nav .nav-link { color: #34495e; font-size: .82rem; font-weight: 650; padding: 18px 0 !important; border: 0; border-bottom: 3px solid transparent; background: none; }
+.main-nav .navbar-nav { gap:16px; }
+.main-nav .nav-link { color: #34495e; font-size: .82rem; font-weight: 650; padding: 12px 0 !important; border: 0; border-bottom: 3px solid transparent; background: none; white-space:nowrap; }
 .main-nav .nav-link.active, .main-nav .nav-link:hover { color: var(--navy); border-bottom-color: #b58d39; }
 .main-nav .dropdown-menu { border: 1px solid var(--line); border-radius: 3px; box-shadow: 0 12px 35px #112b4715; min-width: 290px; padding: 10px; z-index: 1100; }
 .main-nav .dropdown-item { font-size: .86rem; padding: 9px 12px; white-space: normal; }

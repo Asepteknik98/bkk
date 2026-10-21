@@ -67,6 +67,19 @@ function content_image(?string $path): string
     return asset_url('images/placeholder.svg');
 }
 
+/** Logo bawaan lokal; pengaturan pengelola yang valid tetap dapat menggantikannya. */
+function site_logos(): array
+{
+    $logos = [];
+    foreach (['school_logo' => 'jb.webp', 'bkk_logo' => 'ppks.jpeg'] as $key => $fallback) {
+        $configured = setting($key);
+        $url = content_image($configured);
+        $logos[$key] = $configured !== '' && $url !== asset_url('images/placeholder.svg')
+            ? $url : asset_url('images/' . $fallback);
+    }
+    return $logos;
+}
+
 function demo_label(array $item): void
 {
     foreach (['judul', 'slug', 'ringkasan', 'isi', 'perusahaan', 'posisi', 'deskripsi', 'nama'] as $key) {

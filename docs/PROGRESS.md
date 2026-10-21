@@ -133,3 +133,29 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 ## Perubahan setelah audit
 
 - README.md dihapus atas permintaan pengguna agar repository GitHub tidak memuat README. Catatan tahap sebelumnya merupakan riwayat; README tidak lagi tersedia.
+
+## Logo sekolah, PPKS, dan favicon
+
+- Setelah konfirmasi pengguna, kedua logo ditampilkan bersama pada header publik dan panel: assets/images/jb.webp (sekolah) dan ppks.jpeg (Pusat Pengembangan Karir Siswa). Helper site_logos() menyediakan bawaan lokal dan fallback bila pengaturan logo kosong/hilang; logo valid dari pengaturan tetap didukung.
+- Favicon publik, panel, dan login memakai ppks.jpeg dengan MIME image/jpeg dan URL helper agar mendukung subfolder. Logo menggunakan alt yang jelas dan object-fit contain, dengan ukuran responsif tanpa mengubah berkas asli. Tidak mengubah database/SQL atau membuat README kembali.
+- Lint lima PHP berubah dan git diff --check lulus. Integrasi HTTP/database sementara lulus. Chrome memverifikasi dua gambar termuat, favicon /bkk/assets/images/ppks.jpeg, serta tidak ada overflow pada 320/390/768/1440 untuk publik/panel/login. Artefak QA lokal dibersihkan.
+
+## Menu navigasi dalam header publik
+
+- Setelah klarifikasi dan persetujuan pengguna, menu Beranda sampai Pencarian disatukan dengan area logo/nama sekolah dalam header publik. Desktop memakai grid identitas di kiri, pencarian dan menu di kanan; navbar tidak lagi menjadi baris terpisah di luar header. Panel tidak diubah.
+- Mobile/tablet tetap memakai toggle Bootstrap dan dropdown lima program, dengan navigasi aktif/tautan lama dipertahankan. Perubahan terbatas pada layout header/navbar dan CSS utama/responsif.
+- Lint dua layout PHP dan integrasi HTTP/database sementara lulus. Chrome pada salinan HTML hasil render memverifikasi struktur header, posisi menu desktop, toggle/dropdown, serta tidak ada overflow pada 320/390/768/1024/1200/1440 piksel. Screenshot desktop diperiksa; artefak QA workspace dibersihkan. Tidak mengubah SQL/database atau membuat README.
+
+## Navigasi pada bar navy paling atas
+
+- Mengikuti gambar terbaru pengguna, seluruh menu dipindahkan dari masthead ke topbar navy, menggantikan teks Portal Bursa Kerja Khusus. Login Pengelola tetap di kanan; dua logo, nama sekolah, dan pencarian tetap pada area putih di bawah. Hanya layout publik dan CSS terkait yang berubah.
+- Teks menu putih, menu aktif/hover emas, isi dropdown gelap pada latar putih. Memperkuat specificity CSS setelah pemeriksaan screenshot menemukan aturan nav lama menimpa warna. Pada ponsel, tombol Menu berada di kiri dan Login di kanan; dropdown/tautan aktif tetap tersedia.
+- Lint PHP dan integrasi HTTP/database sementara lulus. Uji browser awal struktur topbar, toggle/dropdown dan overflow lulus pada 320/390/768/1024/1200/1440. Setelah koreksi warna, computed style putih/emas dan interaksi diverifikasi pada 320; pengulangan lintas viewport terganggu reset koneksi server preview, bukan error aplikasi. Tidak mengubah SQL/database. Artefak QA dibersihkan.
+
+## Sidebar panel profesional dengan tema
+
+- Atas instruksi pengguna mengikuti referensi sidebar, panel Admin/Staf memakai sidebar navy–emas dengan ikon SVG lokal, menu aktif, mode penuh/ikon, serta tema terang/gelap. Preferensi sidebar dan tema disimpan di localStorage, dipulihkan sebelum stylesheet tema untuk mengurangi kedipan. Tidak menambah library.
+- Layout panel bersama diperbarui; logo sekolah/PPKS dan favicon dipertahankan. Akun tampil pada navbar; Keluar dipindah ke bawah sidebar dengan POST+CSRF. Menu Pengguna/Pengaturan tetap hanya Admin dan middleware/handler tidak dilonggarkan. Ikon statis berasal dari panel/layouts/icons.php, gaya baru terpisah pada assets/css/panel-theme.css.
+- Sidebar desktop sticky mengikuti tinggi navbar yang diukur ResizeObserver; area menu dapat digulir, tombol tema/Keluar tetap terlihat. Mode ikon mempertahankan title/aria-label menu. Pada layar <=900px, drawer memakai backdrop, tombol tutup/Escape, focus trap dan pengembalian fokus ke tombol pembuka; konten belakang inert saat drawer terbuka. Tanpa JavaScript, daftar menu tetap dapat diakses.
+- Suite HTTP/database sementara akun/mitra/pengaturan dan integrasi publik/dashboard lulus, termasuk kedua role, penolakan halaman/handler Admin bagi Staf, logout dan CSRF. Lint layout PHP dan git diff --check lulus. Tidak mengubah SQL/database atau membuat README.
+- Chrome pada snapshot HTML hasil render memverifikasi dashboard/daftar/form mitra/pengaturan pada 320/390/768/1024/1440: tanpa overflow, collapse 88px, label aksesibel, tema light/dark dan penyimpanan preferensi, drawer/Escape/backdrop/focus trap, posisi Keluar dalam viewport desktop. Preferensi saat dokumen dimuat ulang dan navigasi tanpa JavaScript juga lulus. Screenshot desktop/mobile diperiksa; artefak QA dibersihkan.

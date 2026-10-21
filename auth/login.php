@@ -13,6 +13,7 @@ unset($_SESSION['login_error']);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login Pengelola — <?= e(app_config('name')) ?></title>
+    <link rel="icon" type="image/jpeg" href="<?= e(asset_url('images/ppks.jpeg')) ?>">
     <link rel="stylesheet" href="<?= e(asset_url('css/panel.css')) ?>">
 </head>
 <body class="login-page">

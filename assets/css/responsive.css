@@ -1,7 +1,12 @@
 @media (max-width: 1199.98px) {
     .mobile-nav-label { display: block; font-size: .8rem; font-weight: 700; }
-    .main-nav>.container { padding-top: 10px; padding-bottom: 10px; }
-    .main-nav .navbar-toggler { font-size: .8rem; padding: 7px 12px; border: 1px solid #c8d2dc; color: var(--navy); }
+    .masthead { grid-template-columns:minmax(0,1fr) 290px; }
+    .masthead .site-brand { grid-row:1; }
+    .main-nav>.header-navigation { padding-top: 10px; padding-bottom: 4px; }
+    .main-nav .navbar-toggler { font-size: .8rem; padding: 7px 12px; border: 1px solid #c8d2dc; color: white; }
+    .topbar .mobile-nav-label { color:white; }
+    .topbar .main-nav .nav-link { padding:10px 0 !important; }
+    .topbar .manager-login { padding-top:16px; }
     .main-nav .navbar-collapse { padding-top: 10px; width: 100%; }
     .main-nav .navbar-nav { gap: 0; width: 100%; }
     .main-nav .nav-link { display: block; padding: 10px 0 !important; text-align: left; }
@@ -35,7 +40,9 @@
     .portal-container { padding-left: 20px; padding-right: 20px; }
     .topbar { font-size: .64rem; }
     .topbar .container { min-height: 34px; gap: 10px; }
-    .masthead { padding-top: 24px; padding-bottom: 20px; flex-direction: column; align-items: stretch; gap: 20px; }
+    .masthead { grid-template-columns:minmax(0,1fr); padding-top:24px; padding-bottom:12px; align-items:stretch; gap:16px; }
+    .masthead .site-brand, .masthead .header-search { grid-column:1; grid-row:auto; }
+    .masthead .header-search { justify-self:stretch; }
     .brand-title { font-size: 1.22rem; }
     .brand-caption { font-size: .65rem; }
     .header-search { width: 100%; }
@@ -74,9 +81,12 @@
     .surface { padding: 24px; }
 }
 @media (max-width: 479.98px) {
+    .topbar .mobile-nav-label { display:none; }
     .brand-monogram { width: 54px; height: 54px; flex-basis: 54px; font-size: 21px; }
     .brand-monogram span { font-size: 5.5px; }
     .brand-logo { width: 54px; height: 54px; }
+    .masthead .identity-logos img { width:44px; height:44px; }
+    .masthead .brand-title { font-size:1.03rem; }
     .site-brand { gap: 12px; }
     .brand-title { font-size: 1.03rem; }
     .brand-kicker { font-size: .55rem; letter-spacing: .12em; }

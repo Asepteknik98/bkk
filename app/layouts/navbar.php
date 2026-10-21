@@ -1,6 +1,6 @@
 <?php if (!defined('APP_ROOT')) { http_response_code(403); exit; } ?>
 <nav class="main-nav navbar navbar-expand-xl" aria-label="Navigasi utama">
-    <div class="container portal-container">
+    <div class="header-navigation">
         <span class="mobile-nav-label">Jelajahi portal</span>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#public-menu" aria-controls="public-menu" aria-expanded="false" aria-label="Buka menu navigasi"><span aria-hidden="true">☰</span> Menu</button>
         <div class="collapse navbar-collapse" id="public-menu">

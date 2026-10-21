@@ -16,6 +16,10 @@ label { font-weight: 600; }
 .alert { background: #fff0ed; color: #8b2920; padding: 12px; border-radius: 6px; }
 .navbar { background: #122b49; color: white; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; gap: 20px; border-bottom: 4px solid #c8a34b; }
 .brand { color: white; text-decoration: none; font-weight: 700; }
+.navbar .brand { display:flex; align-items:center; gap:14px; min-width:0; }
+.navbar .brand>span:last-child { min-width:0; overflow-wrap:anywhere; }
+.identity-logos { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.identity-logos img { display:block; width:48px; height:48px; object-fit:contain; background:white; border-radius:4px; padding:2px; }
 .navbar-account { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .navbar button { border: 1px solid #b4c5db; }
 .panel-shell { display: grid; grid-template-columns: 230px minmax(0, 1fr); min-height: 70vh; }
