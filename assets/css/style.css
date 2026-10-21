@@ -195,3 +195,15 @@ p { margin: 0 0 1rem; }
 .application-box { border-top:1px solid var(--line); margin-top:28px; }
 .application-box>.muted { margin-top:12px; font-size:.8rem; }
 @media(max-width:600px){.job-filters label{flex-basis:100%;min-width:0}.job-filters button{width:100%}.job-detail .contact-list{grid-template-columns:1fr}}
+.tracer-form { display:grid; gap:20px; max-width:850px; margin:auto; }
+.tracer-form label { display:grid; gap:8px; font-weight:600; }
+.tracer-form input,.tracer-form select,.tracer-form textarea { width:100%; min-width:0; padding:12px; border:1px solid #aab8c7; border-radius:4px; font:inherit; background:white; }
+.tracer-form fieldset { border:1px solid var(--line); padding:20px; display:grid; gap:16px; min-width:0; }
+.tracer-form fieldset[hidden] { display:none; }
+.tracer-form legend { font-size:1.1rem; font-weight:700; float:none; width:auto; padding:0 8px; }
+.consent-box { padding:20px; border:1px solid #d8c9a9; background:#faf6ec; }
+.tracer-form .tracer-check { display:flex; align-items:start; gap:12px; }
+.tracer-check input { width:auto; margin-top:6px; flex-shrink:0; }
+.tracer-honeypot { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.tracer-error { max-width:850px; margin:0 auto 24px; background:#fff0ed; padding:22px; border:1px solid #dfb4ac; border-radius:4px; }
+.tracer-error h2 { font-size:1.15rem; }
