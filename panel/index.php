@@ -13,7 +13,8 @@ require __DIR__ . '/layouts/navbar.php';
     <section class="card">
         <h2>Selamat datang, <?= e($user['nama']) ?></h2>
         <p>Anda masuk sebagai <strong><?= $user['role'] === 'admin' ? 'Admin' : 'Staf BKK/Guru BKK' ?></strong>.</p>
-        <p>Panel pengelola BKK SMK JAYA BUANA siap digunakan. Modul pengelolaan konten akan tersedia pada tahap berikutnya.</p>
+        <p>Kelola berita dan kegiatan, atur publikasi, serta simpan gambar dan dokumen di katalog media.</p>
+        <div class="form-actions"><a class="button" href="<?= e(base_url('panel/berita/')) ?>">Kelola berita</a><a class="button secondary" href="<?= e(base_url('panel/media/')) ?>">Buka media</a></div>
         <?php if ($user['role'] === 'admin'): ?>
             <p>Hak akses Anda mencakup pengelolaan pengguna dan pengaturan saat modul tersebut tersedia.</p>
         <?php else: ?>

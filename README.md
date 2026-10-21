@@ -1,10 +1,10 @@
 # BKK SMK JAYA BUANA
 
-Portal berbasis PHP Native 8.2 dan MySQL/MariaDB. Tahap 1–4 menyediakan fondasi, database, autentikasi, dashboard awal, serta portal publik responsif. Modul CRUD, formulir tracer, dan detail lowongan/program belum diimplementasikan.
+Portal berbasis PHP Native 8.2 dan MySQL/MariaDB. Tahap 1–5 menyediakan fondasi, database, autentikasi, portal publik, CRUD berita, serta katalog media. Formulir tracer dan modul pengelolaan lainnya belum diimplementasikan.
 
 ## Instalasi XAMPP
 
-1. Gunakan Apache 2.4, PHP 8.2 dengan ekstensi `pdo_mysql`, dan MySQL/MariaDB.
+1. Gunakan Apache 2.4, PHP 8.2 dengan ekstensi `pdo_mysql` dan `fileinfo`, serta MySQL/MariaDB.
 2. Letakkan proyek di `C:/xampp/htdocs/bkk`.
 3. Salin `app/config/app.example.php` menjadi `app/config/app.local.php`. Atur `base_url` menjadi `/bkk`, lalu isi konfigurasi database lokal sesuai lingkungan. Jangan commit file lokal ini.
 4. Jalankan Apache dan MySQL, lalu impor database sesuai petunjuk di bawah. Buka `http://localhost/bkk/`. Jika database belum tersedia, kerangka portal tetap tampil dengan pemberitahuan bahwa informasi belum dapat dimuat.
@@ -36,7 +36,7 @@ Data awal berisi satu berita, satu lowongan, dan lima program berlabel **DATA DE
 
 Untuk database yang sudah terpasang, cadangkan terlebih dahulu, pilih database yang benar di phpMyAdmin, lalu impor hanya file pembaruan yang belum diterapkan sesuai urutan nomor. Petunjuk setiap pembaruan harus menyebutkan prasyarat, cara verifikasi, dan apakah aman diimpor ulang. Catat file yang sudah diterapkan; jangan mengimpor ulang tanpa petunjuk eksplisit. Instalasi baru menggunakan SQL awal, dilanjutkan file pembaruan yang tersedia secara berurutan.
 
-Saat ini belum ada file pembaruan: tahap 3 dan 4 tidak mengubah skema atau seed SQL. Jika impor SQL awal menghasilkan `#1050 Table 'users' already exists`, berarti tabel tersebut sudah ada pada database yang dipilih. Hentikan impor ulang dan periksa kelengkapan delapan tabel sebelum menentukan perbaikan; jangan menghapus tabel yang sudah berisi data untuk mengatasi pesan tersebut.
+Saat ini belum ada file pembaruan: tahap 3, 4, dan 5 tidak mengubah skema atau seed SQL. Tahap 5 memakai tabel `berita` dan `media` yang sudah tersedia. Jika impor SQL awal menghasilkan `#1050 Table 'users' already exists`, berarti tabel tersebut sudah ada pada database yang dipilih. Hentikan impor ulang dan periksa kelengkapan delapan tabel sebelum menentukan perbaikan; jangan menghapus tabel yang sudah berisi data untuk mengatasi pesan tersebut.
 
 ### Pembaruan database yang sudah terpasang
 
@@ -85,3 +85,19 @@ Identitas/kontak dibaca dari tabel `settings`. `bkk_logo` dapat diisi path gamba
 Gambar yang belum tersedia memakai `assets/images/placeholder.svg`, ilustrasi geometris lokal yang jelas berlabel placeholder. Monogram teks BKK adalah identitas sementara, bukan logo resmi sekolah. Gambar konten/logo hanya diambil dari path relatif raster dalam `uploads/` atau `assets/images/`; URL gambar eksternal, path tidak aman, dan berkas yang hilang memakai placeholder. Tidak ada foto pihak ketiga. Semua URL halaman/aset menggunakan base URL agar bekerja di subfolder.
 
 Untuk pemeriksaan manual, buka semua menu, detail berita published, slug draft/tidak dikenal, pencarian, dan halaman kosong; pada lebar 320/390/768/1440 piksel periksa menu, dropdown program, pemenggalan judul panjang, batas lamaran, dan gambar. Salinan proyek/database sementara dipakai untuk pengujian konten tanpa mengubah database pengguna.
+
+## Berita dan media (Tahap 5)
+
+Admin dan Staf BKK dapat membuka **Berita & Kegiatan** serta **Katalog Media** melalui sidebar panel. Daftar berita menyediakan pencarian judul/slug, filter draft/published, dan pagination 10 item. Tambah/edit menyediakan judul, slug opsional, ringkasan (maksimal 1.000 karakter), isi (maksimal 100.000 karakter), status, unggulan, serta gambar utama. Slug dibuat dari judul bila kosong; slug dinormalisasi menjadi ASCII dan diberi akhiran angka jika sudah dipakai. Penulis adalah pembuat awal berita dan dipertahankan saat diedit pengelola lain.
+
+Berita baru default draft. Saat pertama dipublikasikan atau dipublikasikan kembali dari draft, waktu publikasi memakai jam database agar sesuai filter publik `NOW()`. Mengedit berita yang sudah published mempertahankan waktu publikasinya. Tombol **Lihat publik** hanya tersedia untuk berita yang sudah dapat dibuka pengunjung. Mengubah slug juga mengubah URL publik. Isi disimpan sebagai teks biasa; paragraf dipisahkan baris kosong dan di-escape ketika ditampilkan. Tag HTML ditampilkan sebagai teks, tidak dieksekusi.
+
+Gambar dapat diunggah langsung dari formulir berita atau dipilih dari katalog (200 gambar terbaru). Unggahan baru mengalahkan pilihan katalog. **Lepaskan gambar** mengosongkan gambar berita jika tidak ada pilihan/unggahan pengganti. Mengganti gambar atau menghapus berita tidak menghapus berkas dari katalog. Hapus berita dan hapus media hanya menerima POST dengan CSRF; konfirmasi JavaScript membantu mencegah salah klik, sedangkan validasi server tetap wajib.
+
+Katalog media menyediakan pencarian nama, pagination 12 item, thumbnail gambar/penanda PDF, ukuran, dimensi, unduhan sebagai attachment, unggah, dan hapus. Gambar JPG/JPEG, PNG, WebP dibatasi 5 MB; PDF 10 MB. Validasi memakai ukuran berkas aktual, ekstensi, `fileinfo`, dan pemeriksaan dimensi gambar (maksimal 10.000 piksel per sisi / 40 juta piksel). SVG, executable, ekstensi ganda berbahaya, MIME palsu, gambar rusak, dan nama/path tidak aman ditolak. Nama simpan acak 32 karakter heksadesimal; metadata nama asli tetap ditampilkan dengan escape. Tidak memerlukan GD pada aplikasi; GD hanya digunakan untuk membuat fixture pengujian.
+
+Pastikan PHP mengaktifkan `file_uploads`, ekstensi `fileinfo`, dan temporary directory PHP dapat ditulis. Agar batas aplikasi dapat digunakan penuh, atur `upload_max_filesize` minimal `10M` dan `post_max_size` lebih besar, misalnya `16M`, di php.ini/panel hosting lalu restart Apache jika diperlukan. Batas server yang lebih kecil tetap berlaku. Jika POST melebihi `post_max_size`, PHP dapat mengosongkan input dan aplikasi menolak pemeriksaan CSRF; unggah ulang berkas lebih kecil atau sesuaikan batas server. Proses PHP perlu hak tulis pada `uploads` untuk subfolder gambar/dokumen dan pada `storage` untuk direktori sementara penghapusan. Jangan memakai izin 777. Tidak ada konfigurasi server global yang diubah otomatis oleh aplikasi.
+
+Helper bersama ada di `app/helpers/upload.php`, `validation.php`, `panel.php`, dan `news.php`. Penulisan konten/media saat ini memakai named lock database dan transaksi, sehingga pemilihan gambar serta pemeriksaan penghapusan tidak saling mendahului. Modul berikutnya yang mengubah referensi media harus memakai `with_content_lock()` juga. Penghapusan memeriksa pemakaian oleh berita/lowongan/program (termasuk draft), mitra, isi teks yang memuat path, dan settings. Jika masih dipakai, metadata dan berkas dipertahankan. Berkas tanpa referensi dipindah dahulu ke `storage/media-trash` yang terlindungi; jika transaksi gagal, berkas dipulihkan, sedangkan setelah commit berkas dihapus permanen. Bila pembersihan gagal, periksa log dan folder tersebut. Jangan membersihkan folder sementara secara sembarangan saat ada operasi berjalan.
+
+Pengujian integrasi dilakukan pada salinan aplikasi dan MariaDB sementara dengan akun uji yang password-nya dibuat acak saat pengujian. Cakupan: kedua role, tambah/edit/draft/publikasi/hapus, slug bertabrakan, unggulan, paragraf/escape XSS, pencarian/pagination, POST/CSRF dan akses tanpa login, seluruh format unggahan yang diizinkan, penolakan unggahan tidak valid, unduhan, file bersama lintas konten/settings, penghapusan fisik, dan rollback berkas/metadata saat simpan berita gagal. Publikasi juga diuji dengan zona waktu PHP berbeda dari database. Database pengguna dan SQL instalasi awal tidak diubah. Tidak ada file SQL pembaruan yang perlu diimpor untuk tahap ini.

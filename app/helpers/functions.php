@@ -31,3 +31,12 @@ function e(?string $value): string
 {
     return htmlspecialchars($value ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
+
+/** Ubah paragraf teks biasa menjadi HTML ter-escape; bukan renderer HTML dari input. */
+function plain_text_paragraphs(string $value): string
+{
+    $text = trim(str_replace(["\r\n", "\r"], "\n", $value));
+    if ($text === '') { return ''; }
+    $paragraphs = preg_split('/\n[\t ]*\n+/', $text) ?: [$text];
+    return implode("\n", array_map(static fn(string $paragraph): string => '<p>' . nl2br(e($paragraph), false) . '</p>', $paragraphs));
+}
