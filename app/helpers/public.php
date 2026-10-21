@@ -44,6 +44,13 @@ function program_categories(): array
     ];
 }
 
+function program_url(array $program): string
+{
+    $categories=program_categories();
+    if(!isset($categories[$program['kategori']])){throw new InvalidArgumentException('Kategori program tidak diizinkan.');}
+    return base_url($categories[$program['kategori']]['path'].'detail.php?slug='.rawurlencode($program['slug']));
+}
+
 /** Hanya gambar lokal raster dalam uploads/assets/images; SVG unggahan tidak ditampilkan. */
 function content_image(?string $path): string
 {

@@ -1,6 +1,6 @@
 # BKK SMK JAYA BUANA
 
-Portal berbasis PHP Native 8.2 dan MySQL/MariaDB. Tahap 1–6 menyediakan fondasi, database, autentikasi, portal publik, CRUD berita/lowongan, serta katalog media. Formulir tracer dan modul pengelolaan lainnya belum diimplementasikan.
+Portal berbasis PHP Native 8.2 dan MySQL/MariaDB. Tahap 1–7 menyediakan fondasi, database, autentikasi, portal publik, CRUD berita/lowongan/program, serta katalog media. Formulir tracer dan modul pengelolaan lainnya belum diimplementasikan.
 
 ## Instalasi XAMPP
 
@@ -36,15 +36,7 @@ Data awal berisi satu berita, satu lowongan, dan lima program berlabel **DATA DE
 
 Untuk database yang sudah terpasang, cadangkan terlebih dahulu, pilih database yang benar di phpMyAdmin, lalu impor hanya file pembaruan yang belum diterapkan sesuai urutan nomor. Petunjuk setiap pembaruan harus menyebutkan prasyarat, cara verifikasi, dan apakah aman diimpor ulang. Catat file yang sudah diterapkan; jangan mengimpor ulang tanpa petunjuk eksplisit. Instalasi baru menggunakan SQL awal, dilanjutkan file pembaruan yang tersedia secara berurutan.
 
-Saat ini belum ada file pembaruan: tahap 3–6 tidak mengubah skema atau seed SQL. Modul memakai tabel `berita`, `media`, dan `lowongan` yang sudah tersedia. Jika impor SQL awal menghasilkan `#1050 Table 'users' already exists`, berarti tabel tersebut sudah ada pada database yang dipilih. Hentikan impor ulang dan periksa kelengkapan delapan tabel sebelum menentukan perbaikan; jangan menghapus tabel yang sudah berisi data untuk mengatasi pesan tersebut.
-
-### Pembaruan database yang sudah terpasang
-
-`database/bkk_jaya_buana.sql` khusus instalasi awal dan tidak boleh diimpor ulang untuk memperbarui aplikasi. Setiap perubahan database berikutnya harus dibuat sebagai file SQL terpisah, berurutan, di `database/updates/`, misalnya `001_nama_perubahan.sql`. File pembaruan hanya memuat perubahan yang diperlukan, tanpa membuat ulang seluruh tabel atau menimpa data yang sudah ada. Jangan menggabungkan pembaruan kembali ke SQL instalasi awal.
-
-Untuk database yang sudah terpasang, cadangkan terlebih dahulu, pilih database yang benar di phpMyAdmin, lalu impor hanya file pembaruan yang belum diterapkan sesuai urutan nomor. Petunjuk setiap pembaruan harus menyebutkan prasyarat, cara verifikasi, dan apakah aman diimpor ulang. Catat file yang sudah diterapkan; jangan mengimpor ulang tanpa petunjuk eksplisit. Instalasi baru menggunakan SQL awal, dilanjutkan file pembaruan yang tersedia secara berurutan.
-
-Saat ini belum ada file pembaruan: tahap 3 dan 4 tidak mengubah skema atau seed SQL. Jika impor SQL awal menghasilkan `#1050 Table 'users' already exists`, berarti tabel tersebut sudah ada pada database yang dipilih. Hentikan impor ulang dan periksa kelengkapan delapan tabel sebelum menentukan perbaikan; jangan menghapus tabel yang sudah berisi data untuk mengatasi pesan tersebut.
+Saat ini belum ada file pembaruan: tahap 3–7 tidak mengubah skema atau seed SQL. Modul memakai tabel `berita`, `media`, `lowongan`, dan `program` yang sudah tersedia. Jika impor SQL awal menghasilkan `#1050 Table 'users' already exists`, berarti tabel tersebut sudah ada pada database yang dipilih. Hentikan impor ulang dan periksa kelengkapan delapan tabel sebelum menentukan perbaikan; jangan menghapus tabel yang sudah berisi data untuk mengatasi pesan tersebut.
 
 Slug unik berlaku per tabel konten. Referensi penulis/pengunggah dapat NULL dan memakai `ON DELETE SET NULL`; menonaktifkan pengguna pada tahap berikutnya tetap menjadi pilihan utama. Gambar/logo menyimpan path relatif; tabel `media` menjadi katalog metadata unggahan yang dapat digunakan kembali. Tracer menyimpan persetujuan, waktu, dan versi teks persetujuan; akses data pribadi harus dibatasi pengelola pada tahap fitur tracer. Constraint database tidak menggantikan validasi server.
 
@@ -74,7 +66,7 @@ Validasi tahap 3 memakai salinan aplikasi dan MariaDB sementara: login kedua rol
 
 ## Portal publik (Tahap 4)
 
-Halaman tersedia: beranda, profil/kontak, daftar dan detail berita (`detail-berita.php?slug=...`), pencarian judul/ringkasan berita, daftar/detail lowongan, informasi tracer study, dan lima kategori program. Semua menu memiliki tujuan yang tersedia. Daftar berita dan lowongan memakai pagination 9 item; daftar awal program menampilkan maksimal 30 item. Rincian program serta formulir tracer menunggu tahap berikutnya.
+Halaman tersedia: beranda, profil/kontak, daftar dan detail berita (`detail-berita.php?slug=...`), pencarian judul/ringkasan berita, daftar/detail lowongan, informasi tracer study, serta daftar/detail lima kategori program. Semua menu memiliki tujuan yang tersedia. Daftar berita, lowongan, dan program memakai pagination 9 item. Formulir tracer menunggu tahap berikutnya.
 
 Berita hanya tampil jika `published` dan waktu publikasinya sudah tiba (NULL memakai waktu pembuatan). Draft, berita terjadwal, dan slug tidak dikenal menghasilkan 404 pada detail; gangguan database menghasilkan 503 pada detail. Lowongan/program hanya memakai status `published`; mitra hanya `aktif = 1`. Batas lamaran kosong diberi keterangan belum ditentukan, sedangkan yang lewat diberi label sudah berakhir. Data pribadi tracer tidak pernah dibaca oleh halaman publik.
 
@@ -121,3 +113,15 @@ C:\xampp\php\php.exe app/tests/jobs.php
 ```
 
 Pengujian integrasi pada salinan aplikasi/MariaDB sementara mencakup kedua role, CRUD, draft/aktif/kedaluwarsa/batas hari ini, terkait, pencarian/filter/pagination, tanggal dan URL tidak valid, escape HTML, unggahan poster/reuse/perlindungan media, POST/CSRF/akses tanpa login. Pengujian dijalankan saat zona waktu PHP sengaja berbeda dari Asia/Jakarta; regresi berita dan media juga lulus. Database pengguna tidak diubah.
+
+## Program BKK (Tahap 7)
+
+Menu **Program BKK** pada panel tersedia untuk Admin dan Staf BKK. Satu CRUD, satu formulir, dan tabel `program` menangani lima kategori: `kelas_industri`, `ppks`, `kelas_melanjutkan`, `entrepreneur`, dan `kelas_internasional`. Kategori wajib berasal dari allowlist yang sama dengan navigasi publik. Daftar panel menyediakan pencarian judul/slug, filter kategori/status, serta pagination 10 item. Tambah/edit memuat kategori, judul, slug, ringkasan, isi teks biasa, gambar, tautan pendaftaran opsional, dan draft/published. Ringkasan maksimal 1.000 karakter dan isi maksimal 100.000 karakter. Teks dalam negeri/luar negeri, tujuan kuliah, dan beasiswa dapat ditulis langsung pada isi Kelas Melanjutkan; tidak ada data sekolah atau beasiswa rekaan yang ditambahkan.
+
+Slug dinormalisasi dan unik pada seluruh tabel program, dengan akhiran angka bila diperlukan. Slug kosong dibuat dari judul. Mengubah slug atau kategori mengubah URL publik. Penulis awal dipertahankan ketika pengelola lain mengedit. Gambar baru memakai layanan unggahan JPG/PNG/WebP 5 MB atau gambar katalog bersama; melepas/mengganti gambar dan menghapus program tetap mempertahankan berkas di media. Penghapusan program hanya menerima POST+CSRF dan semua penulisan referensi gambar memakai lock/transaksi bersama.
+
+Kelima direktori publik memakai `app/layouts/program-list.php` dan `program-detail.php`, dengan entry point yang menetapkan kategori di server. Daftar hanya memuat published dari kategori tersebut (9 item per halaman). Detail diakses lewat `detail.php?slug=...` dan memeriksa **slug + kategori + status published** sekaligus. Mengganti query `kategori` tidak dapat mengubah kategori halaman. Slug milik kategori lain, draft, dan program yang dihapus menghasilkan 404; gangguan database pada detail menghasilkan 503. Judul, ringkasan, isi, serta nama penulis di-escape; paragraf teks biasa dirender dengan helper yang sama seperti berita.
+
+Tautan pendaftaran boleh kosong (disimpan sebagai NULL). Jika diisi, hanya URL http/https valid tanpa username/password atau karakter kontrol yang diterima. URL diperiksa kembali saat ditampilkan, termasuk untuk data lama. Tombol hanya muncul bila URL valid, menuju situs luar di tab baru dengan `noopener noreferrer`. Pengelola perlu memastikan tujuan pendaftaran dan isi program telah diverifikasi.
+
+Pengujian pada salinan aplikasi/MariaDB sementara mencakup CRUD kedua role, lima kategori, seluruh 20 kombinasi akses detail lintas kategori (404), draft/unpublish, pindah kategori, slug unik, tautan opsional/tidak valid, paragraf/XSS, gambar bersama, rollback upload saat INSERT gagal, POST/CSRF/akses tanpa login, serta pencarian/filter/pagination. Komponen daftar/detail publik dan panel diperiksa di Chrome pada lebar 320/390/768/1440 piksel tanpa overflow halaman. Tidak ada perubahan SQL atau impor pembaruan untuk tahap ini; database pengguna tidak diubah.

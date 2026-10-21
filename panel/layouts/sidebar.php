@@ -2,7 +2,7 @@
 <aside class="sidebar">
     <p class="role-label"><?= $user['role'] === 'admin' ? 'Admin' : 'Staf BKK/Guru BKK' ?></p>
     <nav aria-label="Menu panel">
-        <?php foreach (['dashboard' => ['panel/index.php', 'Dashboard'], 'berita' => ['panel/berita/', 'Berita & Kegiatan'], 'lowongan' => ['panel/lowongan/', 'Lowongan Kerja'], 'media' => ['panel/media/', 'Katalog Media']] as $section => [$path, $label]): ?>
+        <?php foreach (['dashboard' => ['panel/index.php', 'Dashboard'], 'berita' => ['panel/berita/', 'Berita & Kegiatan'], 'lowongan' => ['panel/lowongan/', 'Lowongan Kerja'], 'program' => ['panel/program/', 'Program BKK'], 'media' => ['panel/media/', 'Katalog Media']] as $section => [$path, $label]): ?>
         <a href="<?= e(base_url($path)) ?>" <?= ($activePanel ?? 'dashboard') === $section ? 'aria-current="page"' : '' ?>><?= e($label) ?></a>
         <?php endforeach; ?>
         <a href="<?= e(base_url()) ?>">Lihat beranda</a>
