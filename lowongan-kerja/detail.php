@@ -5,7 +5,9 @@ $slug=is_string($_GET['slug']??null)?$_GET['slug']:'';
 $job=strlen($slug)<=191?(public_query("SELECT * FROM lowongan WHERE slug=:slug AND status='published' LIMIT 1",['slug'=>$slug])[0]??null):null;
 setting('site_name');if(!$job){http_response_code(!empty($GLOBALS['public_database_unavailable'])?503:404);}
 $pageTitle=$job?$job['posisi'].' — '.$job['perusahaan']:'Lowongan tidak tersedia';$activePage='lowongan-kerja/';
+$pageDescription=$job ? $job['posisi'].' di '.$job['perusahaan'].'. '.$job['lokasi'].'. '.$job['deskripsi'] : 'Informasi lowongan kerja BKK.';
 $related=$job?public_query("SELECT * FROM lowongan WHERE status='published' AND id<>:id AND (lokasi=:location OR jenis_pekerjaan=:type OR perusahaan=:company) ORDER BY (lokasi=:sort_location) DESC, (jenis_pekerjaan=:sort_type) DESC,created_at DESC,id DESC LIMIT 3",['id'=>(int)$job['id'],'location'=>$job['lokasi'],'type'=>$job['jenis_pekerjaan'],'company'=>$job['perusahaan'],'sort_location'=>$job['lokasi'],'sort_type'=>$job['jenis_pekerjaan']]):[];
+if (!$job && empty($GLOBALS['public_database_unavailable'])) { require APP_ROOT.'/404.php'; exit; }
 require APP_ROOT.'/app/layouts/header.php';
 ?>
 <main id="konten" class="container portal-container page-main"><nav class="breadcrumb-trail" aria-label="Jejak navigasi"><a href="<?= e(base_url()) ?>">Beranda</a><span>/</span><a href="<?= e(base_url('lowongan-kerja/')) ?>">Lowongan Kerja</a><span>/</span><span>Detail</span></nav><div class="content-with-sidebar"><div class="content-column">

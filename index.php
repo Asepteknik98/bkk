@@ -6,7 +6,7 @@ $latestNews = public_query("SELECT id, judul, slug, ringkasan, gambar, published
 $featured = public_query("SELECT id, judul, slug, ringkasan, gambar, published_at, created_at FROM berita WHERE status = 'published' AND (published_at IS NULL OR published_at <= NOW()) ORDER BY unggulan DESC, COALESCE(published_at, created_at) DESC, id DESC LIMIT 1")[0] ?? null;
 $companions = array_slice(array_values(array_filter($latestNews, static fn(array $row): bool => $row['id'] !== ($featured['id'] ?? null))), 0, 2);
 $jobs = public_query("SELECT perusahaan, posisi, slug, lokasi, jenis_pekerjaan, pendidikan, batas_lamaran, deskripsi FROM lowongan WHERE status = 'published' ORDER BY created_at DESC, id DESC LIMIT 3");
-$partners = public_query('SELECT nama, jenis, logo, deskripsi FROM mitra WHERE aktif = 1 ORDER BY nama LIMIT 12');
+$partners = public_query('SELECT nama, jenis, logo, website, deskripsi FROM mitra WHERE aktif = 1 ORDER BY nama LIMIT 12');
 require __DIR__ . '/app/layouts/header.php';
 require __DIR__ . '/app/layouts/breaking-news.php';
 ?>
@@ -31,7 +31,7 @@ require __DIR__ . '/app/layouts/breaking-news.php';
         <section class="section-space" aria-labelledby="news-title"><div class="section-heading"><div><p class="eyebrow">Kabar dari BKK</p><h2 id="news-title">Berita &amp; kegiatan terbaru</h2></div><a href="<?= e(base_url('berita.php')) ?>">Lihat semua ↗</a></div><div class="news-grid"><?php if ($latestNews): foreach ($latestNews as $story): news_card($story); endforeach; else: empty_state('Belum ada berita diterbitkan'); endif; ?></div></section>
     </div><?php require __DIR__ . '/app/layouts/sidebar.php'; ?></div>
     <section class="partners-section section-space" aria-labelledby="partners-title"><div class="section-heading"><div><p class="eyebrow">Jejaring BKK</p><h2 id="partners-title">Mitra perusahaan &amp; perguruan tinggi</h2></div></div>
-        <?php if ($partners): ?><div class="partner-grid"><?php foreach ($partners as $partner): ?><article class="partner-card"><img src="<?= e(content_image($partner['logo'])) ?>" alt="Placeholder atau logo mitra" width="180" height="100" loading="lazy"><?php demo_label($partner); ?><h3><?= e($partner['nama']) ?></h3><p><?= $partner['jenis'] === 'kampus' ? 'Perguruan tinggi' : 'Perusahaan' ?></p></article><?php endforeach; ?></div><?php else: empty_state('Informasi mitra belum tersedia', 'Daftar perusahaan dan perguruan tinggi akan ditampilkan setelah dikonfirmasi oleh pengelola.'); endif; ?>
+        <?php if ($partners): ?><div class="partner-grid"><?php foreach ($partners as $partner): ?><article class="partner-card"><img src="<?= e(content_image($partner['logo'])) ?>" alt="Placeholder atau logo mitra" width="180" height="100" loading="lazy"><?php demo_label($partner); ?><h3><?= e($partner['nama']) ?></h3><p><?= $partner['jenis'] === 'kampus' ? 'Perguruan tinggi' : 'Perusahaan' ?></p><?php if ($partner['deskripsi']): ?><p><?= nl2br(e($partner['deskripsi'])) ?></p><?php endif; ?><?php if ($partner['website'] && http_url($partner['website'])): ?><a href="<?= e($partner['website']) ?>" target="_blank" rel="noopener noreferrer">Website mitra ?</a><?php endif; ?></article><?php endforeach; ?></div><?php else: empty_state('Informasi mitra belum tersedia', 'Daftar perusahaan dan perguruan tinggi akan ditampilkan setelah dikonfirmasi oleh pengelola.'); endif; ?>
     </section>
 </main>
 <?php require __DIR__ . '/app/layouts/footer.php'; ?>

@@ -13,6 +13,7 @@ $pages=max(1,(int)ceil($total/9));$rawPage=$_GET['page']??'1';$page=is_string($r
 $jobs=public_query('SELECT * FROM lowongan WHERE '.$where.' ORDER BY created_at DESC,id DESC LIMIT :limit OFFSET :offset',$params+['limit'=>9,'offset'=>($page-1)*9]);
 $locations=public_query("SELECT DISTINCT lokasi FROM lowongan WHERE status='published' ORDER BY lokasi");
 $types=public_query("SELECT DISTINCT jenis_pekerjaan FROM lowongan WHERE status='published' ORDER BY jenis_pekerjaan");
+$pageDescription='Informasi lowongan kerja BKK'.($q!==''?' untuk '.$q:'').($location!==''?' di '.$location:'').($type!==''?' — '.$type:'').'. Periksa persyaratan dan batas lamaran menurut WIB.';
 require APP_ROOT . '/app/layouts/header.php';
 ?>
 <main id="konten" class="container portal-container page-main"><div class="page-heading"><p class="eyebrow">Langkah menuju dunia kerja</p><h1>Lowongan Kerja</h1><p>Temukan informasi posisi dan perusahaan. Batas lamaran berlaku sampai akhir tanggal yang tercantum, menurut waktu Asia/Jakarta (WIB).</p></div>

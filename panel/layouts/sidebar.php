@@ -2,9 +2,12 @@
 <aside class="sidebar">
     <p class="role-label"><?= $user['role'] === 'admin' ? 'Admin' : 'Staf BKK/Guru BKK' ?></p>
     <nav aria-label="Menu panel">
-        <?php foreach (['dashboard' => ['panel/index.php', 'Dashboard'], 'berita' => ['panel/berita/', 'Berita & Kegiatan'], 'lowongan' => ['panel/lowongan/', 'Lowongan Kerja'], 'program' => ['panel/program/', 'Program BKK'], 'tracer' => ['panel/tracer-study/', 'Tracer Study'], 'media' => ['panel/media/', 'Katalog Media']] as $section => [$path, $label]): ?>
+        <?php foreach (['dashboard' => ['panel/index.php', 'Dashboard'], 'berita' => ['panel/berita/', 'Berita & Kegiatan'], 'lowongan' => ['panel/lowongan/', 'Lowongan Kerja'], 'program' => ['panel/program/', 'Program BKK'], 'tracer' => ['panel/tracer-study/', 'Tracer Study'], 'media' => ['panel/media/', 'Katalog Media'], 'mitra' => ['panel/mitra/', 'Mitra'], 'akun' => ['panel/akun/profil.php', 'Akun Pribadi']] as $section => [$path, $label]): ?>
         <a href="<?= e(base_url($path)) ?>" <?= ($activePanel ?? 'dashboard') === $section ? 'aria-current="page"' : '' ?>><?= e($label) ?></a>
         <?php endforeach; ?>
+        <?php if ($user['role'] === 'admin'): foreach (['pengguna'=>'Pengguna','pengaturan'=>'Pengaturan'] as $section=>$label): ?>
+        <a href="<?= e(base_url('panel/'.$section.'/')) ?>" <?= ($activePanel ?? '') === $section ? 'aria-current="page"' : '' ?>><?= e($label) ?></a>
+        <?php endforeach; endif; ?>
         <a href="<?= e(base_url()) ?>">Lihat beranda</a>
     </nav>
 </aside>

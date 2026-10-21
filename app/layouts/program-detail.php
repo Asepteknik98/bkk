@@ -6,6 +6,7 @@ $slug=is_string($_GET['slug']??null)?$_GET['slug']:'';
 $program=strlen($slug)<=191?(public_query("SELECT p.*,u.nama AS penulis FROM program p LEFT JOIN users u ON u.id=p.penulis_id WHERE p.slug=:slug AND p.kategori=:kategori AND p.status='published' LIMIT 1",['slug'=>$slug,'kategori'=>$programCategory])[0]??null):null;
 setting('site_name');if(!$program){http_response_code(!empty($GLOBALS['public_database_unavailable'])?503:404);}
 $pageTitle=$program['judul']??'Program tidak tersedia';$activePage=$categoryInfo['path'];$pageDescription=$program['ringkasan']??$categoryInfo['description'];
+if (!$program && empty($GLOBALS['public_database_unavailable'])) { require APP_ROOT.'/404.php'; exit; }
 require __DIR__.'/header.php';
 ?>
 <main id="konten" class="container portal-container page-main"><nav class="breadcrumb-trail" aria-label="Jejak navigasi"><a href="<?= e(base_url()) ?>">Beranda</a><span>/</span><a href="<?= e(base_url($categoryInfo['path'])) ?>"><?= e($categoryInfo['title']) ?></a><span>/</span><span>Detail program</span></nav><div class="content-with-sidebar"><div class="content-column">

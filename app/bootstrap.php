@@ -16,7 +16,9 @@ require_once __DIR__ . '/helpers/csrf.php';
 date_default_timezone_set((string) app_config('timezone'));
 
 set_exception_handler(static function (Throwable $exception): void {
-    error_log((string) $exception);
+    // Pesan/trace driver dapat mengandung SQL atau kredensial.
+    error_log('Kesalahan aplikasi: ' . get_class($exception) . '; kode=' . $exception->getCode()
+        . '; lokasi=' . basename($exception->getFile()) . ':' . $exception->getLine());
     http_response_code(500);
     if (PHP_SAPI === 'cli') {
         fwrite(STDERR, "Terjadi kesalahan aplikasi. Periksa storage/logs.\n");

@@ -23,8 +23,8 @@ unset($_SESSION['login_error']);
     <?php if ($error): ?><p class="alert" role="alert"><?= e($error) ?></p><?php endif; ?>
     <form action="<?= e(base_url('auth/proses-login.php')) ?>" method="post">
         <?= csrf_field() ?>
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" maxlength="191" autocomplete="username" required>
+        <label for="username">Username atau email</label>
+        <input id="username" name="username" type="text" maxlength="191" autocomplete="username" required>
         <label for="password">Password</label>
         <input id="password" name="password" type="password" maxlength="72" autocomplete="current-password" required>
         <button type="submit">Masuk</button>

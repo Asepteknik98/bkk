@@ -32,6 +32,14 @@ function e(?string $value): string
     return htmlspecialchars($value ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+/** Ringkasan UTF-8 dengan batas karakter tanpa ekstensi tambahan. */
+function meta_description(string $text, int $length = 160): string
+{
+    $text = trim(preg_replace('/\s+/u', ' ', $text) ?? '');
+    preg_match_all('/./us', $text, $characters);
+    return count($characters[0]) > $length ? implode('', array_slice($characters[0], 0, $length - 1)) . '…' : $text;
+}
+
 /** Ubah paragraf teks biasa menjadi HTML ter-escape; bukan renderer HTML dari input. */
 function plain_text_paragraphs(string $value): string
 {

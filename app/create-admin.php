@@ -70,6 +70,8 @@ try {
         throw new RuntimeException('Admin sudah tersedia. Skrip hanya untuk admin pertama.');
     }
     $nama = ask('Nama admin: ');
+    $username = strtolower(ask('Username (3-50 huruf kecil/angka/titik/garis): '));
+    if (!preg_match('/^[a-z0-9][a-z0-9._-]{2,49}$/D', $username)) { throw new RuntimeException('Username tidak valid.'); }
     $email = strtolower(ask('Email admin: '));
     if ($nama === '' || preg_match('//u', $nama) !== 1 || strlen($nama) > 150
         || strlen($email) > 191 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -83,8 +85,8 @@ try {
     }
     $hash = password_hash($password, PASSWORD_DEFAULT);
     unset($password, $confirmation);
-    $statement = $pdo->prepare("INSERT INTO users (nama, email, password_hash, role, aktif) VALUES (:nama, :email, :hash, 'admin', 1)");
-    $statement->execute(['nama' => $nama, 'email' => $email, 'hash' => $hash]);
+    $statement = $pdo->prepare("INSERT INTO users (nama, username, email, password_hash, role, aktif) VALUES (:nama, :username, :email, :hash, 'admin', 1)");
+    $statement->execute(['nama' => $nama, 'username' => $username, 'email' => $email, 'hash' => $hash]);
     fwrite(STDOUT, "Admin pertama berhasil dibuat. Silakan masuk melalui auth/login.php.\n");
 } catch (PDOException $exception) {
     // Jangan mencetak/log exception SQL yang mungkin berisi input sensitif.

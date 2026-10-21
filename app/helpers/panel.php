@@ -48,7 +48,8 @@ function positive_id(mixed $value): ?int
 function panel_not_found(): never
 {
     http_response_code(404);
-    exit('Data tidak ditemukan. Kembali melalui menu panel.');
+    require APP_ROOT . '/404.php';
+    exit;
 }
 
 /** Semua modul yang menulis referensi media harus memakai lock yang sama. */

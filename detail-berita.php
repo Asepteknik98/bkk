@@ -7,6 +7,7 @@ setting('site_name');
 if (!$story) { http_response_code(!empty($GLOBALS['public_database_unavailable']) ? 503 : 404); }
 $pageTitle = $story['judul'] ?? 'Berita belum tersedia'; $activePage = 'berita.php';
 $pageDescription = $story['ringkasan'] ?? 'Informasi berita BKK SMK JAYA BUANA.';
+if (!$story && empty($GLOBALS['public_database_unavailable'])) { require APP_ROOT.'/404.php'; exit; }
 require __DIR__ . '/app/layouts/header.php';
 ?>
 <main id="konten" class="container portal-container page-main"><nav class="breadcrumb-trail" aria-label="Jejak navigasi"><a href="<?= e(base_url()) ?>">Beranda</a><span aria-hidden="true">/</span><a href="<?= e(base_url('berita.php')) ?>">Berita</a><span aria-hidden="true">/</span><span>Detail berita</span></nav><div class="content-with-sidebar"><div class="content-column">

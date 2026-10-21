@@ -18,6 +18,7 @@ function public_query(string $sql, array $params = []): array
         return $statement->fetchAll();
     } catch (PDOException $exception) {
         $GLOBALS['public_database_unavailable'] = true;
+        http_response_code(503);
         error_log('Pembacaan data portal gagal; kode SQLSTATE: ' . $exception->getCode());
         return [];
     }

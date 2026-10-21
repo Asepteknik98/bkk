@@ -3,6 +3,7 @@ if (!defined('APP_ROOT')) { http_response_code(403); exit; }
 if(!isset($programCategory)||!is_string($programCategory)||!array_key_exists($programCategory,program_categories())){http_response_code(404);exit('Kategori tidak ditemukan.');}
 $categoryInfo = program_categories()[$programCategory];
 $pageTitle = $categoryInfo['title']; $activePage = $categoryInfo['path'];
+$pageDescription = $categoryInfo['description'];
 $total=(int)(public_query("SELECT COUNT(*) AS total FROM program WHERE kategori=:kategori AND status='published'",['kategori'=>$programCategory])[0]['total']??0);
 $pages=max(1,(int)ceil($total/9));$rawPage=$_GET['page']??'1';$page=is_string($rawPage)&&ctype_digit($rawPage)?max(1,min($pages,(int)$rawPage)):1;
 $programs = public_query("SELECT kategori,judul,slug,ringkasan,gambar FROM program WHERE kategori=:kategori AND status='published' ORDER BY created_at DESC,id DESC LIMIT :limit OFFSET :offset", ['kategori'=>$programCategory,'limit'=>9,'offset'=>($page-1)*9]);

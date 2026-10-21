@@ -16,7 +16,7 @@
                     <?php endforeach; ?>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link<?= ($activePage ?? '') === 'pencarian.php' ? ' active' : '' ?>" href="<?= e(base_url('pencarian.php')) ?>">Pencarian</a></li>
+                <li class="nav-item"><a class="nav-link<?= ($activePage ?? '') === 'pencarian.php' ? ' active' : '' ?>" <?= ($activePage ?? '') === 'pencarian.php' ? 'aria-current="page"' : '' ?> href="<?= e(base_url('pencarian.php')) ?>">Pencarian</a></li>
             </ul>
         </div>
     </div>
