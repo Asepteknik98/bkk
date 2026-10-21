@@ -1,0 +1,13 @@
+Options -Indexes
+DirectoryIndex index.php
+
+# Tolak akses HTTP ke sumber internal dan berkas tersembunyi.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule (^|/)\. - [F,L]
+    RewriteRule ^(?:app|database|storage|docs)(?:/|$) - [F,L,NC]
+</IfModule>
+
+<FilesMatch "(?i)^(?:README\.md|.*\.(?:sql|log|ini|env|bak))$">
+    Require all denied
+</FilesMatch>
