@@ -183,3 +183,11 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 
 - Logo sekolah jb.webp dan PPKS ppks.jpeg diperbesar pada bagian atas kartu login, dengan bingkai putih lembut dan alt lengkap. Ukuran 64px desktop, 56px HP, dan 48px layar kecil; object-fit contain mempertahankan proporsi.
 - Pemeriksaan hasil render CLI memastikan kedua logo dan URL subfolder tersedia; sintaks PHP serta git diff --check lulus. Tidak mengubah handler login/database.
+
+- Permintaan lanjutan: pada HP portrait maupun landscape pendek, kedua logo kini rata tengah, dengan identitas BKK/sekolah di bawahnya. Aturan hanya pada breakpoint mobile; desktop tetap memakai susunan sebelumnya. Pemeriksaan diff lulus.
+
+## Pembuatan Admin pertama pada database lokal
+
+- Atas instruksi eksplisit pengguna, Admin aktif dibuat langsung pada database lokal melalui CLI interaktif yang sudah tersedia. Password dibaca tersembunyi dan disimpan sebagai hash bcrypt; tidak disimpan pada source, SQL, dokumentasi, maupun log. Username/password/hash tidak dicatat di progres ini.
+- Email belum diberikan, sehingga digunakan placeholder akun internal berakhiran example.invalid, yang dapat diganti pada profil. Konfigurasi koneksi XAMPP lokal dibuat pada app/config/app.local.php yang diabaikan Git; file tersebut tidak memuat password akun aplikasi.
+- Verifikasi database memastikan role admin, aktif=1 dan algoritma bcrypt. Uji HTTP terhadap Apache lokal berhasil: login menggunakan akun baru, membuka dashboard, logout POST+CSRF, lalu akses panel kembali mengarah ke login. Tidak membuat kredensial bawaan atau mengubah SQL instalasi.

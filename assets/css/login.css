@@ -41,3 +41,7 @@ a:focus-visible,button:focus-visible { outline:3px solid #3158a4; outline-offset
 @media(max-width:360px){body{padding:12px;padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}.login-brand{gap:8px}.login-logos img{width:48px;height:48px}h1{font-size:1.18rem}}
 @media(min-width:701px) and (max-height:650px){.login-form-panel{padding:30px}.login-content{padding:28px 0}.login-intro{margin-bottom:24px}.login-return{margin-top:26px}.visual-caption{padding-bottom:18px}.visual-dots{padding-bottom:25px}}
 @media(max-width:1000px) and (max-height:500px){body{align-items:start}.login-shell{grid-template-columns:minmax(0,1fr);max-width:560px;min-height:0}.login-visual{display:none}.login-form-panel{padding:24px}.login-content{padding:24px 0 12px}.login-intro{margin-bottom:20px}input{margin-bottom:18px}.login-return{margin-top:22px}}
+@media(max-width:700px), (max-width:1000px) and (max-height:500px){
+    .login-brand { align-self:center; flex-direction:column; text-align:center; gap:12px; }
+    .login-logos { justify-content:center; }
+}
