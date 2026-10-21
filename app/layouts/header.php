@@ -13,11 +13,12 @@ $siteName = setting('site_name', (string) app_config('name'));
     <link rel="stylesheet" href="<?= e(asset_url('vendor/bootstrap/bootstrap.min.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset_url('css/style.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset_url('css/responsive.css')) ?>">
+    <link rel="stylesheet" href="<?= e(asset_url('css/portal.css')) ?>">
     <script src="<?= e(asset_url('vendor/bootstrap/bootstrap.bundle.min.js')) ?>" defer></script>
     <script src="<?= e(asset_url('js/main.js')) ?>" defer></script>
-    <noscript><style>.navbar-collapse.collapse{display:block}.main-nav .dropdown-menu{display:block;position:static}.navbar-toggler,.dropdown-toggle{display:none!important}</style></noscript>
+    <noscript><style>.topbar .container{display:block}.navbar-collapse.collapse{display:block}.main-nav .dropdown-menu{display:block;position:static}.navbar-toggler,.dropdown-toggle{display:none!important}</style></noscript>
 </head>
-<body>
+<body class="portal-page">
 <a class="skip-link" href="#konten">Langsung ke konten</a>
 <div class="topbar"><div class="container portal-container">
     <?php require __DIR__ . '/navbar.php'; ?>
