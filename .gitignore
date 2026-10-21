@@ -1,5 +1,7 @@
 /app/config/app.local.php
 /.env
+/storage/login-attempts/
+/storage/sessions/
 /storage/logs/*
 !/storage/logs/.gitkeep
 /uploads/*

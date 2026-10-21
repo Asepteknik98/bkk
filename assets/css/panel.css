@@ -1,0 +1,32 @@
+:root { color-scheme: light; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #182d49; background: #f2f5fa; }
+* { box-sizing: border-box; }
+body { margin: 0; line-height: 1.6; }
+a { color: #174b81; }
+button, input { font: inherit; }
+button { border: 0; border-radius: 6px; background: #183657; color: white; padding: 10px 20px; cursor: pointer; }
+button:hover { background: #294e77; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid #bc922f; outline-offset: 3px; }
+.login-page { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.login-card, .card { background: white; padding: clamp(24px, 5vw, 40px); border-radius: 10px; box-shadow: 0 8px 30px #182d4910; }
+.login-card { max-width: 460px; width: 100%; border-top: 5px solid #c8a34b; }
+.login-card form { display: grid; gap: 10px; margin: 24px 0; }
+input { min-width: 0; width: 100%; padding: 10px; border: 1px solid #8797ab; border-radius: 6px; }
+label { font-weight: 600; }
+.eyebrow, .role-label { font-size: .85rem; font-weight: 700; }
+.alert { background: #fff0ed; color: #8b2920; padding: 12px; border-radius: 6px; }
+.navbar { background: #122b49; color: white; padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; gap: 20px; border-bottom: 4px solid #c8a34b; }
+.brand { color: white; text-decoration: none; font-weight: 700; }
+.navbar-account { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.navbar button { border: 1px solid #b4c5db; }
+.panel-shell { display: grid; grid-template-columns: 230px minmax(0, 1fr); min-height: 70vh; }
+.sidebar { padding: 24px; background: white; }
+.sidebar nav { display: grid; gap: 12px; }
+.sidebar a { display: block; padding: 10px; border-radius: 6px; text-decoration: none; }
+.sidebar a[aria-current] { background: #e8eef7; font-weight: 700; }
+.panel-content { padding: clamp(20px, 4vw, 40px); }
+h1, h2 { line-height: 1.3; overflow-wrap: anywhere; }
+h2 { font-size: 1.25rem; }
+.panel-footer { padding: 20px; text-align: center; color: #52627a; font-size: .85rem; }
+.skip-link { position: absolute; left: -9999px; }
+.skip-link:focus { left: 10px; top: 10px; background: white; padding: 12px; }
+@media (max-width: 700px) { .navbar { align-items: flex-start; flex-direction: column; } .panel-shell { grid-template-columns: 1fr; } .sidebar { padding: 16px 24px; } .sidebar nav { display: flex; flex-wrap: wrap; } }
