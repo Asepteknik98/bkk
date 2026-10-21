@@ -1,17 +1,15 @@
 # BKK SMK JAYA BUANA
 
-Tahap 10 menyatukan pencarian publik, ringkasan dashboard, metadata halaman, dan penanganan 404/error. Tidak ada perubahan skema atau SQL pembaruan untuk tahap ini; instalasi tetap memakai SQL awal, 001, lalu 002 sesuai petunjuk berikut.
-
-Tahap 10 menyatukan pencarian publik, ringkasan dashboard, metadata halaman, dan penanganan 404/error. Tidak ada perubahan skema atau SQL pembaruan untuk tahap ini; instalasi tetap memakai SQL awal, 001, lalu 002 sesuai petunjuk berikut.
-
-Portal berbasis PHP Native 8.2 dan MySQL/MariaDB. Tahap 1–8 menyediakan fondasi, database, autentikasi, portal publik, CRUD berita/lowongan/program, katalog media, tracer study publik dengan panel respons dan ekspor, serta pengelolaan mitra, pengguna, pengaturan, dan akun pribadi.
+Portal berbasis PHP Native 8.2 dan MySQL/MariaDB. Tahap 1 sampai 11 menyediakan fondasi, database, autentikasi, portal publik, CRUD berita/lowongan/program, katalog media, tracer study publik dengan panel respons dan ekspor, serta pengelolaan mitra, pengguna, pengaturan, dan akun pribadi.
 
 ## Instalasi XAMPP
+
+Kebutuhan: Apache 2.4 dengan `mod_rewrite`, `mod_authz_core`, `mod_mime`, dan `.htaccess` aktif; PHP 8.2 dengan `pdo_mysql`, `fileinfo`, dan session; MySQL 8.0.16+ atau MariaDB 10.4+. Tidak membutuhkan Node.js, Composer, framework PHP, maupun CDN. GD dipakai untuk membuat gambar fixture pengujian pengembang, bukan syarat runtime website. CLI PHP diperlukan untuk admin pertama. Pastikan `file_uploads=On`, `upload_max_filesize` minimal `10M`, `post_max_size` misalnya `16M`, dan direktori temporary PHP dapat ditulis.
 
 1. Gunakan Apache 2.4, PHP 8.2 dengan ekstensi `pdo_mysql` dan `fileinfo`, serta MySQL/MariaDB.
 2. Letakkan proyek di `C:/xampp/htdocs/bkk`.
 3. Salin `app/config/app.example.php` menjadi `app/config/app.local.php`. Atur `base_url` menjadi `/bkk`, lalu isi konfigurasi database lokal sesuai lingkungan. Jangan commit file lokal ini.
-4. Jalankan Apache dan MySQL, lalu impor database sesuai petunjuk di bawah. Buka `http://localhost/bkk/`. Jika database belum tersedia, kerangka portal tetap tampil dengan pemberitahuan bahwa informasi belum dapat dimuat.
+4. Jalankan Apache dan MySQL, lalu impor database sesuai petunjuk di bawah. Buka `http://localhost/bkk/`. Jika database belum tersedia, kerangka portal tetap tampil dengan pemberitahuan layanan dan HTTP 503; setelah impor/config benar, halaman normal memberi HTTP 200.
 5. Pastikan stylesheet dimuat melalui `http://localhost/bkk/assets/css/style.css`. Bootstrap 5.3.3 disertakan lokal di `assets/vendor/bootstrap` beserta lisensi MIT; tidak ada proses build atau kebutuhan CDN saat website digunakan.
 
 Untuk hosting shared, unggah isi proyek ke direktori tujuan, lalu atur `base_url` menjadi `/nama-subfolder`, string kosong untuk root domain, atau URL lengkap seperti `https://contoh.sch.id/bkk`. Gunakan HTTPS pada hosting. Zona waktu default adalah `Asia/Jakarta` dan dapat diubah di konfigurasi lokal.
@@ -20,7 +18,7 @@ Untuk hosting shared, unggah isi proyek ke direktori tujuan, lalu atur `base_url
 
 Apache harus mengizinkan `.htaccess` (`AllowOverride All`) dan mengaktifkan `mod_rewrite` serta `mod_authz_core`. Direktori `app`, `database`, `storage`, dan `docs` menolak akses HTTP. Root memblokir berkas tersembunyi dan listing direktori; `uploads` menolak eksekusi skrip. Jangan gunakan server bawaan PHP untuk menilai proteksi Apache karena server tersebut tidak membaca `.htaccess`.
 
-Pastikan proses PHP dapat menulis ke `storage` untuk membuat `sessions` dan `login-attempts`, serta ke `storage/logs` dan, saat fitur unggahan tersedia, `uploads`. Session disimpan di direktori aplikasi yang terlindungi, bukan direktori session bersama hosting. Jangan gunakan izin `777`. Kesalahan dicatat ke `storage/logs/php-error.log`; detail kesalahan dan argumen fungsi tidak ditampilkan kepada pengunjung atau dicatat dalam trace.
+Pastikan proses PHP dapat menulis ke `storage` untuk membuat `sessions` dan `login-attempts`, serta ke `storage/logs` dan `uploads`. Session disimpan di direktori aplikasi yang terlindungi, bukan direktori session bersama hosting. Jangan gunakan izin `777`. Kesalahan dicatat ke `storage/logs/php-error.log`; detail kesalahan dan argumen fungsi tidak ditampilkan kepada pengunjung atau dicatat dalam trace.
 
 ## Database dan helper
 
@@ -182,16 +180,81 @@ Pemeriksaan pemasangan: terbitkan konten uji berlabel DATA DEMO pada tiga modul 
 
 Validasi pengembangan dilakukan pada salinan aplikasi dan database sementara: hasil gabungan/filter/pagination, wildcard/injeksi SQL, input array/panjang, draft/berita terjadwal, ringkasan nyata kedua role, privasi tracer, metadata, gambar hilang, tautan utama dan alt, label formulir, serta error 500/503 tanpa kebocoran respons/log. Apache terpisah memverifikasi 404 root/subfolder dan proteksi app/database/storage/docs/berkas tersembunyi. Chrome memeriksa 27 halaman utama pada lebar 320/390/768/1440 tanpa horizontal overflow. Tidak ada perubahan database pengguna atau pemasangan library baru.
 
-## Integrasi dan pemeriksaan (Tahap 10)
+## Menjalankan instalasi lokal
 
-Pencarian pada header dan `pencarian.php` mencakup judul/ringkasan/isi berita dan program, serta posisi/perusahaan/lokasi/deskripsi lowongan. Filter jenis informasi dan kategori program tersedia; memilih kategori membatasi hasil ke program. Semua sumber hanya mengambil `published`; berita bertanggal publikasi di masa depan tetap tersembunyi. Hasil gabungan diurutkan tanggal, jenis, dan ID, sembilan per halaman. Semua nilai pencarian/filter dibind melalui prepared statements, termasuk limit/offset; karakter `%` dan `_` dicari secara literal. Parameter q/type/kategori dipertahankan pada pagination. Input pencarian tidak valid menghasilkan 400 dengan penjelasan; nomor halaman tidak valid kembali ke halaman pertama atau dibatasi ke halaman terakhir.
+Setelah proyek berada di `C:/xampp/htdocs/bkk`, impor SQL awal, `database/updates/001_tracer_submission_key.sql`, lalu `database/updates/002_users_username_session.sql` satu kali pada database baru. Salin konfigurasi contoh ke `app/config/app.local.php`, isi host/port/nama database/username/password lokal dan `base_url => '/bkk'`. File `.env` tidak dibaca oleh aplikasi; konfigurasi lokal PHP adalah sumber yang digunakan. Jangan menaruh kredensial di file contoh atau Git.
 
-Dashboard Admin/Staf menampilkan jumlah konten per status, lowongan yang masih dibuka menurut tanggal Asia/Jakarta, mitra aktif, katalog media, dan respons tracer per status. Admin juga melihat jumlah pengguna aktif. Hitungan published menyatakan status tersimpan, termasuk berita yang dijadwalkan; berita terjadwal tetap tidak muncul publik sebelum waktunya. Jumlah tracer adalah respons, bukan alumni unik. Tidak ada query ringkasan tracer pada halaman publik.
+Dari terminal pada folder proyek, jalankan `C:\xampp\php\php.exe app/create-admin.php` dan isi nama, username, email, password serta konfirmasi secara interaktif. Jalankan Apache/MySQL melalui XAMPP, buka `http://localhost/bkk/`, kemudian `http://localhost/bkk/auth/login.php`. Jika memakai nama subfolder atau port Apache berbeda, sesuaikan URL dan base URL. Pastikan aset mengarah ke `/bkk/assets/`, bukan `/assets/`. SQL awal tidak boleh diimpor ulang untuk memperbarui database yang sudah berisi data.
 
-Metadata deskripsi dipendekkan secara aman hingga 160 karakter UTF-8 dan di-escape. Judul/deskripsi menggunakan konten detail, kategori, atau konteks pencarian/filter. Gambar lokal hilang memakai placeholder lokal; gambar dekoratif pada kartu memiliki alt kosong, gambar detail/logo memiliki alt. Fokus keyboard tersedia pada tautan, tombol, input, select, dan textarea. Navigasi aktif memakai aria-current.
+## Persiapan shared hosting
 
-`404.php` dipakai untuk detail yang tidak tersedia dan path yang hilang melalui aturan Apache `.htaccess` (mod_rewrite, AllowOverride All). Aturan relatif mendukung subfolder dan root; proteksi direktori internal tetap didahulukan. Server bawaan PHP tidak memproses aturan ini. Kesalahan aplikasi menghasilkan pesan generik 500, kegagalan pembacaan database publik menghasilkan pemberitahuan 503. Log `storage/logs/php-error.log` hanya mencatat jenis/kode/lokasi exception atau kode SQLSTATE, tanpa pesan exception driver, SQL, atau kredensial. Periksa log dan konfigurasi lokal bila layanan gagal; jangan membagikan berkas konfigurasi atau membuka akses HTTP ke logs.
+1. Cocokkan versi/ekstensi dan dukungan Apache `.htaccess` dengan kebutuhan di atas. Pastikan penyedia menyediakan terminal/SSH untuk menjalankan CLI admin pertama. Aplikasi belum menyediakan pembuatan admin melalui browser.
+2. Siapkan salinan proyek untuk document root/subfolder tujuan, termasuk `.htaccess` root, `app`, `database`, `docs`, `storage`, dan `uploads`. Jangan sertakan `.git`, log/session lokal, konfigurasi lokal XAMPP, atau artefak QA. Jika memindahkan data nyata, unggahan dipindahkan bersama backup database yang sesuai.
+3. Buat database dan akun database khusus aplikasi melalui panel hosting. Untuk instalasi kosong, impor SQL awal → 001 → 002. Untuk pemulihan backup yang sudah mencakup migrasi, impor backup saja dan periksa migrasi yang sudah diterapkan; jangan menumpuk impor SQL awal atau pembaruan yang sama.
+4. Buat `app/config/app.local.php` khusus hosting. Isi database hosting, `base_url` berupa `''` untuk root, `/bkk` untuk subfolder, atau URL HTTPS lengkap. Tetapkan zona waktu `Asia/Jakarta` untuk lingkungan sekolah. Pastikan hanya proses aplikasi yang dapat membaca konfigurasi.
+5. Beri izin tulis yang diperlukan pada `storage`, `storage/logs`, dan `uploads`; contoh umum direktori 0755/berkas 0644 jika sesuai kepemilikan hosting. Session dibuat 0700. Jangan menggunakan 0777; sesuaikan kepemilikan dengan penyedia hosting.
+6. Aktifkan HTTPS dan pastikan server meneruskan status HTTPS yang benar ke PHP. Cookie harus beratribut Secure, HttpOnly, dan SameSite=Lax. Jika memakai proxy, konfigurasi alamat/HTTPS dilakukan pada server tepercaya, bukan dengan mempercayai header pengunjung.
+7. Jalankan CLI admin pertama untuk instalasi baru, lengkapi informasi resmi melalui Pengaturan, bersihkan demo, lalu lakukan pengujian manual di bawah. Periksa bahwa akses ke `app/config/app.local.php`, `database/`, `storage/`, `docs/`, berkas tersembunyi, dan skrip di `uploads` ditolak. Jika proteksi tidak aktif, perbaiki konfigurasi hosting sebelum website digunakan.
 
-Pemeriksaan pemasangan: terbitkan konten uji berlabel DATA DEMO pada tiga modul dan simpan satu draft, lalu cari kata uniknya dan pastikan draft tidak terlihat. Uji filter/pagination, detail draft (404), URL yang tidak ada (404), serta login kedua role untuk membandingkan dashboard dengan daftar data. Buka halaman utama pada ponsel dan gunakan Tab untuk menavigasi menu/formulir. Jangan memakai data pribadi alumni untuk pengujian publik.
+Panduan ini hanya persiapan; tidak ada deploy atau unggahan ke hosting yang dijalankan otomatis.
 
-Validasi pengembangan dilakukan pada salinan aplikasi dan database sementara: hasil gabungan/filter/pagination, wildcard/injeksi SQL, input array/panjang, draft/berita terjadwal, ringkasan nyata kedua role, privasi tracer, metadata, gambar hilang, tautan utama dan alt, label formulir, serta error 500/503 tanpa kebocoran respons/log. Apache terpisah memverifikasi 404 root/subfolder dan proteksi app/database/storage/docs/berkas tersembunyi. Chrome memeriksa 27 halaman utama pada lebar 320/390/768/1440 tanpa horizontal overflow. Tidak ada perubahan database pengguna atau pemasangan library baru.
+## Menghapus data demo
+
+Setelah backup, login pengelola dan cari **DATA DEMO** pada Berita, Lowongan, dan Program. SQL awal menyediakan satu berita, satu lowongan, dan lima program draft. Periksa judul/slug/isi tiap entri, lalu hapus melalui tombol panel (POST+CSRF) atau ganti seluruh materi dengan informasi yang sudah diverifikasi sebelum menerbitkan. Jangan menjalankan penghapusan massal atau `TRUNCATE` pada database nyata. Periksa juga mitra/profil/pengaturan bila pernah diisi untuk pengujian. Tidak ada respons alumni contoh dalam SQL.
+
+Setelah menghapus konten, logo/gambar bersama tetap berada di katalog. Hapus hanya media yang tidak dipakai; aplikasi menolak penghapusan referensi aktif. Buka beranda/pencarian tanpa login untuk memastikan demo tidak muncul dan empty state tetap rapi. Kontak resmi yang belum diberikan tetap dikosongkan.
+
+## Backup dan pemulihan
+
+1. Sebelum pembaruan dan secara berkala, batasi sementara perubahan konten/pengiriman tracer menggunakan fasilitas pemeliharaan server agar database dan unggahan konsisten.
+2. Ekspor seluruh database beserta struktur dan data melalui phpMyAdmin: pilih database yang benar → Export → SQL. Alternatif CLI `mysqldump --single-transaction -u NAMA_AKUN -p NAMA_DATABASE > backup.sql`; masukkan password pada prompt, bukan argumen atau source. Nama di perintah ini adalah placeholder.
+3. Salin seluruh `uploads/`, termasuk `.htaccess`, pada waktu backup yang sama. Simpan juga versi source aplikasi dan daftar migrasi yang diterapkan. Simpan konfigurasi lokal secara terpisah dan aman; jangan masukkan ke repository.
+4. Simpan backup SQL, uploads, dan konfigurasi di luar document root dengan akses terbatas; database/CSV tracer berisi data pribadi. Gunakan jadwal dan masa simpan sesuai kebijakan sekolah, serta salinan terpisah dari server utama. CSV tracer bukan backup seluruh database.
+5. Uji pemulihan pada database/folder terpisah: impor backup ke database kosong, pulihkan unggahan, sesuaikan konfigurasi/base URL, lalu periksa login, konten, gambar dan tracer. Jangan impor SQL awal atau migrasi yang sudah ada dalam backup. Direktori session/login-attempts/log lama tidak perlu dipulihkan sebagai sesi pengguna; gunakan sesi baru.
+6. Verifikasi pemulihan sebelum membuka kembali akses/perubahan. Jangan menyimpan `backup.sql`, ZIP backup, atau dump kredensial pada folder publik.
+
+## Pengujian manual akhir
+
+1. Buka beranda dan semua menu tanpa login pada desktop dan ponsel. Uji pencarian/filter/pagination, gambar, tautan dan navigasi Tab. Pastikan URL aset tetap di subfolder dan path acak menghasilkan 404.
+2. Login Admin dan Staf pada profil browser terpisah; logout lewat tombol Keluar. Coba membuka panel tanpa login, serta URL halaman/handler Pengguna dan Pengaturan sebagai Staf: harus ditolak. Nonaktifkan akun uji dan pastikan sesi lamanya kehilangan akses. Pertahankan setidaknya satu Admin aktif.
+3. Pada setiap modul konten, tambah materi berlabel DATA DEMO, edit, simpan draft, terbitkan, dan hapus. Draft harus 404 di publik dan tidak muncul pencarian. Uji URL pendaftaran salah, gambar valid, file SVG/PHP/ekstensi palsu/terlalu besar, dan logo yang dipakai bersama. Teks seperti `<script>alert(1)</script>` harus tampil sebagai teks, bukan dijalankan. POST tanpa token CSRF harus ditolak.
+4. Isi tracer dengan identitas sintetis untuk setiap status, lalu uji validasi/persetujuan/kirim ulang. Periksa detail/filter/rekap dan unduh CSV di panel kedua role; data dan rekap tidak boleh tampil publik. Uji sel berawalan `=`, `+`, `-`, `@` pada CSV memakai data sintetis dan pastikan dinetralisir. Hapus fixture pada database uji setelah selesai, bukan data alumni nyata.
+5. Periksa folder internal dan unggahan melalui Apache; status ditolak berarti berkas tidak dikirim/dieksekusi. Periksa log setelah pengujian. Untuk hosting, verifikasi HTTPS/cookie Secure dan input password CLI langsung pada terminal pemasangan.
+
+Uji CLI yang disertakan dapat diulang tanpa database: `C:\xampp\php\php.exe app/tests/jobs.php` dan `C:\xampp\php\php.exe app/tests/tracer.php`. Pemeriksaan sintaks seluruh PHP di PowerShell: `Get-ChildItem -Recurse -Filter *.php | ForEach-Object { & C:\xampp\php\php.exe -l $_.FullName }`. Pengujian integrasi pengembangan memakai salinan dan layanan sementara; tidak dijalankan pada database pengguna.
+
+## Status audit akhir — 21 Oktober 2026
+
+| Pemeriksaan | Hasil |
+| --- | --- |
+| Sintaks 107 file PHP dan dua uji CLI dalam proyek | Lulus |
+| CRUD berita, lowongan, lima kategori program, mitra, dan media | Lulus melalui HTTP/PDO pada MariaDB sementara |
+| Login/logout kedua role, regenerasi sesi, cookie, throttle, CSRF, hak akses langsung | Lulus; cookie HttpOnly/SameSite/path diuji melalui HTTP lokal |
+| Pengguna/pengaturan khusus Admin, admin aktif terakhir, reset/password pribadi, pencabutan sesi | Lulus, termasuk dua demosi admin bersamaan |
+| Tracer empat status, validasi/anti-spam/kirim ulang, filter/rekap/ekspor dan CSV formula injection | Lulus dengan respons sintetis; tidak mengakses data alumni nyata |
+| Draft/berita terjadwal, pencarian/filter/pagination, metadata, escaping, gambar/tautan | Lulus |
+| Instalasi `/bkk`, 404 dan folder internal/unggahan melalui Apache terpisah | Lulus; PHP dan ekstensi ganda berbahaya pada uploads ditolak, JPG biasa dapat dibuka |
+| Chrome 36 halaman pada 320/390/768/1440 piksel | Lulus tanpa overflow; menu mobile, fokus Tab, label/alt, dan field tracer dinamis diuji pada HTML hasil render data uji |
+| Kredensial repository | Tidak ditemukan literal kredensial nonkosong pada file yang dipindai; konfigurasi lokal/.env diabaikan Git dan tidak ditemukan dalam riwayat path tersebut |
+
+Perbaikan audit: handler exception dipasang sebelum membaca konfigurasi agar exception/syntax error di konfigurasi lokal juga menghasilkan pesan dan log yang aman. Kasus tersebut diuji dengan token rahasia sintetis; token tidak bocor ke halaman maupun log. README yang berulang sudah dirapikan. Tidak ada SQL baru, deploy, perubahan layanan XAMPP, atau perubahan database pengguna.
+
+Batas verifikasi: pemeriksaan browser memakai salinan HTML hasil render dan JavaScript/aset aplikasi, sedangkan penyimpanan/otorisasi diuji melalui HTTP ke aplikasi hidup. HTTPS dengan sertifikat nyata, cookie Secure melalui TLS, dan pembacaan password CLI tanpa echo pada terminal interaktif pemasangan belum diuji langsung; periksa ketiganya saat menyiapkan lingkungan tujuan. Tidak ada pengujian pada shared hosting karena deploy tidak dilakukan.
+
+## Status audit akhir — 21 Oktober 2026
+
+| Pemeriksaan | Hasil |
+| --- | --- |
+| Sintaks 107 file PHP dan dua uji CLI dalam proyek | Lulus |
+| CRUD berita, lowongan, lima kategori program, mitra, dan media | Lulus melalui HTTP/PDO pada MariaDB sementara |
+| Login/logout kedua role, regenerasi sesi, cookie, throttle, CSRF, hak akses langsung | Lulus; cookie HttpOnly/SameSite/path diuji melalui HTTP lokal |
+| Pengguna/pengaturan khusus Admin, admin aktif terakhir, reset/password pribadi, pencabutan sesi | Lulus, termasuk dua demosi admin bersamaan |
+| Tracer empat status, validasi/anti-spam/kirim ulang, filter/rekap/ekspor dan CSV formula injection | Lulus dengan respons sintetis; tidak mengakses data alumni nyata |
+| Draft/berita terjadwal, pencarian/filter/pagination, metadata, escaping, gambar/tautan | Lulus |
+| Instalasi `/bkk`, 404 dan folder internal/unggahan melalui Apache terpisah | Lulus; PHP dan ekstensi ganda berbahaya pada uploads ditolak, JPG biasa dapat dibuka |
+| Chrome 36 halaman pada 320/390/768/1440 piksel | Lulus tanpa overflow; menu mobile, fokus Tab, label/alt, dan field tracer dinamis diuji pada HTML hasil render data uji |
+| Kredensial repository | Tidak ditemukan literal kredensial nonkosong pada file yang dipindai; konfigurasi lokal/.env diabaikan Git dan tidak ditemukan dalam riwayat path tersebut |
+
+Perbaikan audit: handler exception dipasang sebelum membaca konfigurasi agar exception/syntax error di konfigurasi lokal juga menghasilkan pesan dan log yang aman. Kasus tersebut diuji dengan token rahasia sintetis; token tidak bocor ke halaman maupun log. README yang berulang sudah dirapikan. Tidak ada SQL baru, deploy, perubahan layanan XAMPP, atau perubahan database pengguna.
+
+Batas verifikasi: pemeriksaan browser memakai salinan HTML hasil render dan JavaScript/aset aplikasi, sedangkan penyimpanan/otorisasi diuji melalui HTTP ke aplikasi hidup. HTTPS dengan sertifikat nyata, cookie Secure melalui TLS, dan pembacaan password CLI tanpa echo pada terminal interaktif pemasangan belum diuji langsung; periksa ketiganya saat menyiapkan lingkungan tujuan. Tidak ada pengujian pada shared hosting karena deploy tidak dilakukan.
