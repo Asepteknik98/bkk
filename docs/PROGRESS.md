@@ -129,3 +129,7 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Chrome pada HTML hasil render data sintetis: 36 halaman utama/detail/form/panel/login/404, lebar 320/390/768/1440, tanpa horizontal overflow; menu mobile, navigasi Tab, label input/select/textarea, alt gambar, dan empat status tracer dinamis lulus. Penyimpanan dan otorisasi diuji terpisah melalui HTTP aplikasi hidup, bukan diklaim sebagai alur browser end-to-end penuh.
 - README duplikat dirapikan; dilengkapi kebutuhan server, htdocs, urutan SQL awal→001→002, konfigurasi/base URL, CLI admin, menjalankan lokal, persiapan hosting, pembersihan demo lewat panel, backup database+uploads dan uji pemulihan, langkah manual serta tabel hasil/batas verifikasi.
 - Batas verifikasi eksplisit: HTTPS/sertifikat nyata dan cookie Secure melalui TLS, pembacaan password CLI tanpa echo di terminal interaktif pemasangan, serta lingkungan shared hosting belum diuji langsung. Petunjuk manual tersedia; tidak ada deploy/unggah hosting. SQL awal/001/002 dan database pengguna tidak diubah, tidak ada migrasi tambahan. Semua layanan uji dihentikan; artefak QA workspace dibersihkan. Status tahap 1–11 selesai dalam lingkup lokal; instalasi tujuan tetap mengikuti README dan verifikasi lingkungan tersebut.
+
+## Perubahan setelah audit
+
+- README.md dihapus atas permintaan pengguna agar repository GitHub tidak memuat README. Catatan tahap sebelumnya merupakan riwayat; README tidak lagi tersedia.
