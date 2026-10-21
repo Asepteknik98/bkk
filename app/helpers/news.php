@@ -4,17 +4,6 @@ require_once __DIR__ . '/panel.php';
 require_once __DIR__ . '/validation.php';
 require_once __DIR__ . '/upload.php';
 
-/** Semua penulisan berita/media memakai lock yang sama untuk menjaga referensi berkas. */
-function with_content_lock(callable $operation): mixed
-{
-    $name = 'bkk_content_' . substr(hash('sha256', app_config('database')['name']), 0, 32);
-    if ((int) panel_query('SELECT GET_LOCK(:name, 5)', ['name' => $name])->fetchColumn() !== 1) {
-        throw new RuntimeException('Data sedang diproses pengelola lain. Silakan coba kembali.');
-    }
-    try { return $operation(); }
-    finally { panel_query('SELECT RELEASE_LOCK(:name)', ['name' => $name]); }
-}
-
 function news_input(array $input): array
 {
     return ['judul' => input_text($input, 'judul'), 'slug' => input_text($input, 'slug'),

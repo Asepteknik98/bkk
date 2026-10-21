@@ -50,3 +50,14 @@ function panel_not_found(): never
     http_response_code(404);
     exit('Data tidak ditemukan. Kembali melalui menu panel.');
 }
+
+/** Semua modul yang menulis referensi media harus memakai lock yang sama. */
+function with_content_lock(callable $operation): mixed
+{
+    $name = 'bkk_content_' . substr(hash('sha256', app_config('database')['name']), 0, 32);
+    if ((int) panel_query('SELECT GET_LOCK(:name, 5)', ['name' => $name])->fetchColumn() !== 1) {
+        throw new RuntimeException('Data sedang diproses pengelola lain. Silakan coba kembali.');
+    }
+    try { return $operation(); }
+    finally { panel_query('SELECT RELEASE_LOCK(:name)', ['name' => $name]); }
+}

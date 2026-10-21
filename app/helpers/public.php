@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap.php';
+require_once __DIR__ . '/jobs.php';
 
 /** Pembacaan publik gagal dengan pemberitahuan, tanpa menampilkan detail koneksi. */
 function public_query(string $sql, array $params = []): array
@@ -104,15 +105,17 @@ function news_card(array $item): void
 
 function job_card(array $item): void
 {
-    $expired = $item['batas_lamaran'] && $item['batas_lamaran'] < date('Y-m-d');
+    $open = job_is_open($item);
     ?>
     <article class="job-card">
         <p class="eyebrow"><?= e($item['perusahaan']) ?></p>
         <?php demo_label($item); ?>
-        <h3><?= e($item['posisi']) ?></h3>
+        <span class="job-status <?= $open ? 'is-open' : 'is-closed' ?>"><?= e(job_status_label($item)) ?></span>
+        <h3><a href="<?= e(job_url($item)) ?>"><?= e($item['posisi']) ?></a></h3>
         <p><?= e($item['lokasi']) ?> <span aria-hidden="true">·</span> <?= e($item['jenis_pekerjaan']) ?></p>
         <p class="job-education"><?= e($item['pendidikan']) ?></p>
-        <p class="deadline<?= $expired ? ' expired' : '' ?>"><strong>Batas lamaran:</strong> <?= e(indo_date($item['batas_lamaran'])) ?><?= $expired ? ' · Sudah berakhir' : '' ?></p>
+        <p class="deadline<?= !$open ? ' expired' : '' ?>"><strong>Batas lamaran:</strong> <?= e(indo_date($item['batas_lamaran'])) ?><?= $item['batas_lamaran'] ? ' · 23:59:59 WIB' : '' ?></p>
+        <a class="text-link" href="<?= e(job_url($item)) ?>">Lihat detail lowongan ↗</a>
     </article>
     <?php
 }

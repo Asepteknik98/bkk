@@ -1,6 +1,6 @@
 # BKK SMK JAYA BUANA
 
-Portal berbasis PHP Native 8.2 dan MySQL/MariaDB. Tahap 1–5 menyediakan fondasi, database, autentikasi, portal publik, CRUD berita, serta katalog media. Formulir tracer dan modul pengelolaan lainnya belum diimplementasikan.
+Portal berbasis PHP Native 8.2 dan MySQL/MariaDB. Tahap 1–6 menyediakan fondasi, database, autentikasi, portal publik, CRUD berita/lowongan, serta katalog media. Formulir tracer dan modul pengelolaan lainnya belum diimplementasikan.
 
 ## Instalasi XAMPP
 
@@ -36,7 +36,7 @@ Data awal berisi satu berita, satu lowongan, dan lima program berlabel **DATA DE
 
 Untuk database yang sudah terpasang, cadangkan terlebih dahulu, pilih database yang benar di phpMyAdmin, lalu impor hanya file pembaruan yang belum diterapkan sesuai urutan nomor. Petunjuk setiap pembaruan harus menyebutkan prasyarat, cara verifikasi, dan apakah aman diimpor ulang. Catat file yang sudah diterapkan; jangan mengimpor ulang tanpa petunjuk eksplisit. Instalasi baru menggunakan SQL awal, dilanjutkan file pembaruan yang tersedia secara berurutan.
 
-Saat ini belum ada file pembaruan: tahap 3, 4, dan 5 tidak mengubah skema atau seed SQL. Tahap 5 memakai tabel `berita` dan `media` yang sudah tersedia. Jika impor SQL awal menghasilkan `#1050 Table 'users' already exists`, berarti tabel tersebut sudah ada pada database yang dipilih. Hentikan impor ulang dan periksa kelengkapan delapan tabel sebelum menentukan perbaikan; jangan menghapus tabel yang sudah berisi data untuk mengatasi pesan tersebut.
+Saat ini belum ada file pembaruan: tahap 3–6 tidak mengubah skema atau seed SQL. Modul memakai tabel `berita`, `media`, dan `lowongan` yang sudah tersedia. Jika impor SQL awal menghasilkan `#1050 Table 'users' already exists`, berarti tabel tersebut sudah ada pada database yang dipilih. Hentikan impor ulang dan periksa kelengkapan delapan tabel sebelum menentukan perbaikan; jangan menghapus tabel yang sudah berisi data untuk mengatasi pesan tersebut.
 
 ### Pembaruan database yang sudah terpasang
 
@@ -74,7 +74,7 @@ Validasi tahap 3 memakai salinan aplikasi dan MariaDB sementara: login kedua rol
 
 ## Portal publik (Tahap 4)
 
-Halaman tersedia: beranda, profil/kontak, daftar dan detail berita (`detail-berita.php?slug=...`), pencarian judul/ringkasan berita, ringkasan lowongan, informasi tracer study, dan lima kategori program. Semua menu memiliki tujuan yang tersedia. Daftar berita memakai pagination 9 item; daftar awal lowongan/program menampilkan maksimal 30 item. Rincian dan pendaftaran lowongan/program serta formulir tracer menunggu tahap berikutnya.
+Halaman tersedia: beranda, profil/kontak, daftar dan detail berita (`detail-berita.php?slug=...`), pencarian judul/ringkasan berita, daftar/detail lowongan, informasi tracer study, dan lima kategori program. Semua menu memiliki tujuan yang tersedia. Daftar berita dan lowongan memakai pagination 9 item; daftar awal program menampilkan maksimal 30 item. Rincian program serta formulir tracer menunggu tahap berikutnya.
 
 Berita hanya tampil jika `published` dan waktu publikasinya sudah tiba (NULL memakai waktu pembuatan). Draft, berita terjadwal, dan slug tidak dikenal menghasilkan 404 pada detail; gangguan database menghasilkan 503 pada detail. Lowongan/program hanya memakai status `published`; mitra hanya `aktif = 1`. Batas lamaran kosong diberi keterangan belum ditentukan, sedangkan yang lewat diberi label sudah berakhir. Data pribadi tracer tidak pernah dibaca oleh halaman publik.
 
@@ -101,3 +101,23 @@ Pastikan PHP mengaktifkan `file_uploads`, ekstensi `fileinfo`, dan temporary dir
 Helper bersama ada di `app/helpers/upload.php`, `validation.php`, `panel.php`, dan `news.php`. Penulisan konten/media saat ini memakai named lock database dan transaksi, sehingga pemilihan gambar serta pemeriksaan penghapusan tidak saling mendahului. Modul berikutnya yang mengubah referensi media harus memakai `with_content_lock()` juga. Penghapusan memeriksa pemakaian oleh berita/lowongan/program (termasuk draft), mitra, isi teks yang memuat path, dan settings. Jika masih dipakai, metadata dan berkas dipertahankan. Berkas tanpa referensi dipindah dahulu ke `storage/media-trash` yang terlindungi; jika transaksi gagal, berkas dipulihkan, sedangkan setelah commit berkas dihapus permanen. Bila pembersihan gagal, periksa log dan folder tersebut. Jangan membersihkan folder sementara secara sembarangan saat ada operasi berjalan.
 
 Pengujian integrasi dilakukan pada salinan aplikasi dan MariaDB sementara dengan akun uji yang password-nya dibuat acak saat pengujian. Cakupan: kedua role, tambah/edit/draft/publikasi/hapus, slug bertabrakan, unggulan, paragraf/escape XSS, pencarian/pagination, POST/CSRF dan akses tanpa login, seluruh format unggahan yang diizinkan, penolakan unggahan tidak valid, unduhan, file bersama lintas konten/settings, penghapusan fisik, dan rollback berkas/metadata saat simpan berita gagal. Publikasi juga diuji dengan zona waktu PHP berbeda dari database. Database pengguna dan SQL instalasi awal tidak diubah. Tidak ada file SQL pembaruan yang perlu diimpor untuk tahap ini.
+
+## Lowongan kerja (Tahap 6)
+
+Admin dan Staf BKK mengakses **Lowongan Kerja** di sidebar panel. Modul menyediakan daftar dengan pencarian posisi/perusahaan, filter status, pagination 10 item, tambah/edit, serta hapus melalui POST + CSRF. Field perusahaan, posisi, lokasi, jenis pekerjaan, pendidikan minimal, persyaratan, deskripsi, batas lamaran, dan URL pendaftaran wajib diisi. Status yang dapat disimpan adalah draft/published. Poster opsional memakai layanan unggahan gambar 5 MB dan katalog media yang sama; penggantian/penghapusan lowongan tetap mempertahankan berkas di katalog. Penulis awal dan slug dipertahankan saat edit; slug otomatis dibuat unik ketika menambah lowongan.
+
+Pengunjung dapat membuka `lowongan-kerja/` tanpa login, mencari posisi/perusahaan, memfilter lokasi/jenis pekerjaan, dan berpindah halaman (9 item per halaman). Pilihan filter hanya berasal dari lowongan published. Detail memakai `lowongan-kerja/detail.php?slug=...`, menampilkan teks/paragraf ter-escape, pendidikan, poster, batas lamaran, dan maksimal tiga lowongan terkait berdasarkan lokasi/jenis pekerjaan/perusahaan. Draft, status closed lama, dan slug tidak dikenal tidak tampil di publik dan detailnya 404. Gangguan database pada detail menghasilkan 503.
+
+Tanggal lamaran dihitung server dengan **Asia/Jakarta**, terlepas dari zona waktu konfigurasi PHP/database. Lowongan published bertanggal valid masih dibuka sampai 23:59:59 WIB tanggal tersebut dan ditutup tepat pukul 00:00 WIB hari berikutnya. Tidak perlu cron atau perubahan status database saat kedaluwarsa: lowongan published yang sudah lewat tetap dapat dibaca dengan label **Sudah ditutup** dan tanpa tombol daftar. Data lama tanpa tanggal diberi label **Batas belum ditentukan** dan tidak menyediakan tombol daftar.
+
+URL pendaftaran hanya menerima http/https yang valid tanpa username/password atau karakter kontrol. Pemeriksaan dilakukan saat menyimpan dan saat merender tombol, sehingga URL lama yang tidak valid juga tidak ditampilkan. Tombol daftar hanya tersedia saat lowongan masih dibuka dan URL valid; tautan langsung menuju situs perusahaan di tab baru dengan `noopener noreferrer`, tanpa formulir pendaftaran internal. Pengelola tetap perlu memverifikasi bahwa tautan tersebut merupakan tujuan resmi perusahaan. HTML dalam persyaratan/deskripsi ditampilkan sebagai teks.
+
+Helper `jobs.php` memuat aturan batas waktu/URL yang dipakai bersama panel, daftar publik, detail, dan kartu beranda; `vacancies.php` mengelola validasi/transaksi. Lock referensi media bersama kini berada di `panel.php` dan digunakan berita, lowongan, dan media. Tidak ada SQL pembaruan yang perlu diimpor untuk tahap 6; SQL awal tidak diubah.
+
+Uji batas tanggal dan URL dapat dijalankan tanpa database:
+
+```powershell
+C:\xampp\php\php.exe app/tests/jobs.php
+```
+
+Pengujian integrasi pada salinan aplikasi/MariaDB sementara mencakup kedua role, CRUD, draft/aktif/kedaluwarsa/batas hari ini, terkait, pencarian/filter/pagination, tanggal dan URL tidak valid, escape HTML, unggahan poster/reuse/perlindungan media, POST/CSRF/akses tanpa login. Pengujian dijalankan saat zona waktu PHP sengaja berbeda dari Asia/Jakarta; regresi berita dan media juga lulus. Database pengguna tidak diubah.
