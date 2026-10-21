@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="500" viewBox="0 0 560 500" fill="none">
+  <defs>
+    <pattern id="dots" width="23" height="23" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="6" fill="#f5a9be"/></pattern>
+    <pattern id="coral-dots" width="23" height="23" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="6" fill="#f36573"/></pattern>
+    <linearGradient id="case" x1="280" y1="230" x2="280" y2="463" gradientUnits="userSpaceOnUse"><stop stop-color="#f7f8f7"/><stop offset="1" stop-color="#d6dadb"/></linearGradient>
+    <filter id="shadow" x="0" y="0" width="560" height="500" filterUnits="userSpaceOnUse"><feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#132d63" flood-opacity=".2"/></filter>
+  </defs>
+  <path fill="#3157a2" d="M0 0h560v500H0z"/>
+  <path fill="#274b94" d="M0 0h90v120H0zM0 350h160v110H0z"/>
+  <path fill="#234587" d="m410 0 150 0v224H186L410 0Z"/>
+  <path fill="#f16878" d="M410 0h150v150A150 150 0 0 1 410 0Z"/>
+  <circle cx="240" cy="58" r="44" fill="#f5abc1"/>
+  <path d="M209 27a44 44 0 0 1 62 62Z" fill="#ef6275"/>
+  <path fill="url(#dots)" d="M31 17h90v90H31z"/>
+  <path fill="#f5abc1" d="M0 166h334v108H0z"/>
+  <path fill="#f16878" d="m135 56 222 222H135V56Z"/>
+  <path fill="#f5abc1" d="m313 92 109 109V92H313Z"/>
+  <circle cx="128" cy="299" r="111" fill="#f16878"/>
+  <path d="M128 188a111 111 0 0 1 111 111H128V188Z" fill="#3157a2"/>
+  <path fill="url(#coral-dots)" d="M449 175h92v92h-92z"/>
+  <path fill="#f5abc1" d="m486 350 74-74v154h-74v-80Z"/>
+  <path fill="#f16878" d="m491 312 20-21 20 21h-40Zm-16 34 23-23 23 23h-46Z"/>
+  <circle cx="22" cy="149" r="6" fill="#f16878"/>
+  <circle cx="22" cy="178" r="6" fill="#3157a2"/>
+  <circle cx="22" cy="207" r="6" fill="#3157a2"/>
+  <circle cx="22" cy="236" r="6" fill="#3157a2"/>
+  <g filter="url(#shadow)">
+    <rect x="101" y="246" width="367" height="236" rx="13" fill="url(#case)"/>
+    <rect x="116" y="261" width="337" height="204" rx="3" fill="#fff"/>
+    <circle cx="284" cy="253" r="1.5" fill="#bdc4c8"/>
+    <path d="M64 482h444l-20 5a79 79 0 0 1-20 3H104a79 79 0 0 1-20-3l-20-5Z" fill="#e4e7e5"/>
+    <path d="M245 482h82l-5 3h-72l-5-3Z" fill="#b9c1c3"/>
+  </g>
+  <rect x="130" y="276" width="10" height="10" rx="2" fill="#183657"/>
+  <path stroke="#c7ced3" stroke-width="3" stroke-linecap="round" d="M146 279h48M146 285h31M328 282h17M355 282h17M384 282h17"/>
+  <circle cx="433" cy="281" r="4" fill="#183657"/>
+  <path stroke="#eef0f2" d="M126 299h317"/>
+  <text x="134" y="315" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#263445">Informasi BKK</text>
+  <rect x="394" y="307" width="39" height="10" rx="2" fill="#183657"/>
+  <path stroke="#dce1e5" stroke-width="3" stroke-linecap="round" d="M159 334h88M159 359h64M159 384h81M159 409h58M159 434h76"/>
+  <path stroke="#eef0f2" d="M132 345h303M132 370h303M132 395h303M132 420h303M132 445h303"/>
+  <rect x="134" y="328" width="15" height="13" rx="2" fill="#f1b0be"/>
+  <rect x="134" y="353" width="15" height="13" rx="2" fill="#3157a2"/>
+  <rect x="134" y="378" width="15" height="13" rx="2" fill="#f16878"/>
+  <rect x="134" y="403" width="15" height="13" rx="2" fill="#e7b86a"/>
+  <rect x="134" y="428" width="15" height="13" rx="2" fill="#68a0a1"/>
+  <path stroke="#efc193" stroke-width="5" stroke-linecap="round" d="M320 334h16M320 409h16"/>
+  <path stroke="#70bfa5" stroke-width="5" stroke-linecap="round" d="M320 359h16M320 384h16M320 434h16"/>
+  <path stroke="#dde3e8" stroke-width="3" stroke-linecap="round" d="M366 334h21M411 334h20M366 359h21M411 359h20M366 384h21M411 384h20M366 409h21M411 409h20M366 434h21M411 434h20"/>
+</svg>

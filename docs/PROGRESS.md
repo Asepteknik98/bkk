@@ -159,3 +159,27 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Sidebar desktop sticky mengikuti tinggi navbar yang diukur ResizeObserver; area menu dapat digulir, tombol tema/Keluar tetap terlihat. Mode ikon mempertahankan title/aria-label menu. Pada layar <=900px, drawer memakai backdrop, tombol tutup/Escape, focus trap dan pengembalian fokus ke tombol pembuka; konten belakang inert saat drawer terbuka. Tanpa JavaScript, daftar menu tetap dapat diakses.
 - Suite HTTP/database sementara akun/mitra/pengaturan dan integrasi publik/dashboard lulus, termasuk kedua role, penolakan halaman/handler Admin bagi Staf, logout dan CSRF. Lint layout PHP dan git diff --check lulus. Tidak mengubah SQL/database atau membuat README.
 - Chrome pada snapshot HTML hasil render memverifikasi dashboard/daftar/form mitra/pengaturan pada 320/390/768/1024/1440: tanpa overflow, collapse 88px, label aksesibel, tema light/dark dan penyimpanan preferensi, drawer/Escape/backdrop/focus trap, posisi Keluar dalam viewport desktop. Preferensi saat dokumen dimuat ulang dan navigasi tanpa JavaScript juga lulus. Screenshot desktop/mobile diperiksa; artefak QA dibersihkan.
+
+## Desain halaman login sesuai referensi
+
+- Mengikuti instruksi pengguna, halaman login memakai kartu besar dua kolom: form putih di kiri, panel biru dengan geometri coral/pink dan laptop di kanan, tombol Masuk hitam, input garis bawah, sudut membulat dan latar abu-abu. Identitas/logo sekolah dan PPKS serta favicon dipertahankan; teks Indonesia untuk login pengelola, bukan pendaftaran akun.
+- Gaya terisolasi di assets/css/login.css. Ilustrasi vektor lokal assets/images/login-illustration.svg dibuat khusus tanpa foto/dependency/font eksternal atau data resmi rekaan. Mobile <=700px memakai satu kolom formulir. Tidak mengubah CSS panel/publik, handler autentikasi, database, maupun SQL.
+- Form tetap POST ke proses-login.php, field username/email dan password, CSRF, autocomplete, pesan error ter-escape dan tautan beranda. Lint PHP, XML SVG dan git diff --check lulus. Suite HTTP/database sementara akun/role/login/logout lulus.
+- Chrome untuk kondisi normal/error pada lebar 320/390/600/768/906/1200/1440 lulus: tanpa overflow, gambar termuat, label, native validation, urutan fokus keyboard, serta form action/method/token benar. Screenshot desktop 906x600 dan mobile diperiksa. Kontras teks pendukung diperjelas; artefak QA dibersihkan. README tidak dibuat kembali.
+
+## Penyempurnaan login responsif HP/laptop
+
+- Viewport memakai viewport-fit=cover dan interactive-widget=resizes-content. CSS menggunakan dynamic viewport height, padding safe-area, kolom minmax, dan tinggi kartu otomatis agar formulir/pesan error tidak terpotong ketika layar pendek. Mobile dan HP landscape pendek memakai satu kolom; laptop tetap dua kolom.
+- Input 16px untuk menghindari auto-zoom fokus pada iPhone, input/tombol minimal 44px, ruang gulir fokus, serta jarak vertikal yang menyesuaikan layar. Tidak mengunci scroll atau menonaktifkan zoom pengguna. Handler login/CSRF dan database tidak diubah.
+- Chrome pada 12 ukuran (320x568 sampai 1440x900), termasuk HP portrait, landscape 844x390 dan viewport pendek 390x320, lulus untuk normal/error: tidak ada overflow atau konten terpotong, password dan tombol dapat digulir ke area terlihat. Lint PHP dan diff check lulus. Keyboard/safe-area perangkat fisik Safari belum diuji langsung; viewport pendek hanya simulasi browser. Artefak QA dibersihkan.
+
+## Palet login lebih hidup
+
+- Atas permintaan pengguna, palet login kini biru dengan aksen coral/emas yang mengikuti ilustrasi. Latar memakai gradasi pastel biru dan peach, kartu bertint lembut dengan garis aksen tiga warna, judul navy dan indikator gradasi, input berisi biru pucat, tombol gradasi biru dengan bayangan dan feedback hover/fokus, tautan biru serta badge role krem-emas.
+- Perubahan hanya assets/css/login.css; tetap mempertahankan identitas sekolah/PPKS, tata letak responsif, input 16px, target sentuh minimal 48px, safe-area dan scroll. Tidak mengubah alur/handler login atau database.
+- Chrome pada sembilan ukuran 320x568 sampai 1440x900, termasuk landscape dan viewport pendek, lulus untuk normal/error: tidak ada overflow/konten terpotong, gradasi tombol dan font input benar, fokus password dapat digulir ke area terlihat. Screenshot diperiksa; git diff --check lulus dan artefak QA dibersihkan.
+
+## Memperjelas dua logo pada login
+
+- Logo sekolah jb.webp dan PPKS ppks.jpeg diperbesar pada bagian atas kartu login, dengan bingkai putih lembut dan alt lengkap. Ukuran 64px desktop, 56px HP, dan 48px layar kecil; object-fit contain mempertahankan proporsi.
+- Pemeriksaan hasil render CLI memastikan kedua logo dan URL subfolder tersedia; sintaks PHP serta git diff --check lulus. Tidak mengubah handler login/database.
