@@ -626,6 +626,32 @@
     .portal-page .public-tracer-page .tracer-form textarea { height:68px; }
 }
 
+.portal-page .application-page { max-width:760px; }
+.application-page>.text-link { display:inline-flex; align-items:center; min-height:44px; }
+.application-page .surface { padding:24px; box-shadow:none; }
+.application-page h1 { font-size:1.4rem; margin:6px 0 12px; overflow-wrap:anywhere; }
+.application-page h2 { font-size:1.1rem; }
+.application-page p { font-size:.9rem; line-height:1.7; }
+.application-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:20px; }
+.application-form label { display:grid; gap:6px; min-width:0; font-size:.88rem; }
+.application-form input:not([type=checkbox]),.application-form textarea { width:100%; min-width:0; min-height:44px; border:1px solid #bccbdc; padding:10px 12px; border-radius:8px; font:inherit; font-size:16px; background:#fff; }
+.application-form .full-width { grid-column:1/-1; }
+.application-form .application-consent { display:flex; align-items:flex-start; gap:10px; line-height:1.6; }
+.application-consent input { flex-shrink:0; width:18px; height:18px; margin-top:3px; }
+.application-form button { min-height:44px; justify-self:start; }
+.application-documents { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; min-width:0; border:1px solid var(--line); border-radius:8px; padding:16px; }
+.application-documents legend { float:none; width:auto; padding:0 6px; font-size:.95rem; font-weight:600; }
+.application-documents>p { grid-column:1/-1; margin:0; font-size:.8rem; color:#526276; }
+.application-documents label { display:flex; flex-direction:column; gap:5px; }
+.application-documents label>.muted { font-size:.75rem; }
+.application-documents input[type=file] { font-size:.8rem; padding:8px; overflow:hidden; }
+@media(max-width:575.98px) { .application-documents { grid-template-columns:minmax(0,1fr); padding:12px; } }
+@media(max-width:575.98px) {
+    .application-page .surface { padding:16px; }
+    .application-form { grid-template-columns:minmax(0,1fr); }
+    .application-form button { width:100%; }
+}
+
 /* Paginated vacancy cards stay readable as the catalogue grows. */
 .portal-page .job-list-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; align-items:stretch; }
 .portal-page .job-list-grid>.job-card { min-width:0; padding:18px; border:1px solid var(--line); border-radius:10px; box-shadow:none; overflow-wrap:anywhere; }

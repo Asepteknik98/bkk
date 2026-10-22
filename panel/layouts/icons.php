@@ -16,6 +16,7 @@ function panel_icon(string $name): string
         'pengguna'=>'<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6M18 15a5 5 0 0 1 3 5"/>',
         'pengaturan'=>'<path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="9" cy="18" r="2"/>',
         'home'=>'<path d="m3 10 9-7 9 7v11H3V10ZM9 21v-8h6v8"/>',
+        'lamaran'=>'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
         'logout'=>'<path d="M10 4H4v16h6M9 12h12m-4-4 4 4-4 4"/>',
         'collapse'=>'<path d="m14 6-6 6 6 6"/>',
         'menu'=>'<path d="M4 6h16M4 12h16M4 18h16"/>',

@@ -3,6 +3,7 @@
 /storage/login-attempts/
 /storage/sessions/
 /storage/media-trash/
+/storage/application-files/
 /storage/logs/*
 !/storage/logs/.gitkeep
 /uploads/*

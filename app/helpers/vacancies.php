@@ -10,6 +10,7 @@ function vacancy_input(array $input): array
     foreach (['perusahaan','posisi','lokasi','jenis_pekerjaan','pendidikan','persyaratan','deskripsi','batas_lamaran','tautan_pendaftaran','status','media_id'] as $key) {
         $data[$key] = input_text($input, $key);
     }
+    $data['tautan_pendaftaran'] = '';
     $data['hapus_gambar'] = ($input['hapus_gambar'] ?? '') === '1';
     return $data;
 }
@@ -21,7 +22,6 @@ function vacancy_errors(array $data): array
         if (!valid_text($data[$key], $limit)) { $errors[] = "$label wajib diisi dengan teks valid, maksimal $limit karakter."; }
     }
     if (!job_deadline($data['batas_lamaran'])) { $errors[] = 'Batas lamaran wajib berupa tanggal yang valid.'; }
-    if (!http_url($data['tautan_pendaftaran'])) { $errors[] = 'Tautan pendaftaran wajib berupa URL http/https yang valid, tanpa username/password.'; }
     if (!in_array($data['status'], ['draft','published'], true)) { $errors[] = 'Status lowongan tidak valid.'; }
     if ($data['media_id'] !== '' && positive_id($data['media_id']) === null) { $errors[] = 'Pilihan poster tidak valid.'; }
     return $errors;
