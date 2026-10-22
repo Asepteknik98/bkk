@@ -123,19 +123,24 @@
     background-image:linear-gradient(110deg,#fffffffa,#f5f8fcf2),url('../images/batik-sekolah.png');
     background-size:auto,186px auto;
 }
-.site-footer-compact { border-top-width:2px; }
-.footer-compact-main { display:flex; align-items:center; justify-content:space-between; gap:12px 24px; padding-top:16px; padding-bottom:10px; }
-.footer-brand { font-size:.92rem; font-weight:700; color:#fff; }
+.site-footer-compact { border-top-width:3px; }
+.footer-compact-main { display:flex; align-items:center; justify-content:space-between; gap:24px 36px; padding-top:32px; padding-bottom:26px; }
+.footer-identity { display:grid; gap:8px; }
+.footer-identity .footer-kicker { color:#efcf89; font-size:.65rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; }
+.footer-brand { width:fit-content; font-size:1.05rem; font-weight:750; letter-spacing:.02em; color:#fff; text-decoration:none; }
+.footer-identity p { margin:0; color:#bdcbd9; font-size:.78rem; line-height:1.7; }
 .footer-links,.footer-meta-links { display:flex; align-items:center; flex-wrap:wrap; gap:4px 18px; }
-.footer-links a,.footer-meta-links a { display:inline-flex; align-items:center; min-height:44px; color:#e1e9f3; font-size:.76rem; }
-.footer-compact-bottom { display:flex; align-items:center; justify-content:space-between; gap:4px 20px; padding-top:4px; padding-bottom:8px; border-top:1px solid #ffffff20; color:#cbd7e5; font-size:.7rem; }
+.footer-links a,.footer-meta-links a { display:inline-flex; align-items:center; min-height:44px; color:#e1e9f3; font-size:.78rem; text-decoration:none; }
+.footer-compact-bottom { display:flex; align-items:center; justify-content:space-between; gap:8px 20px; min-height:64px; padding-top:14px; padding-bottom:14px; border-top:1px solid #ffffff20; color:#cbd7e5; font-size:.72rem; }
+.footer-meta-links:empty { display:none; }
 .footer-links a:hover,.footer-meta-links a:hover,.footer-brand:hover { color:#ffe1a2; }
 .site-footer-compact a:focus-visible { outline-color:#ffe1a2; }
 @media (max-width:767.98px) {
     .footer-compact-main,.footer-compact-bottom { flex-direction:column; align-items:flex-start; }
-    .footer-compact-main { gap:4px; padding-top:16px; padding-bottom:4px; }
-    .footer-links,.footer-meta-links { gap:0 16px; }
-    .footer-compact-bottom { padding-top:12px; padding-bottom:8px; }
+    .footer-compact-main { gap:18px; padding-top:28px; padding-bottom:20px; }
+    .footer-links { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 24px; width:100%; }
+    .footer-meta-links { gap:0 16px; }
+    .footer-compact-bottom { justify-content:center; padding-top:16px; padding-bottom:16px; }
 }
 .footer-grid p,.footer-grid a { line-height:1.9; font-size:.83rem; }
 .footer-grid a { min-height:32px; }

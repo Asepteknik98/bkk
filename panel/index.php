@@ -23,5 +23,23 @@ panel_start($user,'Dashboard','dashboard');
 <section class="card"><h2><a href="<?= e(base_url('panel/media/')) ?>">Media</a></h2><p><strong><?= $mediaCount ?></strong> berkas dalam katalog</p></section>
 <?php if($users!==null): ?><section class="card"><h2><a href="<?= e(base_url('panel/pengguna/')) ?>">Pengguna aktif</a></h2><p><strong><?= $users ?></strong> akun</p></section><?php endif; ?>
 </div>
-<section class="card section-space"><h2>Ringkasan Tracer Study</h2><p>Khusus pengelola. <?= array_sum($tracer) ?> respons; jumlah respons bukan jumlah alumni unik.</p><dl class="response-details"><?php $labels=tracer_statuses();if(isset($tracer['lainnya'])){$labels['lainnya']='Lainnya (data lama)';}foreach($labels as $status=>$label): ?><dt><?= e($label) ?></dt><dd><?= (int)($tracer[$status]??0) ?></dd><?php endforeach; ?></dl><p><a href="<?= e(base_url('panel/tracer-study/rekap.php')) ?>">Lihat rekap dan filter</a></p></section>
+<section class="card section-space tracer-summary" aria-labelledby="tracer-chart-title">
+    <div class="tracer-summary-heading"><h2 id="tracer-chart-title">Ringkasan Tracer Study</h2><span class="badge"><?= (int) array_sum($tracer) ?> respons</span></div>
+    <p class="muted">Jumlah respons berdasarkan kegiatan alumni, bukan jumlah alumni unik.</p>
+    <?php
+    $labels = tracer_statuses();
+    if (isset($tracer['lainnya'])) { $labels['lainnya'] = 'Lainnya (data lama)'; }
+    $chartMax = max(1, ...array_map(static fn($status): int => (int) ($tracer[$status] ?? 0), array_keys($labels)));
+    ?>
+    <dl class="tracer-chart" aria-label="Grafik jumlah respons per kegiatan; panjang batang dibandingkan kategori terbanyak">
+        <?php foreach ($labels as $status => $label): $value = (int) ($tracer[$status] ?? 0); ?>
+        <div class="tracer-chart-row">
+            <dt><?= e($label) ?></dt>
+            <dd><span class="tracer-chart-track" aria-hidden="true"><span class="tracer-chart-bar" style="width:<?= (int) round($value / $chartMax * 100) ?>%"></span></span><strong><?= $value ?><span class="sr-only"> respons</span></strong></dd>
+        </div>
+        <?php endforeach; ?>
+    </dl>
+    <?php if (array_sum($tracer) === 0): ?><p class="muted">Belum ada respons. Grafik akan terisi setelah alumni mengirim formulir.</p><?php endif; ?>
+    <a href="<?= e(base_url('panel/tracer-study/rekap.php')) ?>">Lihat rekap dan filter &rarr;</a>
+</section>
 <?php panel_end($user); ?>

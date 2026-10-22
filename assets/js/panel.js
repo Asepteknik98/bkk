@@ -3,6 +3,31 @@
 const panelRoot = document.documentElement;
 if (document.querySelector('.panel-page')) {
     panelRoot.classList.add('panel-js');
+    const accountToggle = document.querySelector('.account-menu-toggle');
+    const accountMenu = document.querySelector('#account-menu');
+    if (accountToggle && accountMenu) {
+        const closeAccountMenu = () => {
+            accountMenu.hidden = true;
+            accountToggle.setAttribute('aria-expanded', 'false');
+        };
+        accountToggle.addEventListener('click', () => {
+            const open = accountMenu.hidden;
+            accountMenu.hidden = !open;
+            accountToggle.setAttribute('aria-expanded', String(open));
+        });
+        document.addEventListener('click', event => {
+            if (!event.target.closest('.account-dropdown')) closeAccountMenu();
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && !accountMenu.hidden) {
+                closeAccountMenu();
+                accountToggle.focus();
+            }
+        });
+        document.addEventListener('focusin', event => {
+            if (!event.target.closest('.account-dropdown')) closeAccountMenu();
+        });
+    }
     const sidebar = document.querySelector('#panel-sidebar');
     const drawerButton = document.querySelector('.sidebar-open-button');
     const collapseButton = document.querySelector('.sidebar-collapse');
