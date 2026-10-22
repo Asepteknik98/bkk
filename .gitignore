@@ -1,5 +1,21 @@
 /app/config/app.local.php
 /.env
+# Rahasia lokal; contoh konfigurasi tetap boleh disimpan.
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.pem
+*.key
+*.p12
+*.pfx
+# Cadangan data, bukan skema/migrasi SQL aplikasi.
+/backups/
+/storage/backups/
+*.sql.gz
+*.sql.zip
+*.dump
 /storage/login-attempts/
 /storage/sessions/
 /storage/media-trash/

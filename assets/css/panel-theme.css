@@ -31,7 +31,27 @@ html[data-theme="dark"] .panel-page {
 .applications-inbox td small { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .applications-inbox td:last-child a { display:inline-flex; align-items:center; min-height:44px; }
 .applications-inbox .pagination a { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:8px 16px; border:1px solid var(--panel-line); border-radius:7px; text-decoration:none; }
-.application-review { max-width:960px; margin-inline:auto; }
+.application-review { max-width:1120px; margin-inline:auto; }
+.application-review-layout { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:24px; margin-top:18px; }
+.application-review-info,.application-review-side { min-width:0; }
+.application-review-side { border-left:1px solid var(--panel-line); padding-left:24px; }
+.application-review-layout .application-review-data { grid-template-columns:125px minmax(0,1fr); gap:10px 16px; margin:0 0 18px; font-size:.84rem; }
+.application-review-layout .application-review-documents { border-top:0; padding-top:0; margin-top:0; }
+.application-review-layout .application-review-documents li { align-items:flex-start; flex-direction:column; gap:4px; padding:10px 0; }
+.application-review-documents .application-file-actions { display:flex; align-items:center; gap:16px; }
+.application-file-actions a { font-size:.8rem; text-decoration:none; }
+.application-file-actions .application-file-view { gap:6px; font-weight:600; }
+.application-review-documents .application-preview-hint { font-size:.75rem; line-height:1.5; margin:0 0 4px; }
+.application-review-layout .application-review-status { gap:10px; padding-top:14px; margin-top:14px; }
+.application-review-layout .application-review-status>div { flex:1; width:auto; min-width:130px; }
+@media(max-width:800px) {
+    .application-review-layout { grid-template-columns:minmax(0,1fr); gap:20px; }
+    .application-review-side { border-left:0; border-top:1px solid var(--panel-line); padding-left:0; padding-top:18px; }
+}
+@media(max-width:600px) {
+    .application-review-layout .application-review-data { grid-template-columns:minmax(0,1fr); gap:4px; }
+    .application-review-layout .application-review-status>div { flex-basis:100%; }
+}
 .application-review .page-actions { margin-bottom:16px; gap:12px; }
 .application-review .page-actions h1 { font-size:1.3rem; }
 .application-review .page-actions>a { display:inline-flex; align-items:center; min-height:44px; font-size:.82rem; }

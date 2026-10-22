@@ -9,9 +9,17 @@ if (!$file || !preg_match('/^[a-f0-9]{48}\.(pdf|jpg|png)$/D',$file['nama_simpan'
 $path = application_file_directory().'/'.$file['nama_simpan'];
 if (!is_file($path)) { panel_not_found(); }
 session_write_close();
-header('Content-Type: application/octet-stream');
+$preview = ($_GET['lihat'] ?? '') === '1';
+$types = ['pdf'=>'application/pdf','jpg'=>'image/jpeg','png'=>'image/png'];
+$extension = pathinfo($path,PATHINFO_EXTENSION);
+if ($preview && (($types[$extension] ?? null) !== $file['mime_type'] || (new finfo(FILEINFO_MIME_TYPE))->file($path) !== $types[$extension])) {
+    http_response_code(415); exit('Berkas ini tidak dapat ditampilkan. Silakan unduh berkas.');
+}
+header('Content-Type: '.($preview ? $types[$extension] : 'application/octet-stream'));
+header('X-Frame-Options: SAMEORIGIN');
+header("Content-Security-Policy: default-src 'none'; frame-ancestors 'self'");
 header('X-Content-Type-Options: nosniff');
 header('Cache-Control: private, no-store');
-header('Content-Disposition: attachment; filename="berkas-lamaran-'.(int)$file['id'].'.'.pathinfo($path,PATHINFO_EXTENSION).'"; filename*=UTF-8\'\''.rawurlencode($file['nama_asli']));
+header('Content-Disposition: '.($preview ? 'inline' : 'attachment').'; filename="berkas-lamaran-'.(int)$file['id'].'.'.pathinfo($path,PATHINFO_EXTENSION).'"; filename*=UTF-8\'\''.rawurlencode($file['nama_asli']));
 header('Content-Length: '.filesize($path));
 readfile($path);
