@@ -626,6 +626,60 @@
     .portal-page .public-tracer-page .tracer-form textarea { height:68px; }
 }
 
+/* Paginated vacancy cards stay readable as the catalogue grows. */
+.portal-page .job-list-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; align-items:stretch; }
+.portal-page .job-list-grid>.job-card { min-width:0; padding:18px; border:1px solid var(--line); border-radius:10px; box-shadow:none; overflow-wrap:anywhere; }
+.job-list-grid .job-card-info { display:flex; flex-direction:column; align-items:flex-start; height:100%; min-width:0; }
+.job-list-grid .eyebrow { font-size:.75rem; line-height:1.5; }
+.portal-page .job-list-grid h3 { font-size:1.05rem; line-height:1.5; margin:12px 0; }
+.job-list-grid h3 a { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; }
+.job-list-grid .job-card-info>p:not(.eyebrow) { font-size:.85rem; line-height:1.6; margin-bottom:8px; }
+.portal-page .job-list-grid .deadline { width:100%; padding:8px; font-size:.78rem!important; margin:8px 0!important; }
+.job-list-grid .text-link { display:inline-flex; align-items:center; min-height:44px; margin-top:auto; padding-top:8px; font-size:.85rem; }
+.job-list-grid>.empty-state { grid-column:1/-1; }
+.portal-page .jobs-page .pagination-nav { display:flex; flex-wrap:wrap; justify-content:center; }
+.portal-page .jobs-page .pagination-nav .button { min-height:44px; }
+@media(max-width:991.98px) { .portal-page .job-list-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:575.98px) { .portal-page .job-list-grid { grid-template-columns:minmax(0,1fr); gap:12px; } }
+
+/* Minimal public vacancy detail. */
+.portal-page .job-public-page { max-width:960px; }
+.portal-page .job-public-page .job-detail { padding:20px; }
+.job-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.job-heading>div { min-width:0; }
+.job-heading .eyebrow { margin:0; font-size:.78rem; color:#526276; letter-spacing:.02em; }
+.job-heading .job-status { flex-shrink:0; font-size:.75rem; }
+.job-public-page .job-detail>.eyebrow { color:#526276; font-size:.8rem; letter-spacing:.04em; }
+.portal-page .job-public-page .job-detail h1 { font-size:clamp(1.2rem,2.2vw,1.5rem); margin:4px 0 0; }
+.job-public-page .job-detail h1>.public-icon { display:none; }
+.portal-page .job-public-page .job-facts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px 16px; padding:14px 0; margin:16px 0 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.job-public-page .job-facts dt { grid-row:1; color:#657184; font-size:.8rem; font-weight:400; }
+.job-public-page .job-facts dd { grid-row:2; margin:0; font-size:.9rem; overflow-wrap:anywhere; }
+.job-detail-layout { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:24px; align-items:start; padding-top:18px; }
+.job-description { min-width:0; }
+.portal-page .job-public-page .job-description h2 { margin:0 0 10px; font-size:1rem; }
+.portal-page .job-public-page .job-description .article-body { font-size:.9rem; line-height:1.7; margin-bottom:18px; overflow-wrap:anywhere; }
+.portal-page .job-public-page .application-box { margin:0; padding:16px; border:1px solid var(--line); border-radius:10px; background:#f8fafc; box-shadow:none; font-size:.88rem; overflow-wrap:anywhere; }
+.portal-page .job-public-page .application-box .button { display:inline-flex; flex-direction:row; align-items:center; justify-content:center; gap:8px; width:100%; min-height:44px; font-size:.85rem; text-align:center; white-space:normal; }
+.job-public-page .application-box .button>.public-icon { display:none; }
+.job-public-page .application-box .button>span { margin:0; }
+.job-public-page .application-box .muted { font-size:.75rem; margin-top:8px; }
+.job-poster-details { border-top:1px solid var(--line); padding-top:8px; }
+.job-poster-details summary { cursor:pointer; min-height:44px; padding:10px 0; font-size:.9rem; font-weight:600; }
+.job-poster-details summary:focus-visible { outline:2px solid #315f93; outline-offset:3px; }
+.portal-page .job-public-page .job-poster { max-height:none; max-width:100%; width:auto; height:auto; margin:12px auto; }
+@media(max-width:767.98px) {
+    .portal-page .job-public-page .job-detail { padding:16px; }
+    .job-heading { align-items:flex-start; flex-direction:column; gap:10px; }
+    .portal-page .job-public-page .job-facts { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:5px 16px; padding:16px 0; }
+    .job-public-page .job-facts dt:nth-of-type(1),.job-public-page .job-facts dt:nth-of-type(2) { grid-row:1; }
+    .job-public-page .job-facts dd:nth-of-type(1),.job-public-page .job-facts dd:nth-of-type(2) { grid-row:2; margin-bottom:12px; }
+    .job-public-page .job-facts dt:nth-of-type(3),.job-public-page .job-facts dt:nth-of-type(4) { grid-row:3; }
+    .job-public-page .job-facts dd:nth-of-type(3),.job-public-page .job-facts dd:nth-of-type(4) { grid-row:4; }
+    .job-detail-layout { grid-template-columns:minmax(0,1fr); gap:24px; padding-top:20px; }
+    .job-detail-layout>.application-box { grid-row:1; }
+}
+
 /* Decorative icons retain text labels and stay compact on mobile. */
 .portal-page .public-icon { display:inline-block; width:14px; height:14px; flex:0 0 14px; vertical-align:-2px; margin-right:5px; pointer-events:none; }
 .portal-page h1>.public-icon { width:19px; height:19px; vertical-align:-3px; }

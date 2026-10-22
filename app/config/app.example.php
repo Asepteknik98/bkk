@@ -8,7 +8,7 @@ return [
     'timezone' => 'Asia/Jakarta',
     'database' => [
         'host' => '127.0.0.1',
-        'port' => 3306,
+        'port' => 3307,
         'name' => 'bkk_jaya_buana',
         'username' => '',
         'password' => '',
