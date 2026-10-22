@@ -32,8 +32,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             if (!$exists->fetchColumn()) {
                 if ((int)($_SESSION['last_application_at'] ?? 0) > time()-60) { throw new InvalidArgumentException('Tunggu satu menit sebelum mengirim lamaran berikutnya.'); }
                 $files = validate_application_files($_FILES);
-                $insert = $pdo->prepare('INSERT INTO lamaran (lowongan_id,posisi,perusahaan,nama,email,telepon,pendidikan,alamat,pesan,submission_key,created_at) VALUES (:lowongan_id,:posisi,:perusahaan,:nama,:email,:telepon,:pendidikan,:alamat,:pesan,:submission_key,:created_at)');
-                $insert->execute($data + ['lowongan_id'=>$current['id'],'posisi'=>$current['posisi'],'perusahaan'=>$current['perusahaan'],'submission_key'=>$key,'created_at'=>(new DateTimeImmutable('now',new DateTimeZone('Asia/Jakarta')))->format('Y-m-d H:i:s')]);
+                $insert = $pdo->prepare('INSERT INTO lamaran (lowongan_id,posisi,perusahaan,nama,email,telepon,pendidikan,alamat,pesan,submission_key,created_at,wa_consent,wa_consent_at) VALUES (:lowongan_id,:posisi,:perusahaan,:nama,:email,:telepon,:pendidikan,:alamat,:pesan,:submission_key,:created_at,:wa_consent,:wa_consent_at)');
+                $waConsent=($_POST['wa_consent']??'')==='1';
+                $insert->execute($data + ['wa_consent'=>(int)$waConsent,'wa_consent_at'=>$waConsent?date('Y-m-d H:i:s'):null,'lowongan_id'=>$current['id'],'posisi'=>$current['posisi'],'perusahaan'=>$current['perusahaan'],'submission_key'=>$key,'created_at'=>(new DateTimeImmutable('now',new DateTimeZone('Asia/Jakarta')))->format('Y-m-d H:i:s')]);
                 save_application_files($pdo, (int)$pdo->lastInsertId(), $files, $moved);
             }
             $pdo->commit();
@@ -78,6 +79,7 @@ require APP_ROOT . '/app/layouts/header.php';
 <label for="file-<?= $field ?>" data-public-icon="<?= ['cv'=>'clipboard','ijazah'=>'school','sertifikat'=>'certificate','pendukung'=>'file'][$field] ?>"><?= e($label) ?> <span class="muted"><?= $required ? '(wajib)' : '(opsional)' ?></span><input type="file" id="file-<?= $field ?>" name="<?= $field ?>" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" aria-describedby="document-help" <?= $required ? 'required' : '' ?>></label>
 <?php endforeach; ?>
 <?php if ($errors): ?><p class="full-width">Pilih kembali berkas sebelum mengirim ulang formulir.</p><?php endif; ?></fieldset>
+<label class="application-consent full-width"><input type="checkbox" name="wa_consent" value="1" <?= ($_POST['wa_consent'] ?? '') === '1' ? 'checked' : '' ?>> Saya bersedia menerima informasi lowongan dan tindak lanjut BKK melalui WhatsApp (opsional). Untuk berhenti, hubungi BKK.</label>
 <div class="application-submit full-width"><label class="application-consent" data-public-icon="shield"><input type="checkbox" name="consent" value="1" required <?= ($_POST['consent'] ?? '') === '1' ? 'checked' : '' ?>> Saya menyetujui data ini digunakan pengelola BKK untuk proses lamaran dan menghubungi saya.</label>
 <button data-public-icon="send" class="button button-navy" type="submit">Kirim lamaran</button></div>
 </form>

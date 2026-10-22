@@ -26,6 +26,7 @@ require APP_ROOT.'/app/layouts/header.php';
 <?php endforeach;?>
 <label for="keterangan"><?= panel_icon('berita') ?> Keterangan tambahan (opsional)<textarea id="keterangan" name="keterangan" maxlength="5000" rows="2"><?= e($data['keterangan']) ?></textarea></label>
 <div class="consent-box"><p><?= e(TRACER_CONSENT) ?></p><label class="tracer-check"><input type="checkbox" name="persetujuan_data" value="1" <?= $data['persetujuan_data']?'checked':'' ?> required> Saya setuju dengan pemrosesan data untuk tujuan tersebut.</label></div>
+<label class="tracer-check"><input type="checkbox" name="wa_consent" value="1" <?= !empty($data['wa_consent'])?'checked':'' ?>> Saya bersedia menerima informasi lowongan dan tindak lanjut BKK melalui WhatsApp (opsional). Untuk berhenti, hubungi BKK.</label>
 <p>Untuk koreksi data, hubungi kontak BKK pada <a href="<?= e(base_url('profil.php')) ?>">halaman profil dan kontak</a>. Mengirim ulang formulir yang sama tidak membuat catatan ganda. Jika ingin mengirim perubahan, gunakan formulir baru atau hubungi pengelola.</p>
 <button class="button button-navy" type="submit">Kirim data alumni</button></form></main>
 <script src="<?= e(asset_url('js/tracer-study.js')) ?>" defer></script>

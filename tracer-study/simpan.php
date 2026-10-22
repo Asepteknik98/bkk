@@ -22,6 +22,7 @@ if(!$errors){
             if($retry>0){http_response_code(429);header('Retry-After: '.$retry);exit('Terlalu banyak pengiriman. Tunggu sampai 15 menit, lalu kirim kembali formulir yang sama. Data belum disimpan.');}
             $params=[];foreach(tracer_fields() as $field=>$label){$params[$field]=$data[$field]===''?null:$data[$field];}
             $params['tahun_lulus']=(int)$data['tahun_lulus'];$params['submission_key']=$key;$params['versi_persetujuan']=TRACER_CONSENT_VERSION;
+            $params['wa_consent']=(int)$data['wa_consent'];$params['wa_consent_at']=$data['wa_consent']?date('Y-m-d H:i:s'):null;
             $columns=array_keys($params);
             $sql='INSERT INTO tracer_responses ('.implode(',',$columns).',persetujuan_data,persetujuan_at) VALUES (:'.implode(',:',$columns).',1,NOW())';
             try{$statement=db()->prepare($sql);$statement->execute($params);}

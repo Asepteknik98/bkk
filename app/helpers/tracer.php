@@ -22,6 +22,7 @@ function tracer_input(array $input):array
     $data['nomor_telepon']=preg_replace('/[\s().-]+/','',$data['nomor_telepon']);
     $active=match($data['status_kegiatan']){'bekerja'=>['nama_perusahaan','posisi_pekerjaan','lokasi_pekerjaan'],'kuliah'=>['nama_kampus','program_studi'],'wirausaha'=>['nama_usaha','bidang_usaha'],default=>[]};
     foreach(['nama_perusahaan','posisi_pekerjaan','lokasi_pekerjaan','nama_kampus','program_studi','nama_usaha','bidang_usaha'] as $field){if(!in_array($field,$active,true)){$data[$field]='';}}
+    $data['wa_consent']=($input['wa_consent']??'')==='1';
     $data['persetujuan_data']=($input['persetujuan_data']??'')==='1';return $data;
 }
 
@@ -50,7 +51,7 @@ function tracer_nonce():string
 function tracer_same_response(array $row,array $data):bool
 {
     foreach(tracer_fields() as $field=>$label){if((string)($row[$field]??'')!==(string)$data[$field]){return false;}}
-    return true;
+    return (int)($row['wa_consent']??0)===(int)($data['wa_consent']??false);
 }
 
 function csv_safe_cell(mixed $value):string

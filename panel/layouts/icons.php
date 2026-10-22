@@ -23,6 +23,15 @@ function panel_icon(string $name): string
         'menu'=>'<path d="M4 6h16M4 12h16M4 18h16"/>',
         'moon'=>'<path d="M20 14A8 8 0 0 1 10 4a8 8 0 1 0 10 10Z"/>',
         'sun'=>'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M5 19l1-1M18 6l1-1"/>',
+        'mail'=>'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>',
+        'phone'=>'<path d="M7 3H3c0 10 8 18 18 18v-4l-5-2-2 2a16 16 0 0 1-7-7l2-2-2-5Z"/>',
+        'location'=>'<path d="M19 9c0 6-7 12-7 12S5 15 5 9a7 7 0 1 1 14 0Z"/><circle cx="12" cy="9" r="2"/>',
+        'calendar'=>'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>',
+        'download'=>'<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
+        'message'=>'<path d="M4 4h16v12H9l-5 4V4ZM8 8h8M8 12h5"/>',
+        'certificate'=>'<circle cx="12" cy="8" r="4"/><path d="m9 12-2 9 5-3 5 3-2-9"/>',
+        'back'=>'<path d="M20 12H4m6-6-6 6 6 6"/>',
+        'whatsapp'=>'<path d="M21 11a9 9 0 0 1-13 8l-5 2 2-5a9 9 0 1 1 16-5Z"/><path d="m9 7-2 2c1 4 3 6 7 7l2-2-3-2-1 1-2-2 1-1-2-3Z"/>',
         'close'=>'<path d="m6 6 12 12M6 18 18 6"/>',
     ];
     return '<svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'.($paths[$name]??$paths['dashboard']).'</svg>';
