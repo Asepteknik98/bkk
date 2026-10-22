@@ -111,7 +111,7 @@ function news_url(array $item): string
 function news_card(array $item): void
 {
     ?>
-    <article class="news-card">
+    <article class="news-card news-story-card">
         <a class="image-link" href="<?= e(news_url($item)) ?>" tabindex="-1" aria-hidden="true"><img src="<?= e(content_image($item['gambar'])) ?>" alt="" loading="lazy" width="640" height="400"></a>
         <div class="news-card-body">
             <div class="meta">Berita &amp; kegiatan <span>·</span> <?= e(indo_date($item['published_at'] ?? $item['created_at'])) ?></div>

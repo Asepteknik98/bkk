@@ -12,8 +12,9 @@ if ($searchTerm !== '') {
     $params = ['judul' => $pattern, 'ringkasan' => $pattern];
 }
 $total = (int) (public_query('SELECT COUNT(*) AS total FROM berita WHERE ' . $where, $params)[0]['total'] ?? 0);
-$pages = max(1, (int) ceil($total / 9)); $page = min($page, $pages);
-$rows = public_query('SELECT judul, slug, ringkasan, gambar, published_at, created_at FROM berita WHERE ' . $where . ' ORDER BY COALESCE(published_at, created_at) DESC, id DESC LIMIT :limit OFFSET :offset', $params + ['limit' => 9, 'offset' => ($page - 1) * 9]);
+$perPage = 6;
+$pages = max(1, (int) ceil($total / $perPage)); $page = min($page, $pages);
+$rows = public_query('SELECT judul, slug, ringkasan, gambar, published_at, created_at FROM berita WHERE ' . $where . ' ORDER BY COALESCE(published_at, created_at) DESC, id DESC LIMIT :limit OFFSET :offset', $params + ['limit' => $perPage, 'offset' => ($page - 1) * $perPage]);
 require __DIR__ . '/header.php';
 ?>
 <main id="konten" class="container portal-container page-main"><div class="page-heading"><p class="eyebrow">Portal informasi BKK</p><h1><?= e($pageTitle) ?></h1><p><?= isset($isSearch) ? 'Temukan berita dan kegiatan yang telah diterbitkan.' : 'Kabar, informasi, dan kegiatan terbaru dari pengelola BKK.' ?></p></div>

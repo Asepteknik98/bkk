@@ -200,3 +200,37 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Beranda memakai hero gradasi lembut dengan CTA Lowongan dan formulir Tracer serta anchor program. Empty state tetap menjelaskan belum ada konten published; tidak mengisi konten resmi rekaan. Kartu lima program memakai aksen berbeda. Alt mitra kini menyebut nama dan simbol tautan mitra diperbaiki. Query/visibilitas published, validasi server dan privasi tracer tidak diubah.
 - Lint tiga PHP berubah, git diff --check, uji CLI jobs/tracer, suite HTTP/MariaDB pencarian/dashboard/publik dan suite tracer lengkap lulus pada lingkungan sementara. Database nyata tidak diubah; hanya membaca halaman publik untuk snapshot empty state. Tidak membuat SQL baru atau README.
 - Chrome pada 19 halaman/state publik (beranda, profil, berita, pencarian, lowongan, tracer info/form, lima program, detail bersama, 404, empty state) lulus pada 320/390/600/768/1024/1200/1440: tanpa overflow, brand terpusat, label/alt, menu/dropdown/Escape, dan empat kelompok tracer dinamis. Screenshot desktop/mobile diperiksa. Setelah penyesuaian target sentuh 44px, uji tambahan home/form pada 320/1440 serta fallback tanpa JS/Bootstrap lulus. Browser memakai HTML hasil render dan aset lokal yang disertakan dalam preview; tidak diklaim sebagai pengujian perangkat fisik. Artefak QA dibersihkan.
+
+## Membatasi kepadatan daftar berita
+
+- Setelah persetujuan pengguna, daftar berita menampilkan maksimal 6 kartu per halaman melalui LIMIT/OFFSET, dengan urutan tanggal terbaru dan id sebagai pemecah urutan. Berita lama tetap tersedia melalui pagination dan pencarian. Bagian berita terbaru di beranda mempertahankan batas 6; bagian Sorotan tetap terpisah dan terbatas seperti sebelumnya.
+- Kartu berita diberi kelas khusus news-story-card agar gaya tidak memengaruhi kartu program. Judul maksimal 2 baris, ringkasan maksimal 3 baris pada grid, gambar tetap rasio 16:10. Badan kartu memakai flex agar tautan baca sejajar pada setiap baris; teks panjang tetap membungkus. HP satu kolom, tablet/desktop dua kolom, isi lengkap tetap tersedia pada detail.
+- Lint kedua PHP dan git diff --check lulus. Suite HTTP/MariaDB sementara untuk integrasi publik lulus, ditambah 13 berita published yang terbagi 6/6/1 tanpa duplikasi/kehilangan, batas halaman ekstrem, pengecualian draft/terjadwal, dan batas 6 pada bagian terbaru beranda. Fixture judul/ringkasan panjang berada dalam batas kolom database.
+- Chrome pada snapshot hasil render dengan aset lokal lulus di lebar 320/390/768/1024/1440: jumlah kartu, jumlah kolom, clamp teks, rasio gambar, tinggi kartu sejajar pada setiap baris desktop, dan tanpa horizontal overflow. Bukan pengujian perangkat fisik. Tidak mengubah database nyata, SQL, README, atau modul lain; artefak QA dibersihkan.
+
+## Menghapus Sorotan BKK dari beranda
+
+- Atas permintaan pengguna, seluruh bagian Sorotan BKK (berita utama, pendamping, dan placeholder) dihapus dari index.php beserta query/variabel yang tidak lagi digunakan. Bagian berita terbaru tetap maksimal 6 kartu dengan tautan daftar lengkap.
+- Lint index.php dan pemeriksaan HTTP lokal lulus: status 200, Sorotan/placeholder tidak muncul, bagian program/lowongan/berita terbaru tetap tersedia. git diff --check lulus. Tidak mengubah database atau SQL.
+
+## Persiapan batik sekolah pada kartu program
+
+- Gaya batik navy dengan aksen emas dan lapisan gelap untuk keterbacaan disiapkan pada lima kartu program. index.php mengaktifkan kelas program-section-batik hanya jika assets/images/batik-sekolah.jpg tersedia; URL CSS relatif mendukung subfolder. Hover mempertahankan motif dan teks putih.
+- Status belum selesai: gambar referensi ada di chat tetapi berkas batik belum tersedia di proyek; tidak mengganti dengan motif rekaan. Tampilan awal tetap digunakan sampai berkas tersedia.
+- Lint PHP, git diff --check dan HTTP lokal lulus: kelima kartu tetap tersedia dan kelas batik belum aktif saat gambar tidak ada. Tampilan bermotif belum dapat diverifikasi tanpa aset asli. Tidak mengubah database/SQL.
+
+## Mengaktifkan aset batik PNG
+
+- Pengguna mengonfirmasi nama batik-sekolah.png; berkas asli kini tersedia di assets/images. Referensi pemeriksaan file di index.php dan latar CSS disesuaikan ke PNG sehingga motif aktif pada lima kartu program.
+- Lint PHP, git diff --check dan HTTP lokal lulus: kelas batik aktif, kelima kartu tersedia, CSS merujuk PNG, gambar merespons 200 dengan signature PNG valid. Tampilan visual browser belum diuji ulang pada perubahan ekstensi ini. Tidak mengubah database/SQL.
+
+## Melembutkan motif batik untuk keterbacaan
+
+- Lapisan navy pada kartu batik diperkuat dengan transisi bertahap dari 82% di atas sampai 99% di bawah; motif lebih terlihat pada area dekorasi atas dan semakin samar di belakang judul/deskripsi. Bayangan judul dihapus dan jarak baris teks diperlonggar.
+- Pemeriksaan HTTP lokal memastikan lima kartu aktif dan CSS terbaru termuat. Perhitungan kontras sRGB terhadap motif putih pada lapisan paling ringan memenuhi 4.5:1 untuk teks putih, deskripsi dan nomor emas. git diff --check lulus; pemeriksaan visual browser belum dilakukan pada penyesuaian ini. Hanya portal.css dan progres berubah.
+
+## Batik header dan footer minimalis
+
+- Header publik memakai motif batik lokal dengan lapisan putih sangat lembut agar identitas/logo/pencarian tetap jelas; topbar dan footer memakai motif dengan lapisan navy pekat. Menggunakan aset PNG yang sama, tanpa mengubah gambar aslinya.
+- Footer publik diringkas dari empat kolom menjadi identitas dan navigasi horizontal, diikuti baris copyright/login serta media sosial hanya jika URL valid sudah diisi. Tautan Profil & kontak menggantikan blok alamat/kontak panjang; placeholder media sosial dihapus dari footer. Pada HP susunan membungkus dan bertumpuk secara wajar, target tautan tetap 44px.
+- Lint footer PHP dan git diff --check lulus. HTTP lokal memastikan beranda berhasil, footer ringkas dirender tanpa kolom lama/placeholder, dan semua tautan footer lokal dapat dibuka. Belum menguji ulang tampilan browser desktop/mobile pada perubahan ini. Tidak mengubah panel/login, database, SQL atau README.
