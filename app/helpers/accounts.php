@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/panel.php';
 require_once __DIR__ . '/validation.php';
+require_once __DIR__ . '/upload.php';
 
 function account_password(string $password, string $confirmation): string
 {
@@ -62,4 +63,33 @@ function account_failure(Throwable $exception, string $path): never
     elseif ($exception instanceof PDOException && $exception->getCode() === '23000') { $message = 'Username atau email sudah digunakan. Silakan periksa kembali.'; }
     else { error_log('Perubahan akun gagal: ' . get_class($exception) . ' ' . $exception->getCode()); $message = 'Perubahan belum tersimpan. Periksa database lalu coba kembali.'; }
     panel_message($message, $path);
+}
+
+/** Store a validated photo and retain its media reference after replacement. */
+function account_photo(array $old, int $actorId, ?array &$upload): ?string
+{
+    if (isset($_FILES['profile_photo']) && !is_array($_FILES['profile_photo'])) {
+        throw new InvalidArgumentException('Data foto tidak valid.');
+    }
+    $upload=store_upload($_FILES['profile_photo']??null,'profil');
+    if ($upload) {register_media($upload,$actorId); return $upload['path'];}
+    return ($_POST['remove_photo']??'')==='1'?null:($old['foto_profil']??null);
+}
+
+function account_photo_url(array $account): ?string
+{
+    $path=$account['foto_profil']??null;
+    return is_string($path) && preg_match('/\.(jpg|png|webp)$/D',$path) && managed_upload_path($path) ? base_url($path) : null;
+}
+
+function account_photo_field(array $account): void
+{
+    $photo=account_photo_url($account);
+    ?>
+    <div class="profile-photo-field">
+        <?php if($photo): ?><img class="profile-photo-preview" src="<?= e($photo) ?>" alt="Foto profil saat ini" width="64" height="64"><?php endif; ?>
+        <div><label for="profile_photo">Foto profil</label><input type="file" id="profile_photo" name="profile_photo" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"><small>JPG, PNG, atau WebP, maksimal 5 MB.</small>
+        <?php if($photo): ?><label class="check-label"><input type="checkbox" name="remove_photo" value="1"> Hapus foto saat ini</label><?php endif; ?></div>
+    </div>
+    <?php
 }

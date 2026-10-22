@@ -6,12 +6,28 @@ foreach(settings_fields() as $key=>[$label,$max,$required]){$data[$key]=setting(
 if(isset($_SESSION['settings_form'])){$data=array_replace($data,$_SESSION['settings_form']);unset($_SESSION['settings_form']);}
 panel_start($user,'Pengaturan','pengaturan');
 ?>
-<h1>Pengaturan Website</h1><p>Isi hanya informasi yang telah diverifikasi. Kontak yang belum tersedia boleh dikosongkan. Profil menggunakan teks biasa.</p>
-<form class="editor-form card" method="post" enctype="multipart/form-data" action="<?= e(base_url('panel/pengaturan/simpan.php')) ?>"><?= csrf_field() ?>
-<?php foreach(settings_fields() as $key=>[$label,$max,$required]): ?><label for="<?= $key ?>"><?= e($label) ?></label>
-<?php if(in_array($key,['contact_address','profile_description'],true)): ?><textarea id="<?= $key ?>" name="<?= $key ?>" rows="<?= $key==='profile_description'?10:3 ?>" maxlength="<?= $max ?>"><?= e($data[$key]) ?></textarea>
+<div class="settings-page">
+<div class="page-actions"><div><p class="eyebrow">Konfigurasi portal</p><h1><?= panel_icon('pengaturan') ?> Pengaturan Website</h1></div></div>
+<p class="settings-note">Gunakan informasi terverifikasi. Kontak yang belum tersedia boleh dikosongkan.</p>
+<form class="settings-form" method="post" enctype="multipart/form-data" action="<?= e(base_url('panel/pengaturan/simpan.php')) ?>"><?= csrf_field() ?>
+<?php
+$groups=[
+    ['Identitas & kontak','akun',['site_name','school_name','contact_phone','contact_email','contact_address']],
+    ['Media sosial & profil','home',['social_instagram','social_facebook','social_youtube','profile_description']],
+];
+$fields=settings_fields();
+foreach($groups as [$heading,$icon,$keys]): ?>
+<section class="card settings-section"><h2><?= panel_icon($icon) ?> <?= e($heading) ?></h2><div class="settings-fields">
+<?php foreach($keys as $key): [$label,$max,$required]=$fields[$key]; ?>
+<div class="settings-field <?= in_array($key,['contact_address','profile_description'],true)?'settings-wide':'' ?>"><label for="<?= $key ?>"><?= e($label) ?></label>
+<?php if(in_array($key,['contact_address','profile_description'],true)): ?><textarea id="<?= $key ?>" name="<?= $key ?>" rows="<?= $key==='profile_description'?4:2 ?>" maxlength="<?= $max ?>"><?= e($data[$key]) ?></textarea>
 <?php else: ?><input id="<?= $key ?>" name="<?= $key ?>" type="<?= str_starts_with($key,'social_')?'url':($key==='contact_email'?'email':'text') ?>" maxlength="<?= $max ?>" value="<?= e($data[$key]) ?>" <?= $required?'required':'' ?>><?php endif; ?>
+</div><?php endforeach; ?></div></section>
 <?php endforeach; ?>
-<?php management_image_field('bkk_logo','Logo BKK',setting('bkk_logo'));management_image_field('school_logo','Logo sekolah',setting('school_logo')); ?>
-<button type="submit">Simpan pengaturan</button></form>
+<section class="card settings-logos"><h2><?= panel_icon('media') ?> Logo website</h2><div class="settings-logo-grid">
+<div class="settings-logo-field"><?php management_image_field('bkk_logo','Logo BKK',setting('bkk_logo')); ?></div>
+<div class="settings-logo-field"><?php management_image_field('school_logo','Logo sekolah',setting('school_logo')); ?></div>
+</div></section>
+<div class="settings-save"><button type="submit">Simpan pengaturan</button></div>
+</form></div>
 <?php panel_end($user); ?>

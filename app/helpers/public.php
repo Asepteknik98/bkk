@@ -129,6 +129,8 @@ function job_card(array $item): void
     $open = job_is_open($item);
     ?>
     <article class="job-card">
+        <div class="job-card-image"><img src="<?= e(content_image($item['gambar'] ?? null)) ?>" alt="" width="200" height="200" loading="lazy"></div>
+        <div class="job-card-info">
         <p class="eyebrow"><?= e($item['perusahaan']) ?></p>
         <?php demo_label($item); ?>
         <span class="job-status <?= $open ? 'is-open' : 'is-closed' ?>"><?= e(job_status_label($item)) ?></span>
@@ -137,6 +139,7 @@ function job_card(array $item): void
         <p class="job-education"><?= e($item['pendidikan']) ?></p>
         <p class="deadline<?= !$open ? ' expired' : '' ?>"><strong>Batas lamaran:</strong> <?= e(indo_date($item['batas_lamaran'])) ?><?= $item['batas_lamaran'] ? ' · 23:59:59 WIB' : '' ?></p>
         <a class="text-link" href="<?= e(job_url($item)) ?>">Lihat detail lowongan ↗</a>
+        </div>
     </article>
     <?php
 }

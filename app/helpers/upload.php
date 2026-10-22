@@ -49,7 +49,7 @@ function store_upload(?array $file, string $folder = 'berita', bool $allowPdf = 
         [$width, $height] = $image;
     }
     if ($extension === 'pdf') { $folder = 'dokumen'; }
-    if (!in_array($folder, ['berita', 'lowongan', 'program', 'mitra', 'dokumen'], true)) {
+    if (!in_array($folder, ['berita', 'lowongan', 'program', 'mitra', 'dokumen', 'profil'], true)) {
         throw new InvalidArgumentException('Lokasi unggahan tidak diizinkan.');
     }
     $uploads = realpath(APP_ROOT . '/uploads');
@@ -80,7 +80,7 @@ function register_media(array $upload, int $userId): int
 /** Hanya berkas yang dikelola layanan ini, tanpa symlink keluar uploads. */
 function managed_upload_path(string $path): ?string
 {
-    if (!preg_match('~^uploads/(?:berita|lowongan|program|mitra|dokumen)/[a-f0-9]{32}\.(?:jpg|png|webp|pdf)$~D', $path)) { return null; }
+    if (!preg_match('~^uploads/(?:berita|lowongan|program|mitra|dokumen|profil)/[a-f0-9]{32}\.(?:jpg|png|webp|pdf)$~D', $path)) { return null; }
     $root = realpath(APP_ROOT . '/uploads');
     $real = realpath(APP_ROOT . '/' . $path);
     return $root && $real && is_file($real) && str_starts_with($real, $root . DIRECTORY_SEPARATOR) ? $real : null;
@@ -115,5 +115,6 @@ function media_reference_count(string $path): int
     foreach (['berita' => ['gambar', 'isi'], 'lowongan' => ['gambar', 'deskripsi'], 'program' => ['gambar', 'isi'], 'mitra' => ['logo', 'deskripsi']] as $table => [$image, $body]) {
         $count += (int) panel_query("SELECT COUNT(*) FROM $table WHERE $image = :path OR $body LIKE :pattern ESCAPE '!'", ['path' => $path, 'pattern' => $pattern])->fetchColumn();
     }
+    $count += (int) panel_query('SELECT COUNT(*) FROM users WHERE foto_profil=:path',['path'=>$path])->fetchColumn();
     return $count + (int) panel_query("SELECT COUNT(*) FROM settings WHERE setting_value LIKE :pattern ESCAPE '!'", ['pattern' => $pattern])->fetchColumn();
 }

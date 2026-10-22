@@ -11,11 +11,11 @@ $siteName = setting('site_name', (string) app_config('name'));
     <title><?= e(($pageTitle ?? 'Beranda') . ' — ' . $siteName) ?></title>
     <link rel="icon" type="image/jpeg" href="<?= e(asset_url('images/ppks.jpeg')) ?>">
     <link rel="stylesheet" href="<?= e(asset_url('vendor/bootstrap/bootstrap.min.css')) ?>">
-    <link rel="stylesheet" href="<?= e(asset_url('css/style.css')) ?>">
-    <link rel="stylesheet" href="<?= e(asset_url('css/responsive.css')) ?>">
-    <link rel="stylesheet" href="<?= e(asset_url('css/portal.css')) ?>">
+    <link rel="stylesheet" href="<?= e(asset_url('css/style.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/style.css') ?>">
+    <link rel="stylesheet" href="<?= e(asset_url('css/responsive.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/responsive.css') ?>">
+    <link rel="stylesheet" href="<?= e(asset_url('css/portal.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/portal.css') ?>">
     <script src="<?= e(asset_url('vendor/bootstrap/bootstrap.bundle.min.js')) ?>" defer></script>
-    <script src="<?= e(asset_url('js/main.js')) ?>" defer></script>
+    <script src="<?= e(asset_url('js/main.js')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/js/main.js') ?>" defer></script>
     <noscript><style>.topbar .container{display:block}.navbar-collapse.collapse{display:block}.main-nav .dropdown-menu{display:block;position:static}.navbar-toggler,.dropdown-toggle{display:none!important}</style></noscript>
 </head>
 <body class="portal-page">

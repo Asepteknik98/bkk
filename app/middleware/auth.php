@@ -8,7 +8,7 @@ function require_auth(): array
     if (empty($_SESSION['user_id'])) {
         redirect('auth/login.php');
     }
-    $statement = db()->prepare('SELECT id, nama, username, email, role, aktif, session_version FROM users WHERE id = :id LIMIT 1');
+    $statement = db()->prepare('SELECT id, nama, username, email, foto_profil, role, aktif, session_version FROM users WHERE id = :id LIMIT 1');
     $statement->execute(['id' => $_SESSION['user_id']]);
     $user = $statement->fetch();
     if (!$user || !isset($_SESSION['auth_version']) || (int) $_SESSION['auth_version'] !== (int) $user['session_version'] || !(int) $user['aktif'] || !in_array($user['role'], ['admin', 'staf_bkk'], true)) {

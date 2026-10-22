@@ -2,9 +2,7 @@
 <footer class="site-footer site-footer-compact">
     <div class="container portal-container footer-compact-main">
         <div class="footer-identity">
-            <span class="footer-kicker">Bursa Kerja Khusus</span>
             <a class="footer-brand" href="<?= e(base_url()) ?>">BKK SMKS JAYA BUANA</a>
-            <p>Karir, pendidikan, dan masa depan alumni.</p>
         </div>
         <nav class="footer-links" aria-label="Navigasi footer">
             <a href="<?= e(base_url('profil.php')) ?>">Profil &amp; kontak</a>

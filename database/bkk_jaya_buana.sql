@@ -7,6 +7,7 @@ CREATE TABLE users (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nama VARCHAR(150) NOT NULL,
     email VARCHAR(191) NOT NULL,
+    foto_profil VARCHAR(255) NULL,
     password_hash VARCHAR(255) NOT NULL,
     role ENUM('admin', 'staf_bkk') NOT NULL,
     aktif TINYINT(1) NOT NULL DEFAULT 1,

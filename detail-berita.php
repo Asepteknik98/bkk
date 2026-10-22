@@ -10,8 +10,23 @@ $pageDescription = $story['ringkasan'] ?? 'Informasi berita BKK SMK JAYA BUANA.'
 if (!$story && empty($GLOBALS['public_database_unavailable'])) { require APP_ROOT.'/404.php'; exit; }
 require __DIR__ . '/app/layouts/header.php';
 ?>
-<main id="konten" class="container portal-container page-main"><nav class="breadcrumb-trail" aria-label="Jejak navigasi"><a href="<?= e(base_url()) ?>">Beranda</a><span aria-hidden="true">/</span><a href="<?= e(base_url('berita.php')) ?>">Berita</a><span aria-hidden="true">/</span><span>Detail berita</span></nav><div><div class="content-column">
-    <?php if ($story): ?><article class="article-detail surface"><p class="eyebrow">Berita &amp; kegiatan</p><?php demo_label($story); ?><h1><?= e($story['judul']) ?></h1><p class="meta"><?= e(indo_date($story['published_at'] ?? $story['created_at'])) ?> · <?= e($story['penulis'] ?? 'Pengelola BKK') ?></p><p class="article-summary"><?= e($story['ringkasan']) ?></p><img class="article-image" src="<?= e(content_image($story['gambar'])) ?>" alt="<?= e($story['judul']) ?>" width="960" height="600"><div class="article-body"><?= plain_text_paragraphs($story['isi']) ?></div></article>
+<main id="konten" class="container portal-container page-main detail-page"><nav class="breadcrumb-trail" aria-label="Jejak navigasi"><a href="<?= e(base_url()) ?>">Beranda</a><span aria-hidden="true">/</span><a href="<?= e(base_url('berita.php')) ?>">Berita</a><span aria-hidden="true">/</span><span>Detail berita</span></nav><div><div class="content-column">
+    <?php if ($story): ?>
+    <article class="article-detail surface news-detail">
+        <header>
+            <p class="eyebrow">Berita &amp; kegiatan</p>
+            <?php demo_label($story); ?>
+            <h1><?= e($story['judul']) ?></h1>
+            <p class="meta"><?= e(indo_date($story['published_at'] ?? $story['created_at'])) ?> &middot; <?= e($story['penulis'] ?? 'Pengelola BKK') ?></p>
+        </header>
+        <div class="news-detail-content">
+            <img class="article-image" src="<?= e(content_image($story['gambar'])) ?>" alt="<?= e($story['judul']) ?>" width="960" height="600">
+            <div class="news-detail-text">
+                <p class="article-summary"><?= e($story['ringkasan']) ?></p>
+                <div class="article-body"><?= plain_text_paragraphs($story['isi']) ?></div>
+            </div>
+        </div>
+    </article>
     <?php else: empty_state(!empty($GLOBALS['public_database_unavailable']) ? 'Berita belum dapat dimuat' : 'Berita tidak ditemukan', 'Berita mungkin belum diterbitkan atau tautan sudah tidak tersedia.'); endif; ?>
     <p class="section-space"><a class="text-link" href="<?= e(base_url('berita.php')) ?>">← Kembali ke daftar berita</a></p></div></div>
 </main>
