@@ -51,6 +51,9 @@ function management_error(Throwable $exception,string $path): never
 function settings_fields(): array
 {
     return ['site_name'=>['Nama BKK',150,true],'school_name'=>['Nama sekolah',150,true],
+        'public_announcement'=>['Pengumuman publik (popup)',5000,false],
+        'public_announcement_link_text'=>['Teks tombol hyperlink pengumuman',100,false],
+        'public_announcement_link_url'=>['URL hyperlink pengumuman',2048,false],
         'contact_address'=>['Alamat',2000,false],'contact_phone'=>['Nomor kontak',50,false],
         'contact_email'=>['Email kontak',191,false],'social_instagram'=>['Instagram (URL)',2048,false],
         'social_facebook'=>['Facebook (URL)',2048,false],'social_youtube'=>['YouTube (URL)',2048,false],

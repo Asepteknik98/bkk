@@ -34,6 +34,38 @@ function setting(string $key, string $default = ''): string
     return is_string($value) && trim($value) !== '' ? $value : $default;
 }
 
+function render_linked_text(string $value): string
+{
+    $pattern = '/\[([^\]\r\n]+)\]\((https?:\/\/[^\s)]+|www\.[^\s)]+)\)|(?<![\w"\'=])((?:https?:\/\/|www\.)[^\s<>"\']+)/i';
+    $matched = preg_match_all($pattern, $value, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+    if ($matched === false || $matched === 0) { return nl2br(e($value)); }
+
+    $rendered = '';
+    $offset = 0;
+    foreach ($matches as $match) {
+        $full = $match[0][0];
+        $position = $match[0][1];
+        $rendered .= nl2br(e(substr($value, $offset, $position - $offset)));
+        $markdownLabel = $match[1][1] >= 0 ? $match[1][0] : null;
+        $rawUrl = $markdownLabel !== null ? $match[2][0] : $match[3][0];
+        $href = preg_match('/^www\./i', $rawUrl) ? 'https://' . $rawUrl : $rawUrl;
+
+        if (!http_url($href)) {
+            $rendered .= e($full);
+        } elseif ($markdownLabel !== null) {
+            $rendered .= '<a href="' . e($href) . '" target="_blank" rel="noopener noreferrer">' . e($markdownLabel) . '</a>';
+        } else {
+            $label = rtrim($rawUrl, '.,;:!?');
+            $suffix = substr($rawUrl, strlen($label));
+            $href = preg_match('/^www\./i', $label) ? 'https://' . $label : $label;
+            $rendered .= '<a href="' . e($href) . '" target="_blank" rel="noopener noreferrer">' . e($label) . '</a>' . e($suffix);
+        }
+        $offset = $position + strlen($full);
+    }
+
+    return $rendered . nl2br(e(substr($value, $offset)));
+}
+
 function program_categories(): array
 {
     return [

@@ -7,8 +7,10 @@ try{
         $value=input_text($_POST,$key);$data[$key]=$value;
         if(!valid_text($value,$max,$required)){throw new InvalidArgumentException($label.' tidak valid atau terlalu panjang.');}
         if($value!==''&&str_starts_with($key,'social_')&&!http_url($value)){throw new InvalidArgumentException($label.' harus URL http/https.');}
+        if($key==='public_announcement_link_url'&&$value!==''&&!http_url($value)){throw new InvalidArgumentException('URL hyperlink pengumuman harus menggunakan URL http/https yang valid.');}
         if($key==='contact_email'&&$value!==''&&!filter_var($value,FILTER_VALIDATE_EMAIL)){throw new InvalidArgumentException('Email kontak tidak valid.');}
     }
+    if(($data['public_announcement_link_text']??'')!=='' xor ($data['public_announcement_link_url']??'')!==''){throw new InvalidArgumentException('Isi teks tombol dan URL hyperlink pengumuman secara bersamaan.');}
     foreach(['bkk_logo','school_logo'] as $field){$uploads[$field]=management_upload($field);}
     management_transaction(static function()use($data,$uploads,$user):void{
         $values=$data;

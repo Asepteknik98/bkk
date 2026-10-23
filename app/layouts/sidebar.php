@@ -3,7 +3,7 @@
     <section class="announcement-box">
         <p class="eyebrow">Papan informasi</p><h2>Pengumuman</h2>
         <?php $announcement = setting('public_announcement'); ?>
-        <?php if ($announcement): ?><?php demo_label(['isi' => $announcement]); ?><p><?= nl2br(e($announcement)) ?></p>
+        <?php if ($announcement): ?><?php demo_label(['isi' => $announcement]); ?><p><?= render_linked_text($announcement) ?></p>
         <?php else: ?><p>Belum ada pengumuman yang diterbitkan.</p><?php endif; ?>
         <a class="text-link" href="<?= e(base_url('berita.php')) ?>">Lihat berita BKK <span aria-hidden="true">↗</span></a>
     </section>

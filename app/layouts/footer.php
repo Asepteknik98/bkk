@@ -19,6 +19,22 @@
             <?php endif; endforeach; ?>
         </div>
     </div>
+<?php $announcement = setting('public_announcement'); ?>
+<?php if ($announcement): ?>
+<div class="public-announcement-modal" id="public-announcement-modal" hidden>
+    <div class="public-announcement-backdrop" data-close-announcement aria-hidden="true"></div>
+    <div class="public-announcement-dialog" role="dialog" aria-modal="true" aria-labelledby="public-announcement-title">
+        <button class="public-announcement-close" type="button" data-close-announcement aria-label="Tutup pengumuman">&times;</button>
+        <p class="eyebrow">Papan informasi</p>
+        <h2 id="public-announcement-title">Pengumuman</h2>
+        <div class="public-announcement-body"><?= render_linked_text($announcement) ?></div>
+        <?php $announcementLinkText = setting('public_announcement_link_text'); $announcementLinkUrl = setting('public_announcement_link_url'); ?>
+        <?php if ($announcementLinkText !== '' && http_url($announcementLinkUrl)): ?>
+        <a class="public-announcement-action" href="<?= e($announcementLinkUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e($announcementLinkText) ?><span aria-hidden="true">↗</span></a>
+        <?php endif; ?>
+    </div>
+</div>
+<?php endif; ?>
 </footer>
 </body>
 </html>
