@@ -3,30 +3,30 @@ declare(strict_types=1);
 require_once __DIR__.'/panel.php';
 require_once __DIR__.'/validation.php';
 
-function student_columns(): array
+function participant_columns(): array
 {
-    return ['nis'=>'NIS','nisn'=>'NISN','nama'=>'Nama siswa','kelas'=>'Kelas','jurusan'=>'Jurusan','angkatan'=>'Angkatan (tahun masuk)','kelas_industri'=>'Kelas industri','telepon'=>'Telepon','email'=>'Email','tempat_pkl'=>'Tempat PKL','tahun_pkl'=>'Tahun PKL'];
+    return ['nis'=>'Nomor peserta','nama'=>'Nama peserta','kelas'=>'Kelas','jurusan'=>'Jurusan','angkatan'=>'Angkatan','kelas_industri'=>'Kelas industri','telepon'=>'Telepon','email'=>'Email','tempat_pkl'=>'Tempat PKL','tahun_pkl'=>'Tahun PKL'];
 }
 
-function student_sort_options(): array
+function participant_sort_options(): array
 {
     return ['nama'=>'Nama A–Z','angkatan_baru'=>'Angkatan terbaru','angkatan_lama'=>'Angkatan terlama','kelas_industri'=>'Kelas industri A–Z'];
 }
 
 /** Shared filters keep the count, list and pagination consistent. */
-function student_filters(array $input): array
+function participant_filters(array $input): array
 {
     $filters=[];
     foreach(['q'=>100,'angkatan'=>4,'kelas_industri'=>150,'urut'=>30] as $key=>$max){
-        if(isset($input[$key])&&!is_string($input[$key])){throw new InvalidArgumentException('Filter siswa tidak valid.');}
+        if(isset($input[$key])&&!is_string($input[$key])){throw new InvalidArgumentException('Filter peserta tidak valid.');}
         $value=input_text($input,$key);
-        if(!valid_text($value,$max,false)){throw new InvalidArgumentException('Filter siswa terlalu panjang atau tidak valid.');}
+        if(!valid_text($value,$max,false)){throw new InvalidArgumentException('Filter peserta terlalu panjang atau tidak valid.');}
         $filters[$key]=$value;
     }
-    if($filters['angkatan']!==''&&!preg_match('/^(19|20|21)[0-9]{2}$/D',$filters['angkatan'])){throw new InvalidArgumentException('Angkatan harus berupa tahun masuk (1900–2199).');}
+    if($filters['angkatan']!==''&&!preg_match('/^(19|20|21)[0-9]{2}$/D',$filters['angkatan'])){throw new InvalidArgumentException('Angkatan harus berupa tahun (1900–2199).');}
     if($filters['urut']===''){$filters['urut']='nama';}
     $orders=['nama'=>'nama ASC,id ASC','angkatan_baru'=>'angkatan DESC,nama ASC,id ASC','angkatan_lama'=>'angkatan ASC,nama ASC,id ASC','kelas_industri'=>'kelas_industri ASC,angkatan DESC,nama ASC,id ASC'];
-    if(!isset($orders[$filters['urut']])){throw new InvalidArgumentException('Urutan siswa tidak valid.');}
+    if(!isset($orders[$filters['urut']])){throw new InvalidArgumentException('Urutan peserta tidak valid.');}
     $where='1=1';$params=[];
     if($filters['q']!==''){
         $pattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$filters['q']).'%';
@@ -37,30 +37,29 @@ function student_filters(array $input): array
     return [$filters,$where,$params,$orders[$filters['urut']]];
 }
 
-function student_input(array $input): array
+function participant_input(array $input): array
 {
     $data=[];
-    foreach(student_columns() as $key=>$label){$data[$key]=isset($input[$key])&&is_string($input[$key])?trim($input[$key]):'';}
+    foreach(participant_columns() as $key=>$label){$data[$key]=isset($input[$key])&&is_string($input[$key])?trim($input[$key]):'';}
     return $data;
 }
 
-function student_errors(array $data): array
+function participant_errors(array $data): array
 {
     $errors=[];
-    foreach(['nis'=>30,'nisn'=>10,'nama'=>150,'kelas'=>80,'jurusan'=>150,'kelas_industri'=>150,'telepon'=>25,'email'=>190,'tempat_pkl'=>190,'tahun_pkl'=>9] as $key=>$max){
-        if(!mb_check_encoding($data[$key],'UTF-8')||mb_strlen($data[$key])>$max||preg_match('/[\x00-\x1F\x7F]/',$data[$key])){$errors[]=student_columns()[$key].' tidak valid atau terlalu panjang.';}
+    foreach(['nis'=>30,'nama'=>150,'kelas'=>80,'jurusan'=>150,'kelas_industri'=>150,'telepon'=>25,'email'=>190,'tempat_pkl'=>190,'tahun_pkl'=>9] as $key=>$max){
+        if(!mb_check_encoding($data[$key],'UTF-8')||mb_strlen($data[$key])>$max||preg_match('/[\x00-\x1F\x7F]/',$data[$key])){$errors[]=participant_columns()[$key].' tidak valid atau terlalu panjang.';}
     }
-    foreach(['nis','nama','kelas'] as $key){if($data[$key]===''){$errors[]=student_columns()[$key].' wajib diisi.';}}
-    if(!preg_match('/^(19|20|21)[0-9]{2}$/D',$data['angkatan'])){$errors[]='Angkatan harus berupa tahun masuk (1900–2199).';}
-    if($data['nisn']!==''&&!preg_match('/^[0-9]{10}$/D',$data['nisn'])){$errors[]='NISN harus 10 digit.';}
+    foreach(['nis','nama','kelas'] as $key){if($data[$key]===''){$errors[]=participant_columns()[$key].' wajib diisi.';}}
+    if(!preg_match('/^(19|20|21)[0-9]{2}$/D',$data['angkatan'])){$errors[]='Angkatan harus berupa tahun (1900–2199).';}
     if($data['email']!==''&&!filter_var($data['email'],FILTER_VALIDATE_EMAIL)){$errors[]='Email tidak valid.';}
     if($data['tahun_pkl']!==''&&!preg_match('~^(?:19|20|21)[0-9]{2}(?:/(?:19|20|21)[0-9]{2})?$~D',$data['tahun_pkl'])){$errors[]='Tahun PKL harus seperti 2025 atau 2025/2026.';}
     return $errors;
 }
 
-function student_save(array $data, ?int $id=null): void
+function participant_save(array $data, ?int $id=null): void
 {
-    $columns=array_keys(student_columns());
+    $columns=array_keys(participant_columns());
     if($id!==null){
         panel_query('UPDATE siswa SET '.implode(',',array_map(static fn($key)=>"$key=:$key",$columns)).' WHERE id=:id',$data+['id'=>$id]);
     }else{
@@ -69,7 +68,7 @@ function student_save(array $data, ?int $id=null): void
 }
 
 /** Read only text/numbers from the first worksheet; never evaluate formulas or XML entities. */
-function student_xlsx_rows(string $path): array
+function participant_xlsx_rows(string $path): array
 {
     $archive=new PharData($path);
     $xml=static function(string $name)use($archive): SimpleXMLElement {
@@ -92,8 +91,8 @@ function student_xlsx_rows(string $path): array
     if(!preg_match('~^xl/worksheets/[a-zA-Z0-9_.-]+\.xml$~D',$target)){throw new InvalidArgumentException('Lokasi lembar Excel tidak didukung.');}
     $rows=[];
     foreach($xml($target)->xpath('//*[local-name()="sheetData"]/*[local-name()="row"]') as $row){
-        if(count($rows)>=1001){throw new InvalidArgumentException('Maksimal 1.000 siswa per impor.');}
-        $values=array_fill(0,count(student_columns()),'');
+        if(count($rows)>=1001){throw new InvalidArgumentException('Maksimal 1.000 peserta per impor.');}
+        $values=array_fill(0,count(participant_columns()),'');
         foreach($row->xpath('./*[local-name()="c"]') as $cell){
             if(!preg_match('/^([A-Z]+)[0-9]+$/D',(string)$cell['r'],$match)){throw new InvalidArgumentException('Referensi sel tidak valid.');}
             $col=0;foreach(str_split($match[1]) as $letter){$col=$col*26+ord($letter)-64;}
@@ -106,7 +105,7 @@ function student_xlsx_rows(string $path): array
         }
         if(implode('',$values)!==''){$rows[]=$values;}
     }
-    if(!$rows||array_shift($rows)!==array_keys(student_columns())){throw new InvalidArgumentException('Judul kolom harus sama dan berurutan seperti template.');}
-    if(!$rows){throw new InvalidArgumentException('Tidak ada data siswa untuk diimpor.');}
+    if(!$rows||array_shift($rows)!==array_keys(participant_columns())){throw new InvalidArgumentException('Judul kolom harus sama dan berurutan seperti template.');}
+    if(!$rows){throw new InvalidArgumentException('Tidak ada data peserta untuk diimpor.');}
     return $rows;
 }

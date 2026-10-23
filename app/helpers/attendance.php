@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__.'/students.php';
+require_once __DIR__.'/participants.php';
 
 function attendance_statuses(): array
 {
@@ -16,7 +16,7 @@ function attendance_errors(array $data): array
 {
     $errors=[];
     foreach(['judul'=>190,'kelas_industri'=>150,'deskripsi'=>5000] as $key=>$max){if(!valid_text($data[$key],$max,$key!=='deskripsi')){$errors[]=ucfirst(str_replace('_',' ',$key)).' tidak valid (maksimal '.$max.' karakter).';}}
-    if(!preg_match('/^(19|20|21)[0-9]{2}$/D',$data['angkatan'])){$errors[]='Angkatan harus berupa tahun masuk (1900–2199).';}
+    if(!preg_match('/^(19|20|21)[0-9]{2}$/D',$data['angkatan'])){$errors[]='Angkatan harus berupa tahun (1900–2199).';}
     $date=DateTimeImmutable::createFromFormat('!Y-m-d',$data['tanggal']);
     if(!$date||$date->format('Y-m-d')!==$data['tanggal']||$data['tanggal']<'1900-01-01'||$data['tanggal']>'2199-12-31'){$errors[]='Tanggal kegiatan tidak valid.';}
     return $errors;
@@ -24,7 +24,7 @@ function attendance_errors(array $data): array
 
 function attendance_filters(array $input): array
 {
-    [$filters]=student_filters(array_intersect_key($input,array_flip(['q','angkatan','kelas_industri'])));
+    [$filters]=participant_filters(array_intersect_key($input,array_flip(['q','angkatan','kelas_industri'])));
     unset($filters['urut']);
     // Use only fixed SQL fragments; every value remains a bound parameter.
     $where='1=1';$params=[];
@@ -40,17 +40,17 @@ function attendance_options(): array
     return [$years,$industries];
 }
 
-/** Snapshot the roster at creation so subsequent student edits do not rewrite history. */
+/** Snapshot the roster at creation so subsequent participant edits do not rewrite history. */
 function attendance_create(array $data,int $userId): int
 {
     if($errors=attendance_errors($data)){throw new InvalidArgumentException(implode(' ',$errors));}
     db()->beginTransaction();
     try{
-        $students=panel_query('SELECT id,nis,nama,kelas FROM siswa WHERE angkatan=:angkatan AND kelas_industri=:kelas_industri ORDER BY id FOR UPDATE',['angkatan'=>$data['angkatan'],'kelas_industri'=>$data['kelas_industri']])->fetchAll();
-        if(!$students){throw new InvalidArgumentException('Belum ada siswa pada angkatan dan kelas industri tersebut. Isi Data Siswa terlebih dahulu.');}
+        $participants=panel_query('SELECT id,nis,nama,kelas FROM siswa WHERE angkatan=:angkatan AND kelas_industri=:kelas_industri ORDER BY id FOR UPDATE',['angkatan'=>$data['angkatan'],'kelas_industri'=>$data['kelas_industri']])->fetchAll();
+        if(!$participants){throw new InvalidArgumentException('Belum ada peserta pada angkatan dan kelas industri tersebut. Isi Data Peserta terlebih dahulu.');}
         panel_query('INSERT INTO attendance_events(judul,tanggal,angkatan,kelas_industri,deskripsi,created_by) VALUES(:judul,:tanggal,:angkatan,:kelas_industri,:deskripsi,:created_by)',$data+['created_by'=>$userId]);
         $id=(int)db()->lastInsertId();
-        foreach($students as $student){panel_query('INSERT INTO attendance_records(event_id,siswa_id,nis,nama,kelas) VALUES(:event_id,:siswa_id,:nis,:nama,:kelas)',['event_id'=>$id,'siswa_id'=>(int)$student['id'],'nis'=>$student['nis'],'nama'=>$student['nama'],'kelas'=>$student['kelas']]);}
+        foreach($participants as $participant){panel_query('INSERT INTO attendance_records(event_id,siswa_id,nis,nama,kelas) VALUES(:event_id,:siswa_id,:nis,:nama,:kelas)',['event_id'=>$id,'siswa_id'=>(int)$participant['id'],'nis'=>$participant['nis'],'nama'=>$participant['nama'],'kelas'=>$participant['kelas']]);}
         db()->commit();return $id;
     }catch(Throwable $exception){if(db()->inTransaction()){db()->rollBack();}throw $exception;}
 }
@@ -98,6 +98,6 @@ function attendance_filter_form(array $filters,string $path): void
     if($filters['angkatan']!==''&&!in_array($filters['angkatan'],array_map('strval',$years),true)){$years[]=$filters['angkatan'];}
     if($filters['kelas_industri']!==''&&!in_array($filters['kelas_industri'],$industries,true)){$industries[]=$filters['kelas_industri'];}
     ?>
-    <form class="filter-form card" method="get"><label>Cari kegiatan<input name="q" maxlength="100" value="<?= e($filters['q']) ?>"></label><label>Angkatan<select name="angkatan"><option value="">Semua angkatan</option><?php foreach($years as $year):?><option value="<?= e((string)$year) ?>" <?= $filters['angkatan']===(string)$year?'selected':'' ?>><?= e((string)$year) ?></option><?php endforeach;?></select></label><label>Kelas industri<select name="kelas_industri"><option value="">Semua kelas industri</option><?php foreach($industries as $industry):?><option value="<?= e($industry) ?>" <?= $filters['kelas_industri']===$industry?'selected':'' ?>><?= e($industry) ?></option><?php endforeach;?></select></label><button type="submit">Terapkan</button><a href="<?= e(base_url($path)) ?>">Reset filter</a></form>
+    <details class="bmw-filter" open><summary><?= panel_icon('filter') ?> Cari &amp; filter</summary><form class="filter-form card" method="get"><label>Cari kegiatan<input name="q" maxlength="100" value="<?= e($filters['q']) ?>"></label><label>Angkatan<select name="angkatan"><option value="">Semua angkatan</option><?php foreach($years as $year):?><option value="<?= e((string)$year) ?>" <?= $filters['angkatan']===(string)$year?'selected':'' ?>><?= e((string)$year) ?></option><?php endforeach;?></select></label><label>Kelas industri<select name="kelas_industri"><option value="">Semua kelas industri</option><?php foreach($industries as $industry):?><option value="<?= e($industry) ?>" <?= $filters['kelas_industri']===$industry?'selected':'' ?>><?= e($industry) ?></option><?php endforeach;?></select></label><button type="submit">Terapkan</button><a href="<?= e(base_url($path)) ?>">Reset filter</a></form></details>
     <?php
 }

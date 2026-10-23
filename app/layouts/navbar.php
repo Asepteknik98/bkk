@@ -9,7 +9,7 @@
                 <li class="nav-item"><a class="nav-link<?= ($activePage ?? '') === $path ? ' active' : '' ?>" <?= ($activePage ?? '') === $path ? 'aria-current="page"' : '' ?> href="<?= e(base_url($path)) ?>"><?= e($label) ?></a></li>
             <?php endforeach; ?>
                 <li class="nav-item dropdown">
-                    <button class="nav-link dropdown-toggle<?= in_array($activePage ?? '', array_column(program_categories(), 'path'), true) ? ' active' : '' ?>" type="button" data-bs-toggle="dropdown" aria-expanded="false">Program BKK</button>
+                    <button class="nav-link dropdown-toggle<?= in_array($activePage ?? '', array_column(program_categories(), 'path'), true) ? ' active' : '' ?>" type="button" data-bs-toggle="dropdown" aria-expanded="false">BMW SAKTI</button>
                     <ul class="dropdown-menu">
                     <?php foreach (program_categories() as $category): ?>
                         <li><a class="dropdown-item" <?= ($activePage ?? '') === $category['path'] ? 'aria-current="page"' : '' ?> href="<?= e(base_url($category['path'])) ?>"><?= e($category['title']) ?></a></li>

@@ -4,13 +4,13 @@ require_once __DIR__.'/app/helpers/search.php';
 [$filters,$results,$total,$page,$pages,$error]=portal_search($_GET);
 $searchTerm=$filters['q'];$activePage='pencarian.php';
 $pageTitle=$searchTerm!==''?'Pencarian: '.$searchTerm:'Pencarian Informasi';
-$pageDescription='Cari berita, lowongan kerja, dan program BKK yang telah diterbitkan'.($searchTerm!==''?' untuk '.$searchTerm:'').'.';
+$pageDescription='Cari berita, lowongan kerja, dan BMW SAKTI yang telah diterbitkan'.($searchTerm!==''?' untuk '.$searchTerm:'').'.';
 require __DIR__.'/app/layouts/header.php';
 ?>
-<main id="konten" class="container portal-container page-main jobs-page search-page"><div class="page-heading"><h1>Pencarian Informasi</h1><p>Temukan berita, lowongan kerja, dan program BKK yang telah diterbitkan.</p></div>
+<main id="konten" class="container portal-container page-main jobs-page search-page"><div class="page-heading"><h1>Pencarian Informasi</h1><p>Temukan berita, lowongan kerja, dan BMW SAKTI yang telah diterbitkan.</p></div>
 <form class="job-filters surface" method="get" action="<?= e(base_url('pencarian.php')) ?>" role="search">
 <label for="search-q">Kata kunci<input id="search-q" name="q" type="search" maxlength="100" value="<?= e($searchTerm) ?>"></label>
-<label for="search-type">Jenis informasi<select id="search-type" name="type"><?php foreach([''=>'Semua informasi','berita'=>'Berita','lowongan'=>'Lowongan kerja','program'=>'Program BKK'] as $value=>$label): ?><option value="<?= $value ?>" <?= $filters['type']===$value?'selected':'' ?>><?= $label ?></option><?php endforeach; ?></select></label>
+<label for="search-type">Jenis informasi<select id="search-type" name="type"><?php foreach([''=>'Semua informasi','berita'=>'Berita','lowongan'=>'Lowongan kerja','program'=>'BMW SAKTI'] as $value=>$label): ?><option value="<?= $value ?>" <?= $filters['type']===$value?'selected':'' ?>><?= $label ?></option><?php endforeach; ?></select></label>
 <label for="search-category">Kategori program<select id="search-category" name="kategori"><option value="">Semua kategori</option><?php foreach(program_categories() as $value=>$info): ?><option value="<?= $value ?>" <?= $filters['kategori']===$value?'selected':'' ?>><?= e($info['title']) ?></option><?php endforeach; ?></select></label>
 <button class="button button-navy" type="submit">Cari informasi</button><a href="<?= e(base_url('pencarian.php')) ?>">Reset</a></form><p class="search-hint muted">Memilih kategori membatasi hasil ke program dalam kategori tersebut.</p>
 <?php if($error): ?><p class="service-notice" role="alert"><?= e($error) ?></p><?php else: ?>

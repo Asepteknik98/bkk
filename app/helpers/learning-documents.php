@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__.'/students.php';
+require_once __DIR__.'/participants.php';
 
 function learning_filters(array $input): array
 {
-    [$filters,$where,$params]=student_filters($input);unset($filters['urut']);
+    [$filters,$where,$params]=participant_filters($input);unset($filters['urut']);
     $where=str_replace(['nama LIKE :nama','nis LIKE :nis'],['judul LIKE :nama','deskripsi LIKE :nis'],$where);
     return [$filters,$where,$params];
 }
@@ -22,7 +22,7 @@ function learning_errors(array $data): array
     foreach(['judul'=>190,'deskripsi'=>5000,'kelas_industri'=>150] as $key=>$max){
         if(!valid_text($data[$key],$max,$key!=='deskripsi')){$errors[]=ucfirst(str_replace('_',' ',$key)).' tidak valid (maksimal '.$max.' karakter).';}
     }
-    if(!preg_match('/^(19|20|21)[0-9]{2}$/D',$data['angkatan'])){$errors[]='Angkatan harus berupa tahun masuk (1900–2199).';}
+    if(!preg_match('/^(19|20|21)[0-9]{2}$/D',$data['angkatan'])){$errors[]='Angkatan harus berupa tahun (1900–2199).';}
     return $errors;
 }
 

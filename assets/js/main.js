@@ -84,7 +84,7 @@ if (document.querySelector('.portal-page')) {
         clipboard:'M9 5H5v16h14V5h-4M9 3h6v4H9V3ZM8 12h8M8 16h5'
     };
     const publicIconFor = label => {
-        const rules = [[/beranda/i,'home'],[/login|pengelola|privasi/i,'lock'],[/kembali|sebelumnya/i,'back'],[/cari|pencarian/i,'search'],[/email/i,'mail'],[/telepon|whatsapp/i,'phone'],[/alamat|lokasi/i,'location'],[/tahun|tanggal|batas/i,'calendar'],[/website|instagram|facebook|youtube|tautan/i,'link'],[/tracer|alumni|respons/i,'chart'],[/mitra|usaha|entrepreneur|perusahaan/i,'business'],[/kuliah|pendidikan|jurusan|kelas|program|beasiswa/i,'school'],[/lowongan|pekerjaan|karir|posisi/i,'job'],[/profil|nama|nisn|penulis/i,'user'],[/berita|kegiatan|informasi|ringkasan|keterangan/i,'news'],[/kirim|berhasil|setuju/i,'check']];
+        const rules = [[/beranda/i,'home'],[/login|pengelola|privasi/i,'lock'],[/kembali|sebelumnya/i,'back'],[/cari|pencarian/i,'search'],[/email/i,'mail'],[/telepon|whatsapp/i,'phone'],[/alamat|lokasi/i,'location'],[/tahun|tanggal|batas/i,'calendar'],[/website|instagram|facebook|youtube|tautan/i,'link'],[/tracer|alumni|respons/i,'chart'],[/mitra|usaha|entrepreneur|perusahaan/i,'business'],[/kuliah|pendidikan|jurusan|kelas|program|beapeserta/i,'school'],[/lowongan|pekerjaan|karir|posisi/i,'job'],[/profil|nama|nisn|penulis/i,'user'],[/berita|kegiatan|informasi|ringkasan|keterangan/i,'news'],[/kirim|berhasil|setuju/i,'check']];
         return rules.find(([pattern])=>pattern.test(label))?.[1] || 'arrow';
     };
     const addPublicIcon = (element, name) => {

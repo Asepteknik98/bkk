@@ -5,6 +5,12 @@ if (!defined('APP_ROOT')) { http_response_code(403); exit; }
 function panel_icon(string $name): string
 {
     $paths = [
+        'filter'=>'<path d="M4 6h16M7 12h10M10 18h4"/>',
+        'lock'=>'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>',
+        'peserta'=>'<circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6M18 15a5 5 0 0 1 3 5"/>',
+        'capaian'=>'<path d="M4 3h11l5 5v13H4V3Zm11 0v6h5M8 13h8M8 17h5"/>',
+        'upload'=>'<path d="M12 16V3m-5 5 5-5 5 5M4 17v4h16v-4"/>',
+        'add'=>'<path d="M12 5v14M5 12h14"/>',
         'pemateri'=>'<circle cx="8" cy="7" r="3"/><path d="M2 21v-4a6 6 0 0 1 12 0v4M15 3h7v12h-6M17 7h3M17 11h3"/>',
         'absensi'=>'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 11h16m-12 5 3 3 5-5"/>',
         'dashboard'=>'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',

@@ -9,7 +9,7 @@ CREATE TABLE users (
     email VARCHAR(191) NOT NULL,
     foto_profil VARCHAR(255) NULL,
     password_hash VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'staf_bkk', 'siswa') NOT NULL,
+    role ENUM('admin', 'staf_bkk') NOT NULL,
     aktif TINYINT(1) NOT NULL DEFAULT 1,
     last_login_at DATETIME NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -168,8 +168,8 @@ INSERT INTO lowongan (perusahaan, posisi, slug, lokasi, jenis_pekerjaan, pendidi
 
 INSERT INTO program (kategori, judul, slug, ringkasan, isi, status) VALUES
 ('kelas_industri', 'DATA DEMO - Kelas Industri', 'data-demo-kelas-industri', 'DATA DEMO: bukan program resmi sekolah.', 'DATA DEMO. Contoh konten kelas industri untuk pengujian.', 'draft'),
-('ppks', 'DATA DEMO - Program PPKS', 'data-demo-ppks', 'DATA DEMO: bukan program resmi sekolah.', 'DATA DEMO. Contoh konten pengembangan karir siswa untuk pengujian.', 'draft'),
-('kelas_melanjutkan', 'DATA DEMO - Kelas Melanjutkan', 'data-demo-kelas-melanjutkan', 'DATA DEMO: bukan informasi kuliah atau beasiswa resmi.', 'DATA DEMO. Contoh konten kuliah dalam atau luar negeri untuk pengujian.', 'draft'),
+('ppks', 'DATA DEMO - Program PPKS', 'data-demo-ppks', 'DATA DEMO: bukan program resmi sekolah.', 'DATA DEMO. Contoh konten pengembangan karir peserta untuk pengujian.', 'draft'),
+('kelas_melanjutkan', 'DATA DEMO - Kelas Melanjutkan', 'data-demo-kelas-melanjutkan', 'DATA DEMO: bukan informasi kuliah atau beapeserta resmi.', 'DATA DEMO. Contoh konten kuliah dalam atau luar negeri untuk pengujian.', 'draft'),
 ('entrepreneur', 'DATA DEMO - Entrepreneur Program', 'data-demo-entrepreneur', 'DATA DEMO: bukan program resmi sekolah.', 'DATA DEMO. Contoh konten kewirausahaan untuk pengujian.', 'draft'),
 ('kelas_internasional', 'DATA DEMO - Kelas Internasional', 'data-demo-kelas-internasional', 'DATA DEMO: bukan program resmi sekolah.', 'DATA DEMO. Contoh konten program internasional untuk pengujian.', 'draft');
 
@@ -295,7 +295,7 @@ CREATE TABLE IF NOT EXISTS siswa (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uq_siswa_nis (nis),
-    KEY idx_siswa_angkatan_kelas (angkatan, kelas)
+    KEY idx_peserta_angkatan_kelas (angkatan, kelas)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS learning_documents (
@@ -387,12 +387,4 @@ CREATE TABLE IF NOT EXISTS event_resources (
     updated_by BIGINT UNSIGNED NOT NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_event_resources FOREIGN KEY (event_id) REFERENCES attendance_events(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS student_accounts (
-    user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
-    siswa_id BIGINT UNSIGNED NOT NULL,
-    UNIQUE KEY uq_student_account (siswa_id),
-    CONSTRAINT fk_student_account_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_student_account_student FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

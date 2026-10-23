@@ -12,7 +12,6 @@ try {
         if ($id) {
             $old = panel_query('SELECT * FROM users WHERE id=:id FOR UPDATE', ['id'=>$id])->fetch();
             if (!$old) { throw new InvalidArgumentException('Akun tidak ditemukan.'); }
-            if($old['role']==='siswa'){throw new InvalidArgumentException('Kelola akun siswa melalui menu Data Siswa → Akun siswa.');}
             protect_last_admin($old, $role, (int)$old['aktif']);
             $photo=account_photo($old,(int)$actor['id'],$upload);
             panel_query('UPDATE users SET nama=:nama,username=:username,email=:email,role=:role,foto_profil=:foto WHERE id=:id', $data+['role'=>$role,'foto'=>$photo,'id'=>$id]);

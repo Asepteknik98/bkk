@@ -221,15 +221,15 @@ if (document.querySelector('.panel-page')) {
     const iconFor = text => {
         const rules = [
             [/hapus|nonaktifkan/i,'delete'],[/reset.*password|password|sandi/i,'lock'],
-            [/tambah|baru/i,'add'],[/simpan|kirim/i,'save'],[/unggah/i,'upload'],
-            [/ekspor|unduh/i,'download'],[/edit|ubah/i,'edit'],[/cari/i,'search'],
+            [/tambah|baru/i,'add'],[/simpan|kirim/i,'save'],[/unggah|upload|impor/i,'upload'],
+            [/ekspor|unduh|download|excel/i,'download'],[/edit|ubah/i,'edit'],[/cari|terapkan|tampilkan/i,'search'],
             [/reset/i,'reset'],[/batal|kembali|daftar|sebelumnya/i,'back'],[/berikutnya/i,'next'],
             [/lihat|detail/i,'eye'],[/email/i,'mail'],[/telepon|whatsapp|kontak/i,'phone'],
             [/tahun|tanggal|batas|publikasi|dikirim/i,'calendar'],[/website|tautan|url|slug|instagram|facebook|youtube/i,'link'],
             [/gambar|logo|poster|media/i,'image'],[/jurusan|pendidikan|kampus|kuliah|program studi/i,'school'],
             [/lokasi|alamat/i,'location'],[/status|aktif|persetujuan/i,'check'],
             [/perusahaan|pekerjaan|usaha|lowongan|mitra/i,'briefcase'],[/tracer|rekap|respons|jumlah/i,'chart'],
-            [/nama|pengguna|akun|username|penulis|nisn/i,'user'],[/pengaturan|role|jenis|kategori|tindakan|aksi/i,'settings']
+            [/peserta|pemateri|nama|pengguna|akun|username|penulis|nisn/i,'user'],[/absensi|kegiatan/i,'calendar'],[/bmw sakti/i,'school'],[/pretest/i,'link'],[/pengaturan|role|jenis|kategori|tindakan|aksi/i,'settings']
         ];
         return rules.find(([pattern]) => pattern.test(text))?.[1] || 'file';
     };
@@ -243,8 +243,9 @@ if (document.querySelector('.panel-page')) {
         const path = document.createElementNS('http://www.w3.org/2000/svg','path');
         path.setAttribute('d',paths[name]); svg.append(path); element.prepend(svg);
     };
-    document.querySelectorAll('.panel-content h1, .panel-content h2, .panel-content label, .panel-content th, .panel-content button, .panel-content .button, .panel-content .row-actions a, .panel-content .page-actions a, .panel-content .form-actions a, .panel-content .pagination a, .panel-content .filter-form > a').forEach(element => {
+    document.querySelectorAll('.panel-content h1, .panel-content h2, .panel-content label, .panel-content th, .panel-content button, .panel-content .button, .panel-content .row-actions a, .panel-content .page-actions a, .panel-content .form-actions a, .panel-content .pagination a, .panel-content .filter-form > a, .bmw-admin .table-scroll td:last-child > a').forEach(element => {
         if (element.querySelector('svg') || element.matches('.wa-selection label') || element.closest('.donut-legend') || element.classList.contains('sr-only')) return;
+        if (element.closest('.bmw-admin') && element.matches('label,th')) return;
         const text = element.cloneNode(true);
         text.querySelectorAll('input,select,textarea,small,.badge').forEach(child => child.remove());
         const label = text.textContent.trim();
@@ -259,3 +260,19 @@ document.querySelector('.sidebar-programs>summary')?.addEventListener('click', (
         document.querySelector('.sidebar-collapse')?.click();
     }
 });
+
+// Native disclosures remain usable without JavaScript; shortcuts reveal the relevant form.
+document.querySelectorAll('[data-open-details]').forEach(link => {
+    link.addEventListener('click', () => {
+        const details = document.getElementById(link.dataset.openDetails);
+        if (details instanceof HTMLDetailsElement) details.open = true;
+    });
+});
+
+// Keep the list in view on small screens while leaving filters one tap away.
+const compactFilters = window.matchMedia('(max-width: 600px)');
+const syncCompactFilters = () => document.querySelectorAll('.bmw-filter').forEach(details => {
+    details.open = !compactFilters.matches;
+});
+syncCompactFilters();
+compactFilters.addEventListener('change', syncCompactFilters);

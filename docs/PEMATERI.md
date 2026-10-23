@@ -10,6 +10,6 @@ Kelas industri utama dapat diisi tanpa mengaitkan kegiatan. Filter kelas industr
 
 Edit tanpa unggahan mempertahankan berkas. Centang Hapus CV/Foto untuk menghapus berkas tertentu. Unggahan baru menggantikan berkas lama, termasuk jika Hapus dicentang. Penghapusan profil membersihkan berkas dan relasi pemateri; kegiatan, peserta, dan absensi tetap tersedia. Versi profil diperiksa untuk mencegah perubahan lama menimpa perubahan pengelola lain.
 
-Instalasi lama: jalankan `database/updates/012_speakers.sql` setelah migrasi absensi 011. SQL utama sudah diperbarui untuk instalasi baru. Akses akun siswa belum tersedia pada tahap ini.
+Instalasi lama: jalankan `database/updates/012_speakers.sql` setelah migrasi absensi 011. SQL utama sudah diperbarui untuk instalasi baru. Tidak ada akun peserta; profil dikelola admin/pengguna.
 
 Uji integrasi lokal: `C:\xampp\php\php.exe tests/pemateri.php` dengan Apache/MySQL aktif. Pengujian mencakup upload/download, foto, penggantian dan penghapusan berkas, relasi kegiatan, filter kelas, versi profil, validasi berkas, CSRF, dan akses admin/staf/anonim. Akun, sesi, kegiatan, dan berkas sementara dibersihkan setelah pengujian. Jalankan hanya pada lingkungan lokal.

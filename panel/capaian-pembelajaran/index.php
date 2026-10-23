@@ -44,17 +44,18 @@ $pages=max(1,(int)ceil($total/20));$page=min($pages,positive_id($_GET['page']??'
 $rows=$ready?panel_query('SELECT * FROM learning_documents WHERE '.$where.' ORDER BY updated_at DESC,id DESC LIMIT :limit OFFSET :offset',$params+['limit'=>20,'offset'=>($page-1)*20])->fetchAll():[];
 panel_start($user,'Capaian pembelajaran','capaian');
 ?>
-<div class="page-actions"><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'capaian']+$filters))) ?>">Download Excel capaian pembelajaran</a></div>
-<div class="page-actions"><h1>Capaian pembelajaran</h1><a href="<?= e(base_url($listPath)) ?>">Tambah dokumen</a><a href="<?= e(base_url('panel/siswa/')) ?>">Data siswa</a></div>
-<p>Kelola dokumen materi dan target pembelajaran per kelas industri dan angkatan. Dokumen tersedia bagi admin dan staf BKK yang masuk ke panel.</p>
+<div class="page-actions"><h1>Capaian pembelajaran</h1><a href="#materi-form" data-open-details="materi-form">Upload dokumen</a><a href="<?= e(base_url('panel/peserta/')) ?>">Data peserta</a><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'capaian']+$filters))) ?>" title="Download Excel capaian pembelajaran"><?= panel_icon('download') ?> Excel</a></div>
+
+<p>Dokumen pembelajaran per angkatan dan kelas industri.</p>
 <?php if(!$ready):?><p class="alert">Fitur belum aktif. Jalankan pembaruan database 010_learning_documents.sql.</p><?php endif;?>
 <?php if($errors):?><div class="alert" role="alert"><strong>Perubahan belum disimpan.</strong><ul><?php foreach($errors as $error):?><li><?= e($error) ?></li><?php endforeach;?></ul><p>Pilih kembali berkas jika diperlukan.</p></div><?php endif;?>
+<details class="bmw-disclosure" id="materi-form" <?= $id||$errors?'open':'' ?>><summary><?= panel_icon('capaian') ?> <?= $id?'Edit dokumen':'Upload dokumen' ?></summary>
 <form class="editor-form card" method="post" enctype="multipart/form-data">
 <?= csrf_field() ?><input type="hidden" name="aksi" value="simpan">
-<h2><?= $id?'Edit capaian pembelajaran':'Upload capaian pembelajaran' ?></h2>
+
 <label for="judul">Judul<input id="judul" name="judul" maxlength="190" value="<?= e($data['judul']) ?>" required></label>
 <label for="deskripsi">Deskripsi (opsional)<textarea id="deskripsi" name="deskripsi" maxlength="5000" rows="3"><?= e($data['deskripsi']) ?></textarea></label>
-<label for="angkatan">Angkatan (tahun masuk)<input id="angkatan" name="angkatan" maxlength="4" pattern="(?:19|20|21)[0-9]{2}" inputmode="numeric" list="learning-years" value="<?= e($data['angkatan']) ?>" required></label>
+<label for="angkatan">Angkatan<input id="angkatan" name="angkatan" maxlength="4" pattern="(?:19|20|21)[0-9]{2}" inputmode="numeric" list="learning-years" value="<?= e($data['angkatan']) ?>" required></label>
 <datalist id="learning-years"><?php foreach($years as $year):?><option value="<?= e($year) ?>"><?php endforeach;?></datalist>
 <label for="kelas_industri">Kelas industri<input id="kelas_industri" name="kelas_industri" maxlength="150" list="learning-industries" value="<?= e($data['kelas_industri']) ?>" required></label>
 <datalist id="learning-industries"><?php foreach($industries as $industry):?><option value="<?= e($industry) ?>"><?php endforeach;?></datalist>
@@ -63,12 +64,13 @@ panel_start($user,'Capaian pembelajaran','capaian');
 <p>PDF maksimal 5 MB. Satu dokumen dapat memuat beberapa capaian pembelajaran.</p>
 <div class="form-actions"><button type="submit" <?= !$ready?'disabled':'' ?>>Simpan dokumen</button><?php if($id):?><a href="<?= e(base_url($listPath)) ?>">Batal edit</a><?php endif;?></div>
 </form>
-<form class="filter-form card" method="get">
+</details>
+<details class="bmw-filter" open><summary><?= panel_icon('filter') ?> Cari &amp; filter</summary><form class="filter-form card" method="get">
 <label>Cari judul / deskripsi<input name="q" maxlength="100" value="<?= e($filters['q']) ?>"></label>
 <label>Angkatan<select name="angkatan"><option value="">Semua angkatan</option><?php foreach($years as $year):?><option value="<?= e($year) ?>" <?= $filters['angkatan']===$year?'selected':'' ?>><?= e($year) ?></option><?php endforeach;?></select></label>
 <label>Kelas industri<select name="kelas_industri"><option value="">Semua kelas industri</option><?php foreach($industries as $industry):?><option value="<?= e($industry) ?>" <?= $filters['kelas_industri']===$industry?'selected':'' ?>><?= e($industry) ?></option><?php endforeach;?></select></label>
 <button type="submit">Terapkan</button><a href="<?= e(base_url('panel/capaian-pembelajaran/')) ?>">Reset filter</a>
-</form>
+</form></details>
 <p><?= $total ?> dokumen · Halaman <?= $page ?> dari <?= $pages ?></p>
 <div class="table-scroll"><table><thead><tr><th>Dokumen</th><th>Angkatan</th><th>Kelas industri</th><th>Ukuran</th><th>Diperbarui</th><th>Tindakan</th></tr></thead><tbody>
 <?php foreach($rows as $row):?><tr><td><strong><?= e($row['judul']) ?></strong><p><?= nl2br(e($row['deskripsi'])) ?></p><small><?= e($row['nama_asli']) ?></small></td><td><?= e((string)$row['angkatan']) ?></td><td><?= e($row['kelas_industri']) ?></td><td><?= number_format($row['ukuran']/1024,1) ?> KB</td><td><?= e($row['updated_at']) ?></td><td><div class="row-actions"><a href="<?= e(base_url('panel/capaian-pembelajaran/download.php?id='.$row['id'])) ?>">Download PDF</a><a href="<?= e(base_url('panel/capaian-pembelajaran/?'.http_build_query($filters+['id'=>$row['id']]))) ?>">Edit / ganti PDF</a><form method="post" action="<?= e(base_url($listPath)) ?>" data-confirm="Hapus dokumen capaian pembelajaran ini?"><?= csrf_field() ?><input type="hidden" name="aksi" value="hapus"><input type="hidden" name="id" value="<?= $row['id'] ?>"><button type="submit" class="danger small-button">Hapus</button></form></div></td></tr><?php endforeach;?>

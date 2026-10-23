@@ -1,5 +1,6 @@
 <?php
 if (!defined('APP_ROOT')) { http_response_code(403); exit; }
+require_once APP_ROOT.'/panel/layouts/icons.php';
 $siteName = setting('site_name', (string) app_config('name'));
 ?>
 <!doctype html>
@@ -7,13 +8,14 @@ $siteName = setting('site_name', (string) app_config('name'));
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="<?= e(meta_description($pageDescription ?? (($pageTitle ?? 'Beranda') . ' — ' . $siteName . '. Informasi karir, pendidikan, dan kewirausahaan bagi siswa serta alumni.'))) ?>">
+    <meta name="description" content="<?= e(meta_description($pageDescription ?? (($pageTitle ?? 'Beranda') . ' — ' . $siteName . '. Informasi karir, pendidikan, dan kewirausahaan bagi peserta serta alumni.'))) ?>">
     <title><?= e(($pageTitle ?? 'Beranda') . ' — ' . $siteName) ?></title>
     <link rel="icon" type="image/jpeg" href="<?= e(asset_url('images/ppks.jpeg')) ?>">
     <link rel="stylesheet" href="<?= e(asset_url('vendor/bootstrap/bootstrap.min.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset_url('css/style.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/style.css') ?>">
     <link rel="stylesheet" href="<?= e(asset_url('css/responsive.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/responsive.css') ?>">
     <link rel="stylesheet" href="<?= e(asset_url('css/portal.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/portal.css') ?>">
+    <link rel="stylesheet" href="<?= e(asset_url('css/bmw.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/bmw.css') ?>">
     <script src="<?= e(asset_url('vendor/bootstrap/bootstrap.bundle.min.js')) ?>" defer></script>
     <script src="<?= e(asset_url('js/main.js')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/js/main.js') ?>" defer></script>
     <noscript><style>.topbar .container{display:block}.navbar-collapse.collapse{display:block}.main-nav .dropdown-menu{display:block;position:static}.navbar-toggler,.dropdown-toggle{display:none!important}</style></noscript>
@@ -22,14 +24,13 @@ $siteName = setting('site_name', (string) app_config('name'));
 <a class="skip-link" href="#konten">Langsung ke konten</a>
 <div class="topbar"><div class="container portal-container">
     <?php require __DIR__ . '/navbar.php'; ?>
-    <a class="manager-login" href="<?= e(base_url('siswa/')) ?>">Login Siswa</a>
     <a class="manager-login" href="<?= e(base_url('auth/login.php')) ?>">Login Pengelola <span aria-hidden="true">↗</span></a>
 </div></div>
 <header class="site-header">
 <div class="masthead container portal-container">
     <a class="site-brand" href="<?= e(base_url()) ?>">
         <?php $logos = site_logos(); ?>
-        <span class="identity-logos"><img src="<?= e($logos['school_logo']) ?>" alt="Logo SMK JAYA BUANA" width="78" height="78"><img src="<?= e($logos['bkk_logo']) ?>" alt="Logo Pusat Pengembangan Karir Siswa" width="78" height="78"></span>
+        <span class="identity-logos"><img src="<?= e($logos['school_logo']) ?>" alt="Logo SMK JAYA BUANA" width="78" height="78"><img src="<?= e($logos['bkk_logo']) ?>" alt="Logo Pusat Pengembangan Karir Peserta" width="78" height="78"></span>
         <span><span class="brand-kicker">Bursa Kerja Khusus</span><span class="brand-title"><?= e($siteName) ?></span><span class="brand-caption"><?= e(setting('school_name', 'SMK JAYA BUANA')) ?></span><span class="brand-caption">Informasi karir · Pendidikan · Kewirausahaan</span></span>
     </a>
     <form class="header-search" action="<?= e(base_url('pencarian.php')) ?>" method="get" role="search">

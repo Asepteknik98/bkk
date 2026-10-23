@@ -12,5 +12,5 @@
         <p>Kenali tracer study dan pendataan perjalanan alumni setelah lulus.</p>
         <a class="button button-gold" href="<?= e(base_url('tracer-study/')) ?>">Informasi Tracer Study <span aria-hidden="true">↗</span></a>
     </section>
-    <section class="quick-links"><h2>Akses cepat</h2><a href="<?= e(base_url('lowongan-kerja/')) ?>">Lowongan kerja <span aria-hidden="true">↗</span></a><a href="<?= e(base_url('kelas-melanjutkan/')) ?>">Kuliah &amp; beasiswa <span aria-hidden="true">↗</span></a><a href="<?= e(base_url('profil.php')) ?>">Profil &amp; kontak BKK <span aria-hidden="true">↗</span></a></section>
+    <section class="quick-links"><h2>Akses cepat</h2><a href="<?= e(base_url('lowongan-kerja/')) ?>">Lowongan kerja <span aria-hidden="true">↗</span></a><a href="<?= e(base_url('kelas-melanjutkan/')) ?>">Kuliah &amp; beapeserta <span aria-hidden="true">↗</span></a><a href="<?= e(base_url('profil.php')) ?>">Profil &amp; kontak BKK <span aria-hidden="true">↗</span></a></section>
 </aside>

@@ -38,8 +38,8 @@ function program_categories(): array
 {
     return [
         'kelas_industri' => ['title' => 'Kelas Industri dan Pasar Kerja', 'path' => 'kelas-industri/', 'description' => 'Informasi pembelajaran industri dan kebutuhan dunia kerja.', 'short' => 'Industri'],
-        'ppks' => ['title' => 'Program PPKS', 'path' => 'program-ppks/', 'description' => 'Pusat Pengembangan Karir Siswa: informasi persiapan karir.', 'short' => 'Karir'],
-        'kelas_melanjutkan' => ['title' => 'Kelas Melanjutkan', 'path' => 'kelas-melanjutkan/', 'description' => 'Informasi kuliah dan beasiswa di dalam maupun luar negeri.', 'short' => 'Studi lanjut'],
+        'ppks' => ['title' => 'Program PPKS', 'path' => 'program-ppks/', 'description' => 'Pusat Pengembangan Karir Peserta: informasi persiapan karir.', 'short' => 'Karir'],
+        'kelas_melanjutkan' => ['title' => 'Kelas Melanjutkan', 'path' => 'kelas-melanjutkan/', 'description' => 'Informasi kuliah dan beapeserta di dalam maupun luar negeri.', 'short' => 'Studi lanjut'],
         'entrepreneur' => ['title' => 'Entrepreneur Program', 'path' => 'entrepreneur-program/', 'description' => 'Informasi pengembangan usaha dan kewirausahaan.', 'short' => 'Wirausaha'],
         'kelas_internasional' => ['title' => 'Kelas Internasional', 'path' => 'kelas-internasional/', 'description' => 'Informasi persiapan dan program internasional.', 'short' => 'Internasional'],
     ];

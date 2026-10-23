@@ -4,7 +4,7 @@ require_once __DIR__.'/learning-documents.php';
 
 function speaker_filters(array $input): array
 {
-    [$filters]=student_filters(array_intersect_key($input,array_flip(['q','kelas_industri'])));unset($filters['urut'],$filters['angkatan']);
+    [$filters]=participant_filters(array_intersect_key($input,array_flip(['q','kelas_industri'])));unset($filters['urut'],$filters['angkatan']);
     $eventId=positive_id($input['event_id']??'');
     if(isset($input['event_id'])&&$input['event_id']!==''&&!$eventId){throw new InvalidArgumentException('Filter kegiatan tidak valid.');}
     if($eventId){$filters['event_id']=(string)$eventId;}
