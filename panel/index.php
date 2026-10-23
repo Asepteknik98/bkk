@@ -15,6 +15,9 @@ $unseenApplications=(int)panel_query('SELECT COUNT(*) FROM lamaran WHERE viewed_
 $applications=panel_query('SELECT status,COUNT(*) AS jumlah FROM lamaran GROUP BY status')->fetchAll(PDO::FETCH_KEY_PAIR);
 $tracer=panel_query('SELECT status_kegiatan,COUNT(*) AS jumlah FROM tracer_responses GROUP BY status_kegiatan')->fetchAll(PDO::FETCH_KEY_PAIR);
 $users=$user['role']==='admin'?(int)panel_query('SELECT COUNT(*) FROM users WHERE aktif=1')->fetchColumn():null;
+$participantStats=panel_query("SELECT COUNT(*) AS total,COALESCE(SUM(TRIM(tempat_pkl)<>'' OR TRIM(tahun_pkl)<>''),0) AS pkl FROM siswa")->fetch();
+$eventCount=(int)panel_query('SELECT COUNT(*) FROM attendance_events')->fetchColumn();
+$speakerCount=(int)panel_query('SELECT COUNT(*) FROM speakers')->fetchColumn();
 panel_start($user,'Dashboard','dashboard');
 ?>
 <div class="dashboard-view"><header class="dashboard-heading"><h1><?= panel_icon('dashboard') ?> Dashboard</h1><p>Selamat datang, <?= e($user['nama']) ?>. Berikut ringkasan data BKK saat ini.</p></header>
@@ -25,8 +28,17 @@ panel_start($user,'Dashboard','dashboard');
 <section class="card"><span class="stat-icon"><?= panel_icon('media') ?></span><h2><a href="<?= e(base_url('panel/media/')) ?>">Media</a></h2><p><strong><?= $mediaCount ?></strong> berkas dalam katalog</p></section>
 <?php if($users!==null): ?><section class="card"><span class="stat-icon"><?= panel_icon('pengguna') ?></span><h2><a href="<?= e(base_url('panel/pengguna/')) ?>">Pengguna aktif</a></h2><p><strong><?= $users ?></strong> akun</p></section><?php endif; ?>
 <section class="card stat-applications"><span class="stat-icon"><?= panel_icon('bell') ?><?php if($unseenApplications>0): ?><span class="inbox-new-count" aria-label="<?= $unseenApplications ?> lamaran belum dilihat"><?= $unseenApplications>99?'99+':$unseenApplications ?></span><?php endif; ?></span><h2><a href="<?= e(base_url('panel/lamaran/')) ?>">Lamaran Masuk</a></h2><p><strong><?= (int)array_sum($applications) ?></strong> lamaran</p><p><?= (int)($applications['baru']??0) ?> belum diproses</p></section>
+<?php foreach([
+    ['participants','peserta','Data Siswa / PKL','panel/peserta/',(int)$participantStats['total'],'peserta',(int)$participantStats['pkl'].' memiliki riwayat PKL'],
+    ['tracer','tracer','Tracer Study','panel/tracer-study/rekap.php',(int)array_sum($tracer),'respons','Respons kegiatan alumni'],
+    ['events','absensi','Kegiatan','panel/absensi/',$eventCount,'kegiatan','Kegiatan dan absensi peserta'],
+    ['speakers','pemateri','Pemateri Kelas','panel/pemateri/',$speakerCount,'pemateri','Profil, CV, dan foto pemateri'],
+] as [$statClass,$icon,$label,$path,$value,$unit,$description]): ?>
+<section class="card stat-<?= e($statClass) ?>"><span class="stat-icon"><?= panel_icon($icon) ?></span><h2><a href="<?= e(base_url($path)) ?>"><?= e($label) ?></a></h2><p><strong><?= $value ?></strong> <?= e($unit) ?></p><p><?= e($description) ?></p></section>
+<?php endforeach; ?>
 </div>
-<details class="dashboard-insights" open><summary><?= panel_icon('tracer') ?> Tracer Study <span><?= (int)array_sum($tracer) ?> respons</span><span class="dashboard-insights-toggle" aria-hidden="true">⌄</span></summary>
+<section class="dashboard-insights" aria-label="Grafik PKL dan Tracer Study">
+<div class="dashboard-chart-actions"><button type="button" class="chart-replay" hidden><?= panel_icon('reset') ?> Putar ulang animasi</button></div>
 <div class="dashboard-charts"><section class="card section-space tracer-summary" aria-labelledby="tracer-chart-title">
     <div class="tracer-summary-heading"><h2 id="tracer-chart-title"><?= panel_icon('tracer') ?> Ringkasan Tracer Study</h2><span class="badge"><?= (int) array_sum($tracer) ?> respons</span></div>
     <p class="muted">Jumlah respons berdasarkan kegiatan alumni, bukan jumlah alumni unik.</p>
@@ -35,11 +47,11 @@ panel_start($user,'Dashboard','dashboard');
     if (isset($tracer['lainnya'])) { $labels['lainnya'] = 'Lainnya (data lama)'; }
     $chartMax = max(1, ...array_map(static fn($status): int => (int) ($tracer[$status] ?? 0), array_keys($labels)));
     ?>
-    <dl class="tracer-chart" aria-label="Grafik jumlah respons per kegiatan; panjang batang dibandingkan kategori terbanyak">
+    <dl class="tracer-chart dashboard-column-chart" aria-label="Grafik jumlah respons per kegiatan; tinggi batang dibandingkan kategori terbanyak">
         <?php foreach ($labels as $status => $label): $value = (int) ($tracer[$status] ?? 0); ?>
         <div class="tracer-chart-row">
             <dt><?= e($label) ?></dt>
-            <dd><span class="tracer-chart-track" aria-hidden="true"><span class="tracer-chart-bar" style="width:<?= (int) round($value / $chartMax * 100) ?>%"></span></span><strong><?= $value ?><span class="sr-only"> respons</span></strong></dd>
+            <dd><span class="tracer-chart-track" aria-hidden="true"><span class="tracer-chart-bar" style="height:<?= (int) round($value / $chartMax * 100) ?>%"></span></span><strong><?= $value ?><span class="sr-only"> respons</span></strong></dd>
         </div>
         <?php endforeach; ?>
     </dl>
@@ -67,7 +79,18 @@ panel_start($user,'Dashboard','dashboard');
         </div>
     </div>
     <?php if (!$tracerTotal): ?><p class="muted">Grafik akan terisi setelah ada respons alumni.</p><?php endif; ?>
-</section></div></details>
+</section>
+<section class="card tracer-summary pkl-summary" aria-labelledby="pkl-chart-title">
+    <div class="tracer-summary-heading"><h2 id="pkl-chart-title"><?= panel_icon('peserta') ?> Kelengkapan Data PKL</h2><span class="badge"><?= (int)$participantStats['total'] ?> peserta</span></div>
+    <p class="muted">Riwayat PKL terisi jika tempat atau tahun PKL sudah dicatat.</p>
+    <dl class="tracer-chart dashboard-column-chart" aria-label="Grafik kelengkapan riwayat PKL, persentase dari seluruh peserta">
+        <?php foreach(['Riwayat terisi'=>(int)$participantStats['pkl'],'Belum terisi'=>(int)$participantStats['total']-(int)$participantStats['pkl']] as $label=>$value): $percent=(int)$participantStats['total']>0 ? (int)round($value/(int)$participantStats['total']*100) : 0; ?>
+        <div class="tracer-chart-row"><dt><?= e($label) ?></dt><dd><span class="tracer-chart-track" aria-hidden="true"><span class="tracer-chart-bar" style="height:<?= $percent ?>%"></span></span><strong><?= $value ?><span class="sr-only"> peserta, <?= $percent ?> persen</span></strong></dd></div>
+        <?php endforeach; ?>
+    </dl>
+    <?php if(!(int)$participantStats['total']): ?><p class="muted">Grafik akan terisi setelah data peserta ditambahkan.</p><?php endif; ?>
+    <a href="<?= e(base_url('panel/peserta/')) ?>">Lihat data peserta &rarr;</a>
+</section></div></section>
 
 </div>
 <?php panel_end($user); ?>

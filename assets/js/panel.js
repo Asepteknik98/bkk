@@ -279,10 +279,38 @@ const syncCompactFilters = () => document.querySelectorAll('.bmw-filter').forEac
 syncCompactFilters();
 compactFilters.addEventListener('change', syncCompactFilters);
 
-// Start with the compact overview on phones; keep desktop charts expanded.
-const compactDashboard = window.matchMedia('(max-width: 600px)');
-const syncDashboardInsights = () => document.querySelectorAll('.dashboard-insights').forEach(details => {
-    details.open = !compactDashboard.matches;
-});
-syncDashboardInsights();
-compactDashboard.addEventListener('change', syncDashboardInsights);
+// Draw charts on entry and allow an explicit replay without changing their data.
+const dashboardGraphs = document.querySelectorAll('.dashboard-charts > .card');
+const replayGraphs = document.querySelector('.chart-replay');
+if (dashboardGraphs.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const animateGraph = graph => {
+        graph.querySelectorAll('.tracer-chart-bar, .donut-segment').forEach(element => {
+            element.getAnimations().forEach(animation => animation.cancel());
+        });
+        graph.querySelectorAll('.tracer-chart-bar').forEach((bar, index) => {
+            bar.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], {
+                duration: 1600, delay: index * 120, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'backwards'
+            });
+        });
+        graph.querySelectorAll('.donut-segment').forEach(segment => {
+            const target = segment.getAttribute('stroke-dasharray');
+            segment.animate([{ strokeDasharray: '0 100' }, { strokeDasharray: target }], {
+                duration: 1800, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'backwards'
+            });
+        });
+    };
+    if (replayGraphs) {
+        replayGraphs.hidden = false;
+        replayGraphs.addEventListener('click', () => dashboardGraphs.forEach(animateGraph));
+    }
+    if ('IntersectionObserver' in window) {
+        const graphObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) animateGraph(entry.target);
+            });
+        }, { threshold: 0.25 });
+        dashboardGraphs.forEach(graph => graphObserver.observe(graph));
+    } else {
+        dashboardGraphs.forEach(animateGraph);
+    }
+}
