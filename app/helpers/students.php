@@ -8,6 +8,35 @@ function student_columns(): array
     return ['nis'=>'NIS','nisn'=>'NISN','nama'=>'Nama siswa','kelas'=>'Kelas','jurusan'=>'Jurusan','angkatan'=>'Angkatan (tahun masuk)','kelas_industri'=>'Kelas industri','telepon'=>'Telepon','email'=>'Email','tempat_pkl'=>'Tempat PKL','tahun_pkl'=>'Tahun PKL'];
 }
 
+function student_sort_options(): array
+{
+    return ['nama'=>'Nama A–Z','angkatan_baru'=>'Angkatan terbaru','angkatan_lama'=>'Angkatan terlama','kelas_industri'=>'Kelas industri A–Z'];
+}
+
+/** Shared filters keep the count, list and pagination consistent. */
+function student_filters(array $input): array
+{
+    $filters=[];
+    foreach(['q'=>100,'angkatan'=>4,'kelas_industri'=>150,'urut'=>30] as $key=>$max){
+        if(isset($input[$key])&&!is_string($input[$key])){throw new InvalidArgumentException('Filter siswa tidak valid.');}
+        $value=input_text($input,$key);
+        if(!valid_text($value,$max,false)){throw new InvalidArgumentException('Filter siswa terlalu panjang atau tidak valid.');}
+        $filters[$key]=$value;
+    }
+    if($filters['angkatan']!==''&&!preg_match('/^(19|20|21)[0-9]{2}$/D',$filters['angkatan'])){throw new InvalidArgumentException('Angkatan harus berupa tahun masuk (1900–2199).');}
+    if($filters['urut']===''){$filters['urut']='nama';}
+    $orders=['nama'=>'nama ASC,id ASC','angkatan_baru'=>'angkatan DESC,nama ASC,id ASC','angkatan_lama'=>'angkatan ASC,nama ASC,id ASC','kelas_industri'=>'kelas_industri ASC,angkatan DESC,nama ASC,id ASC'];
+    if(!isset($orders[$filters['urut']])){throw new InvalidArgumentException('Urutan siswa tidak valid.');}
+    $where='1=1';$params=[];
+    if($filters['q']!==''){
+        $pattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$filters['q']).'%';
+        $where.=" AND (nama LIKE :nama ESCAPE '!' OR nis LIKE :nis ESCAPE '!')";
+        $params+=['nama'=>$pattern,'nis'=>$pattern];
+    }
+    foreach(['angkatan','kelas_industri'] as $key){if($filters[$key]!==''){$where.=" AND $key=:$key";$params[$key]=$filters[$key];}}
+    return [$filters,$where,$params,$orders[$filters['urut']]];
+}
+
 function student_input(array $input): array
 {
     $data=[];

@@ -15,3 +15,11 @@ Impor menambahkan siswa baru. Seluruh impor dibatalkan jika ada baris tidak vali
 Belum ditemukan sumber data PKL atau akun siswa pada sistem awal. Data PKL lama dapat dipindahkan ke template untuk diimpor; penarikan langsung membutuhkan sumber data dan pemetaan kolomnya. Akses akun siswa, absensi, capaian pembelajaran, pemateri, ekspor lengkap, dan pretest/poster dikerjakan pada tahap berikutnya.
 
 Pemeriksaan otomatis: `C:\xampp\php\php.exe tests/students.php`.
+
+## Tahap 2 — filter dan pengurutan
+
+Admin dan staf BKK dapat memfilter daftar berdasarkan angkatan (tahun masuk) dan kelas industri secara bersamaan, disertai pencarian nama/NIS. Pilihan filter berasal dari data siswa yang tersimpan. Gunakan Edit pada siswa untuk mengubah angkatan atau kelas industrinya.
+
+Pilihan pengurutan: nama A–Z, angkatan terbaru, angkatan terlama, dan kelas industri A–Z. Jumlah hasil dan navigasi halaman mengikuti seluruh filter. Tautan Edit membawa filter aktif; setelah edit disimpan, daftar kembali menggunakan filter tersebut. Reset filter menampilkan seluruh siswa.
+
+Pemeriksaan filter dengan database: `C:\xampp\php\php.exe tests/student-filters.php`. Data uji dibatalkan melalui transaksi dan tidak disimpan.
