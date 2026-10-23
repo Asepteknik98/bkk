@@ -5,7 +5,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#public-menu" aria-controls="public-menu" aria-expanded="false" aria-label="Buka menu navigasi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Menu</span></button>
         <div class="collapse navbar-collapse" id="public-menu">
             <ul class="navbar-nav">
-            <?php foreach (['Beranda' => '', 'Profil BKK' => 'profil.php', 'Berita' => 'berita.php', 'Lowongan Kerja' => 'lowongan-kerja/', 'Tracer Study' => 'tracer-study/'] as $label => $path): ?>
+            <?php foreach (['Beranda' => '', 'Profil BKK' => 'profil.php', 'Berita' => 'berita.php', 'Lowongan Kerja' => 'lowongan-kerja/', 'Kegiatan' => 'kegiatan.php', 'Tracer Study' => 'tracer-study/'] as $label => $path): ?>
                 <li class="nav-item"><a class="nav-link<?= ($activePage ?? '') === $path ? ' active' : '' ?>" <?= ($activePage ?? '') === $path ? 'aria-current="page"' : '' ?> href="<?= e(base_url($path)) ?>"><?= e($label) ?></a></li>
             <?php endforeach; ?>
                 <li class="nav-item dropdown">

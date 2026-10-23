@@ -27,6 +27,7 @@ $counts=array_fill_keys(array_keys(attendance_statuses()),0);$pending=0;
 foreach(panel_query('SELECT status,COUNT(*) AS jumlah FROM attendance_records WHERE event_id=:id GROUP BY status',['id'=>$id])->fetchAll() as $count){if($count['status']===null){$pending=(int)$count['jumlah'];}else{$counts[$count['status']]=(int)$count['jumlah'];}}
 panel_start($user,'Absensi: '.$event['judul'],'absensi');
 ?>
+<div class="page-actions"><a class="button" href="<?= e(base_url('panel/absensi/publikasi.php?id='.$id)) ?>">Kelola pretest dan poster</a></div>
 <div class="page-actions"><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'absensi','id'=>$id]))) ?>">Download Excel absensi kegiatan ini</a></div>
 <div class="page-actions"><h1><?= e($event['judul']) ?></h1><a href="<?= e(base_url('panel/absensi/')) ?>">Daftar kegiatan</a><a href="<?= e(base_url('panel/absensi/rekap.php?'.http_build_query(['angkatan'=>$event['angkatan'],'kelas_industri'=>$event['kelas_industri']]))) ?>">Rekap siswa</a></div>
 <p><?= e($event['tanggal']) ?> · Angkatan <?= e((string)$event['angkatan']) ?> · <?= e($event['kelas_industri']) ?></p>
