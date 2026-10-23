@@ -4,7 +4,7 @@ require_once dirname(__DIR__,2).'/app/helpers/tracer-panel.php';
 $user=require_role('admin','staf_bkk');[$filters,$where,$params]=tracer_filters($_GET);
 $fields=['id'=>'ID respons']+tracer_fields()+['persetujuan_data'=>'Persetujuan data','persetujuan_at'=>'Waktu persetujuan','versi_persetujuan'=>'Versi persetujuan','created_at'=>'Dikirim','updated_at'=>'Diperbarui'];
 db()->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY,false);
-$statement=panel_query('SELECT '.implode(',',array_keys($fields)).' FROM tracer_responses WHERE '.$where.' ORDER BY id DESC',$params);
+$statement=panel_query('SELECT '.implode(',',array_keys($fields)).' FROM tracer_responses WHERE '.$where.' ORDER BY tahun_lulus DESC,nama_lengkap ASC,id DESC',$params);
 session_write_close();
 header('Content-Type: text/csv; charset=UTF-8');header('X-Content-Type-Options: nosniff');header('Cache-Control: private, no-store');
 header('Content-Disposition: attachment; filename="tracer-study-'.date('Ymd-His').'.csv"');

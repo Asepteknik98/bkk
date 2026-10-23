@@ -137,6 +137,7 @@ document.querySelectorAll('.tracer-visual').forEach(chart => {
 
 // Keep long admin lists compact while retaining the server's filters and pagination.
 document.querySelectorAll('.panel-content .table-scroll, .panel-content .media-grid').forEach((viewport, index) => {
+    if(viewport.hasAttribute('data-vertical-list')) return;
     const media = viewport.classList.contains('media-grid');
     const table = viewport.querySelector('table');
     const rows = table && !table.querySelector('tbody th') ? Array.from(table.querySelectorAll('tbody > tr')).filter(row => !row.querySelector('[colspan]')) : [];
@@ -160,8 +161,8 @@ document.querySelectorAll('.panel-content .table-scroll, .panel-content .media-g
         return button;
     };
     const scroll = direction => viewport.scrollBy({ left: direction * viewport.clientWidth * .8, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
-    const left = createButton('?', 'Geser daftar ke kiri', () => scroll(-1));
-    const right = createButton('?', 'Geser daftar ke kanan', () => scroll(1));
+    const left = createButton('\u2190', 'Geser daftar ke kiri', () => scroll(-1));
+    const right = createButton('\u2192', 'Geser daftar ke kanan', () => scroll(1));
     const previous = createButton('Sebelumnya', 'Lima baris sebelumnya', () => { slide--; render(); });
     const status = document.createElement('span');
     status.setAttribute('role', 'status'); controls.append(status);
@@ -243,7 +244,7 @@ if (document.querySelector('.panel-page')) {
         path.setAttribute('d',paths[name]); svg.append(path); element.prepend(svg);
     };
     document.querySelectorAll('.panel-content h1, .panel-content h2, .panel-content label, .panel-content th, .panel-content button, .panel-content .button, .panel-content .row-actions a, .panel-content .page-actions a, .panel-content .form-actions a, .panel-content .pagination a, .panel-content .filter-form > a').forEach(element => {
-        if (element.querySelector('svg') || element.closest('.donut-legend') || element.classList.contains('sr-only')) return;
+        if (element.querySelector('svg') || element.matches('.wa-selection label') || element.closest('.donut-legend') || element.classList.contains('sr-only')) return;
         const text = element.cloneNode(true);
         text.querySelectorAll('input,select,textarea,small,.badge').forEach(child => child.remove());
         const label = text.textContent.trim();
@@ -251,3 +252,10 @@ if (document.querySelector('.panel-page')) {
         appendIcon(element, iconFor(label));
     });
 }
+
+// Expand the sidebar when its program dropdown is opened from icon-only mode.
+document.querySelector('.sidebar-programs>summary')?.addEventListener('click', () => {
+    if (document.documentElement.dataset.sidebar === 'collapsed') {
+        document.querySelector('.sidebar-collapse')?.click();
+    }
+});

@@ -6,7 +6,7 @@ $id=positive_id($_POST['id']??'');$row=$id?panel_query('SELECT * FROM wa_recipie
 if(!$row){panel_not_found();}
 $action=$_POST['action']??'';
 if($action==='open'){
-    if(!wa_eligible($row)){http_response_code(409);exit('Penerima tidak lagi memenuhi status/persetujuan WhatsApp. Buat daftar baru setelah memeriksa data penerima.');}
+    if(!wa_eligible($row)){http_response_code(409);exit('Penerima tidak lagi memenuhi status penerima atau telah meminta berhenti. Buat daftar baru setelah memeriksa data penerima.');}
     $phone=wa_phone($row['nomor']);if(!$phone){http_response_code(422);exit('Nomor tidak valid.');}
     panel_query('UPDATE wa_recipients SET opened_at=:at,opened_by=:user WHERE id=:id',['at'=>date('Y-m-d H:i:s'),'user'=>(int)$user['id'],'id'=>$id]);
     header('Referrer-Policy: no-referrer');

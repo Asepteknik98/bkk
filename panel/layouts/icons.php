@@ -32,6 +32,9 @@ function panel_icon(string $name): string
         'certificate'=>'<circle cx="12" cy="8" r="4"/><path d="m9 12-2 9 5-3 5 3-2-9"/>',
         'back'=>'<path d="M20 12H4m6-6-6 6 6 6"/>',
         'whatsapp'=>'<path d="M21 11a9 9 0 0 1-13 8l-5 2 2-5a9 9 0 1 1 16-5Z"/><path d="m9 7-2 2c1 4 3 6 7 7l2-2-3-2-1 1-2-2 1-1-2-3Z"/>',
+        'up'=>'<path d="m6 14 6-6 6 6"/>',
+        'down'=>'<path d="m6 10 6 6 6-6"/>',
+        'next'=>'<path d="M4 12h16m-6-6 6 6-6 6"/>',
         'close'=>'<path d="m6 6 12 12M6 18 18 6"/>',
     ];
     return '<svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'.($paths[$name]??$paths['dashboard']).'</svg>';

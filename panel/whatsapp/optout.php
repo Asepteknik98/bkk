@@ -10,11 +10,11 @@ if($raw===false){panel_not_found();}$phone=wa_phone($raw);
 db()->beginTransaction();
 try{
     foreach(['lamaran'=>'telepon','tracer_responses'=>'nomor_telepon'] as $target=>$field){
-        foreach(panel_query('SELECT id,'.$field.' FROM '.$target.' WHERE wa_consent=1')->fetchAll() as $row){
-            if($phone!==null&&wa_phone($row[$field])===$phone){panel_query('UPDATE '.$target.' SET wa_consent=0 WHERE id=:id',['id'=>(int)$row['id']]);}
+        foreach(panel_query('SELECT id,'.$field.' FROM '.$target.'')->fetchAll() as $row){
+            if($phone!==null&&wa_phone($row[$field])===$phone){panel_query('UPDATE '.$target.' SET wa_consent=0,wa_opted_out_at=NOW() WHERE id=:id',['id'=>(int)$row['id']]);}
         }
     }
-    panel_query('UPDATE '.$table.' SET wa_consent=0 WHERE id=:id',['id'=>$id]);
+    panel_query('UPDATE '.$table.' SET wa_consent=0,wa_opted_out_at=NOW() WHERE id=:id',['id'=>$id]);
     db()->commit();
 }catch(Throwable $exception){if(db()->inTransaction()){db()->rollBack();}throw $exception;}
 panel_message('Persetujuan WhatsApp dinonaktifkan untuk nomor ini.','panel/'.($type==='pelamar'?'lamaran':'tracer-study').'/detail.php?id='.$id);

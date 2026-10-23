@@ -1,0 +1,15 @@
+<?php
+declare(strict_types=1);
+require_once dirname(__DIR__,2).'/app/helpers/programs.php';
+$user=require_role('admin','staf_bkk');$categories=program_categories();$category=input_text($_GET,'kategori');$status=input_text($_GET,'status');
+$params=[];$where='1=1';if(isset($categories[$category])){$where.=' AND kategori=:category';$params['category']=$category;}
+$statuses=['baru'=>'Baru','diproses'=>'Diproses','selesai'=>'Selesai'];if(isset($statuses[$status])){$where.=' AND status=:status';$params['status']=$status;}
+$total=(int)panel_query('SELECT COUNT(*) FROM program_inquiries WHERE '.$where,$params)->fetchColumn();$pages=max(1,(int)ceil($total/25));$page=min($pages,positive_id($_GET['page']??'1')??1);
+$rows=panel_query('SELECT * FROM program_inquiries WHERE '.$where.' ORDER BY id DESC LIMIT 25 OFFSET :offset',$params+['offset'=>($page-1)*25])->fetchAll();
+panel_start($user,'Minat & Pertanyaan Program','program-minat');
+?>
+<div class="content-management program-interest-admin"><div class="page-actions"><h1><?= panel_icon('message') ?> Minat &amp; pertanyaan program</h1></div>
+<form method="get" class="filter-form card"><label>Program<select name="kategori"><option value="">Semua program</option><?php foreach($categories as $key=>$info):?><option value="<?= $key ?>" <?= $category===$key?'selected':'' ?>><?= e($info['title']) ?></option><?php endforeach;?></select></label><label>Status<select name="status"><option value="">Semua status</option><?php foreach($statuses as $key=>$label):?><option value="<?= $key ?>" <?= $status===$key?'selected':'' ?>><?= $label ?></option><?php endforeach;?></select></label><button type="submit">Tampilkan</button></form>
+<p><?= $total ?> pesan &middot; Halaman <?= $page ?>/<?= $pages ?></p><div class="table-scroll"><table><thead><tr><th>Nama</th><th>Program</th><th>Status</th><th>Dikirim (WIB)</th><th></th></tr></thead><tbody><?php foreach($rows as $row):?><tr><td><?= e($row['nama']) ?><small><?= e($row['email']) ?></small></td><td><?= e($categories[$row['kategori']]['title']) ?><small><?= e($row['program_judul']) ?></small></td><td><?= $statuses[$row['status']] ?></td><td><?= e($row['created_at']) ?></td><td><a href="<?= e(base_url('panel/program-minat/detail.php?id='.$row['id'])) ?>">Buka / balas</a></td></tr><?php endforeach;?><?php if(!$rows):?><tr><td colspan="5">Belum ada pesan yang sesuai.</td></tr><?php endif;?></tbody></table></div>
+<?php if($pages>1):?><nav class="pagination" aria-label="Halaman pesan program"><?php foreach(['Sebelumnya'=>$page-1,'Berikutnya'=>$page+1] as $label=>$target):if($target<1||$target>$pages){continue;}?><a href="<?= e(base_url('panel/program-minat/?'.http_build_query(['kategori'=>$category,'status'=>$status,'page'=>$target]))) ?>"><?= $label ?></a><?php endforeach;?></nav><?php endif;?></div>
+<?php panel_end($user); ?>

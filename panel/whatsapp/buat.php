@@ -10,17 +10,22 @@ if($existing){redirect('panel/whatsapp/detail.php?id='.$existing,303);}
 try {
     if(!valid_text($title,150)||!valid_text($message,1500)||($link!==''&&!http_url($link))){throw new InvalidArgumentException('Isi judul dan pesan yang valid. Tautan opsional harus berupa URL http/https.');}
     $contacts=wa_contacts($filters);$mode=$_POST['mode']??'';
-    if($mode==='manual'){
+    if($mode==='basket'){
+        $visible=$_POST['visible']??[];$checked=$_POST['selected']??[];
+        if(!is_array($visible)||!is_array($checked)||count($visible)>20||count($checked)>20||array_filter(array_merge($visible,$checked),static fn($v)=>!is_string($v))){throw new InvalidArgumentException('Pilihan tidak valid.');}
+        foreach(wa_contacts($filters,true) as $contact){if(!in_array($contact['key'],$visible,true)){continue;}if($contact['selectable']&&in_array($contact['key'],$checked,true)){$_SESSION['wa_selected'][$contact['nomor']]=$contact['key'];}else{unset($_SESSION['wa_selected'][$contact['nomor']]);}}
+        $contacts=wa_selected_contacts();
+    }elseif($mode==='manual'){
         $selected=$_POST['selected']??[];
-        if(!is_array($selected)||count($selected)>20||array_filter($selected,static fn($v)=>!is_string($v))){throw new InvalidArgumentException('Pilihan penerima tidak valid.');}
+        if(!is_array($selected)||array_filter($selected,static fn($v)=>!is_string($v))){throw new InvalidArgumentException('Pilihan penerima tidak valid.');}
         $contacts=array_filter($contacts,static fn($c)=>in_array($c['key'],$selected,true));
-    }elseif($mode!=='all'){throw new InvalidArgumentException('Pilih cara menentukan penerima.');}
-    if(!$contacts){throw new InvalidArgumentException('Tidak ada penerima dengan nomor valid dan persetujuan WhatsApp.');}
+    }elseif($mode!=='all'){throw new InvalidArgumentException('Pilih penerima terlebih dahulu.');}
+    if(!$contacts){throw new InvalidArgumentException('Belum ada penerima dipilih, atau penerima sudah meminta berhenti.');}
     db()->beginTransaction();
     panel_query('INSERT INTO wa_campaigns(judul,pesan,tautan,created_by,created_at,submission_key) VALUES(:judul,:pesan,:tautan,:user,:at,:key)',['judul'=>$title,'pesan'=>$message,'tautan'=>$link,'user'=>(int)$user['id'],'at'=>date('Y-m-d H:i:s'),'key'=>$key]);
     $id=(int)db()->lastInsertId();
     foreach($contacts as $contact){panel_query('INSERT INTO wa_recipients(campaign_id,source_type,source_id,nama,nomor,pesan) VALUES(:campaign,:type,:source,:nama,:nomor,:pesan)',['campaign'=>$id,'type'=>$contact['source_type'],'source'=>$contact['source_id'],'nama'=>$contact['nama'],'nomor'=>$contact['nomor'],'pesan'=>wa_message($message,$contact['nama'],$link)]);}
-    db()->commit();unset($_SESSION['wa_draft']);
+    db()->commit();unset($_SESSION['wa_draft'],$_SESSION['wa_selected']);
     redirect('panel/whatsapp/detail.php?id='.$id,303);
 }catch(Throwable $exception){
     if(db()->inTransaction()){db()->rollBack();}
