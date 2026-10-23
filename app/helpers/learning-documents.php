@@ -2,6 +2,13 @@
 declare(strict_types=1);
 require_once __DIR__.'/students.php';
 
+function learning_filters(array $input): array
+{
+    [$filters,$where,$params]=student_filters($input);unset($filters['urut']);
+    $where=str_replace(['nama LIKE :nama','nis LIKE :nis'],['judul LIKE :nama','deskripsi LIKE :nis'],$where);
+    return [$filters,$where,$params];
+}
+
 function learning_input(array $input): array
 {
     $data=[];

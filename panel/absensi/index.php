@@ -17,6 +17,7 @@ $pages=max(1,(int)ceil($total/20));$page=min($pages,positive_id($_GET['page']??'
 $rows=panel_query('SELECT e.*,(SELECT COUNT(*) FROM attendance_records r WHERE r.event_id=e.id) AS peserta,(SELECT COUNT(*) FROM attendance_records r WHERE r.event_id=e.id AND r.status IS NOT NULL) AS tercatat FROM attendance_events e WHERE '.$where.' ORDER BY e.tanggal DESC,e.id DESC LIMIT :limit OFFSET :offset',$params+['limit'=>20,'offset'=>($page-1)*20])->fetchAll();
 panel_start($user,'Absensi kegiatan','absensi');
 ?>
+<div class="page-actions"><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'absensi']+$filters))) ?>">Download Excel kegiatan dan absensi</a></div>
 <div class="page-actions"><h1>Absensi kegiatan</h1><a href="<?= e(base_url('panel/absensi/rekap.php?'.http_build_query($filters))) ?>">Rekap siswa</a><a href="<?= e(base_url('panel/siswa/')) ?>">Data siswa</a></div>
 <?php if($errors):?><div class="alert" role="alert"><strong>Kegiatan belum dibuat.</strong><ul><?php foreach($errors as $error):?><li><?= e($error) ?></li><?php endforeach;?></ul></div><?php endif;?>
 <form class="editor-form card" method="post"><?= csrf_field() ?><h2>Buat kegiatan / pertemuan</h2>

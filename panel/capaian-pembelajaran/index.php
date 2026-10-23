@@ -2,11 +2,8 @@
 declare(strict_types=1);
 require_once dirname(__DIR__,2).'/app/helpers/learning-documents.php';
 $user=require_role('admin','staf_bkk');
-try{[$filters,$where,$params]=student_filters($_GET);}
+try{[$filters,$where,$params]=learning_filters($_GET);}
 catch(InvalidArgumentException $exception){http_response_code(400);exit(e($exception->getMessage()));}
-unset($filters['urut']);
-// Student search uses nama/NIS; documents search their title and description instead.
-$where=str_replace(['nama LIKE :nama','nis LIKE :nis'],['judul LIKE :nama','deskripsi LIKE :nis'],$where);
 $listPath='panel/capaian-pembelajaran/?'.http_build_query($filters);
 $ready=(bool)panel_query("SHOW TABLES LIKE 'learning_documents'")->fetchColumn();
 $errors=[];$data=learning_input([]);$id=positive_id($_GET['id']??'');$document=null;
@@ -47,6 +44,7 @@ $pages=max(1,(int)ceil($total/20));$page=min($pages,positive_id($_GET['page']??'
 $rows=$ready?panel_query('SELECT * FROM learning_documents WHERE '.$where.' ORDER BY updated_at DESC,id DESC LIMIT :limit OFFSET :offset',$params+['limit'=>20,'offset'=>($page-1)*20])->fetchAll():[];
 panel_start($user,'Capaian pembelajaran','capaian');
 ?>
+<div class="page-actions"><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'capaian']+$filters))) ?>">Download Excel capaian pembelajaran</a></div>
 <div class="page-actions"><h1>Capaian pembelajaran</h1><a href="<?= e(base_url($listPath)) ?>">Tambah dokumen</a><a href="<?= e(base_url('panel/siswa/')) ?>">Data siswa</a></div>
 <p>Kelola dokumen materi dan target pembelajaran per kelas industri dan angkatan. Dokumen tersedia bagi admin dan staf BKK yang masuk ke panel.</p>
 <?php if(!$ready):?><p class="alert">Fitur belum aktif. Jalankan pembaruan database 010_learning_documents.sql.</p><?php endif;?>

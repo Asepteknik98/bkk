@@ -2,6 +2,19 @@
 declare(strict_types=1);
 require_once __DIR__.'/learning-documents.php';
 
+function speaker_filters(array $input): array
+{
+    [$filters]=student_filters(array_intersect_key($input,array_flip(['q','kelas_industri'])));unset($filters['urut'],$filters['angkatan']);
+    $eventId=positive_id($input['event_id']??'');
+    if(isset($input['event_id'])&&$input['event_id']!==''&&!$eventId){throw new InvalidArgumentException('Filter kegiatan tidak valid.');}
+    if($eventId){$filters['event_id']=(string)$eventId;}
+    $where='1=1';$params=[];
+    if($filters['q']!==''){$pattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$filters['q']).'%';$where.=" AND (s.nama LIKE :nama ESCAPE '!' OR s.instansi LIKE :instansi ESCAPE '!' OR s.keahlian LIKE :keahlian ESCAPE '!')";$params+=['nama'=>$pattern,'instansi'=>$pattern,'keahlian'=>$pattern];}
+    if($filters['kelas_industri']!==''){$where.=' AND (s.kelas_industri=:industri OR EXISTS(SELECT 1 FROM speaker_events se JOIN attendance_events e ON e.id=se.event_id WHERE se.speaker_id=s.id AND e.kelas_industri=:event_industri))';$params+=['industri'=>$filters['kelas_industri'],'event_industri'=>$filters['kelas_industri']];}
+    if($eventId){$where.=' AND EXISTS(SELECT 1 FROM speaker_events se WHERE se.speaker_id=s.id AND se.event_id=:event)';$params['event']=$eventId;}
+    return [$filters,$where,$params];
+}
+
 function speaker_input(array $input): array
 {
     $data=[];foreach(['nama','instansi','keahlian','kelas_industri','bio'] as $key){$data[$key]=input_text($input,$key);}return $data;

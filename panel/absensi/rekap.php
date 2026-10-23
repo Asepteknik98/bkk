@@ -9,6 +9,7 @@ $pages=max(1,(int)ceil($total/25));$page=min($pages,positive_id($_GET['page']??'
 $rows=panel_query("SELECT s.id,s.nis,s.nama,s.kelas,COUNT(*) AS kegiatan,SUM(r.status='hadir') AS hadir,SUM(r.status='izin') AS izin,SUM(r.status='sakit') AS sakit,SUM(r.status='alpa') AS alpa,SUM(r.status IS NULL) AS belum".$from.' GROUP BY s.id,s.nis,s.nama,s.kelas ORDER BY s.nama,s.id LIMIT :limit OFFSET :offset',$params+['limit'=>25,'offset'=>($page-1)*25])->fetchAll();
 panel_start($user,'Rekap absensi siswa','absensi');
 ?>
+<div class="page-actions"><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'rekap']+$filters))) ?>">Download Excel rekap siswa</a></div>
 <div class="page-actions"><h1>Rekap absensi siswa</h1><a href="<?= e(base_url('panel/absensi/?'.http_build_query($filters))) ?>">Daftar kegiatan</a></div>
 <p>Rekap menghitung kegiatan yang diikuti setiap siswa sesuai filter. Belum diisi dihitung terpisah dari Alpa. Identitas pada rekap mengikuti Data Siswa terbaru; identitas dalam setiap kegiatan mengikuti riwayat peserta saat kegiatan dibuat.</p>
 <?php attendance_filter_form($filters,'panel/absensi/rekap.php'); ?>

@@ -55,6 +55,7 @@ $pages=max(1,(int)ceil($total/25));$page=min($pages,positive_id($_GET['page']??'
 $rows=$ready?panel_query('SELECT * FROM siswa WHERE '.$where.' ORDER BY '.$order.' LIMIT :limit OFFSET :offset',$params+['limit'=>25,'offset'=>($page-1)*25])->fetchAll():[];
 panel_start($user,'Data siswa','siswa');
 ?>
+<div class="page-actions"><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'siswa']+$filters))) ?>">Download Excel data siswa</a></div>
 <div class="page-actions"><h1>Data siswa</h1><a href="<?= e(base_url('panel/absensi/?'.http_build_query(array_intersect_key($filters,array_flip(['angkatan','kelas_industri']))))) ?>">Absensi kegiatan</a><a href="<?= e(base_url('panel/capaian-pembelajaran/?'.http_build_query(array_intersect_key($filters,array_flip(['angkatan','kelas_industri']))))) ?>">Capaian pembelajaran</a><a href="<?= e(base_url('panel/siswa/')) ?>">Tambah siswa</a><a href="<?= e(base_url('panel/siswa/template.php')) ?>">Download template Excel</a></div>
 <?php if(!$ready):?><p class="alert">Fitur belum diaktifkan. Jalankan database/updates/009_siswa.sql pada database aplikasi.</p><?php endif;?>
 <?php if($errors):?><div class="alert" role="alert"><strong>Data belum disimpan.</strong><ul><?php foreach(array_slice($errors,0,30) as $error):?><li><?= e($error) ?></li><?php endforeach;?></ul><?php if(count($errors)>30):?><p>Masih ada kesalahan lain. Perbaiki data dan unggah kembali.</p><?php endif;?></div><?php endif;?>

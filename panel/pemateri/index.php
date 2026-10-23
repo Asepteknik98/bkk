@@ -3,18 +3,15 @@ declare(strict_types=1);
 require_once dirname(__DIR__,2).'/app/helpers/speakers.php';
 $user=require_role('admin','staf_bkk');
 if(!panel_query("SHOW TABLES LIKE 'speakers'")->fetchColumn()){panel_start($user,'Pemateri kelas','pemateri');echo '<p class="alert">Jalankan pembaruan database 012_speakers.sql terlebih dahulu.</p>';panel_end($user);exit;}
-try{[$filters]=student_filters(array_intersect_key($_GET,array_flip(['q','kelas_industri'])));}catch(InvalidArgumentException $exception){http_response_code(400);exit(e($exception->getMessage()));}
-unset($filters['urut'],$filters['angkatan']);$eventId=positive_id($_GET['event_id']??'');if($eventId){$filters['event_id']=(string)$eventId;}
-$where='1=1';$params=[];
-if($filters['q']!==''){$pattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$filters['q']).'%';$where.=" AND (s.nama LIKE :nama ESCAPE '!' OR s.instansi LIKE :instansi ESCAPE '!' OR s.keahlian LIKE :keahlian ESCAPE '!')";$params+=['nama'=>$pattern,'instansi'=>$pattern,'keahlian'=>$pattern];}
-if($filters['kelas_industri']!==''){$where.=' AND (s.kelas_industri=:industri OR EXISTS(SELECT 1 FROM speaker_events se JOIN attendance_events e ON e.id=se.event_id WHERE se.speaker_id=s.id AND e.kelas_industri=:event_industri))';$params+=['industri'=>$filters['kelas_industri'],'event_industri'=>$filters['kelas_industri']];}
-if($eventId){$where.=' AND EXISTS(SELECT 1 FROM speaker_events se WHERE se.speaker_id=s.id AND se.event_id=:event)';$params['event']=$eventId;}
+try{[$filters,$where,$params]=speaker_filters($_GET);}catch(InvalidArgumentException $exception){http_response_code(400);exit(e($exception->getMessage()));}
+$eventId=positive_id($filters['event_id']??'');
 $industries=panel_query("SELECT kelas_industri FROM speakers WHERE kelas_industri<>'' UNION SELECT kelas_industri FROM siswa WHERE kelas_industri<>'' UNION SELECT kelas_industri FROM attendance_events ORDER BY kelas_industri")->fetchAll(PDO::FETCH_COLUMN);
 if($filters['kelas_industri']!==''&&!in_array($filters['kelas_industri'],$industries,true)){$industries[]=$filters['kelas_industri'];}
 $total=(int)panel_query('SELECT COUNT(*) FROM speakers s WHERE '.$where,$params)->fetchColumn();$pages=max(1,(int)ceil($total/20));$page=min($pages,positive_id($_GET['page']??'1')??1);
 $rows=panel_query('SELECT s.*,(SELECT COUNT(*) FROM speaker_events se WHERE se.speaker_id=s.id) AS kegiatan FROM speakers s WHERE '.$where.' ORDER BY s.nama,s.id LIMIT :limit OFFSET :offset',$params+['limit'=>20,'offset'=>($page-1)*20])->fetchAll();
 panel_start($user,'Pemateri kelas','pemateri');
 ?>
+<div class="page-actions"><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'pemateri']+$filters))) ?>">Download Excel pemateri</a></div>
 <div class="page-actions"><h1>Pemateri kelas</h1><a class="button" href="<?= e(base_url('panel/pemateri/form.php?'.http_build_query(array_intersect_key($filters,array_flip(['kelas_industri','event_id']))))) ?>">+ Tambah pemateri</a><a href="<?= e(base_url('panel/absensi/')) ?>">Kegiatan</a></div>
 <form class="filter-form card" method="get"><?php if($eventId):?><input type="hidden" name="event_id" value="<?= $eventId ?>"><?php endif;?><label>Cari pemateri<input name="q" maxlength="100" placeholder="Nama, instansi, atau keahlian" value="<?= e($filters['q']) ?>"></label><label>Kelas industri<select name="kelas_industri"><option value="">Semua kelas industri</option><?php foreach($industries as $industry):?><option value="<?= e($industry) ?>" <?= $filters['kelas_industri']===$industry?'selected':'' ?>><?= e($industry) ?></option><?php endforeach;?></select></label><button type="submit">Terapkan</button><a href="<?= e(base_url('panel/pemateri/')) ?>">Reset filter</a></form>
 <?php if($eventId):?><p>Menampilkan pemateri yang terkait dengan kegiatan #<?= $eventId ?>.</p><?php endif;?>
