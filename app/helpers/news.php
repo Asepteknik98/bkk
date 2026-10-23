@@ -9,6 +9,7 @@ function news_input(array $input): array
     return ['judul' => input_text($input, 'judul'), 'slug' => input_text($input, 'slug'),
         'ringkasan' => input_text($input, 'ringkasan'), 'isi' => input_text($input, 'isi'),
         'status' => input_text($input, 'status'), 'unggulan' => ($input['unggulan'] ?? '') === '1' ? 1 : 0,
+        'popup' => ($input['popup'] ?? '') === '1' ? 1 : 0,
         'media_id' => input_text($input, 'media_id'), 'hapus_gambar' => ($input['hapus_gambar'] ?? '') === '1'];
 }
 
@@ -56,11 +57,14 @@ function save_news(array $data, ?int $id, int $userId, ?array $upload): int
             $databaseNow = (string) panel_query('SELECT NOW()')->fetchColumn();
             $publishedAt = $data['status'] === 'published' ? (($old['status'] ?? '') === 'published' ? ($old['published_at'] ?? $databaseNow) : $databaseNow) : null;
             $params = ['judul' => $data['judul'], 'slug' => $slug, 'ringkasan' => $data['ringkasan'], 'isi' => $data['isi'],
-                'gambar' => $image, 'status' => $data['status'], 'unggulan' => $data['unggulan'], 'published_at' => $publishedAt];
+                'gambar' => $image, 'status' => $data['status'], 'unggulan' => $data['unggulan'], 'popup' => (int)($data['popup'] ?? 0), 'published_at' => $publishedAt];
+            if ($params['popup'] === 1) {
+                panel_query('UPDATE berita SET popup=0 WHERE popup=1');
+            }
             if ($id) {
-                panel_query('UPDATE berita SET judul=:judul, slug=:slug, ringkasan=:ringkasan, isi=:isi, gambar=:gambar, status=:status, unggulan=:unggulan, published_at=:published_at WHERE id=:id', $params + ['id' => $id]);
+                panel_query('UPDATE berita SET judul=:judul, slug=:slug, ringkasan=:ringkasan, isi=:isi, gambar=:gambar, status=:status, unggulan=:unggulan, popup=:popup, published_at=:published_at WHERE id=:id', $params + ['id' => $id]);
             } else {
-                panel_query('INSERT INTO berita (judul,slug,ringkasan,isi,gambar,status,unggulan,published_at,penulis_id) VALUES (:judul,:slug,:ringkasan,:isi,:gambar,:status,:unggulan,:published_at,:penulis_id)', $params + ['penulis_id' => $userId]);
+                panel_query('INSERT INTO berita (judul,slug,ringkasan,isi,gambar,status,unggulan,popup,published_at,penulis_id) VALUES (:judul,:slug,:ringkasan,:isi,:gambar,:status,:unggulan,:popup,:published_at,:penulis_id)', $params + ['penulis_id' => $userId]);
                 $id = (int) db()->lastInsertId();
             }
             db()->commit();

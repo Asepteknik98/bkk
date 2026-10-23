@@ -20,12 +20,15 @@
         </div>
     </div>
 </footer>
-<?php $announcement = setting('public_announcement'); ?>
+<?php
+$popupNews = public_popup_news();
+$announcement = $popupNews['isi'] ?? '';
+?>
 <?php if ($announcement): ?>
 <?php
-$announcementImage = setting('public_announcement_image');
+$announcementImage = ($popupNews['gambar'] ?? '');
 $announcementImageUrl = $announcementImage !== '' ? content_image($announcementImage) : '';
-$announcementTitle = setting('public_announcement_title') ?: 'Pengumuman ' . ($siteName ?? 'BKK');
+$announcementTitle = $popupNews['judul'];
 ?>
 <div class="public-announcement-modal" id="public-announcement-modal" hidden>
     <div class="public-announcement-backdrop" data-close-announcement aria-hidden="true"></div>
@@ -47,11 +50,9 @@ $announcementTitle = setting('public_announcement_title') ?: 'Pengumuman ' . ($s
             <p class="public-announcement-eyebrow">Pengumuman sekolah</p>
             <h2 id="public-announcement-title"><?= e($announcementTitle) ?></h2>
             <div class="public-announcement-body" id="public-announcement-content"><?= render_linked_text($announcement) ?></div>
-        <?php $announcementLinkText = setting('public_announcement_link_text'); $announcementLinkUrl = setting('public_announcement_link_url'); ?>
+        <?php $announcementLinkText = 'Baca berita selengkapnya'; $announcementLinkUrl = base_url('detail-berita.php?slug='.rawurlencode($popupNews['slug'])); ?>
         <div class="public-announcement-footer">
-            <?php if ($announcementLinkText !== '' && http_url($announcementLinkUrl)): ?>
-            <a class="public-announcement-action" href="<?= e($announcementLinkUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e($announcementLinkText) ?><span aria-hidden="true">↗</span></a>
-            <?php endif; ?>
+            <a class="public-announcement-action" href="<?= e($announcementLinkUrl) ?>"><?= e($announcementLinkText) ?><span aria-hidden="true">↗</span></a>
             <button class="public-announcement-continue" type="button" data-close-announcement>Saya Mengerti</button>
         </div>
         </div>

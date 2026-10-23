@@ -29,12 +29,14 @@ CREATE TABLE berita (
     penulis_id BIGINT UNSIGNED NULL,
     status ENUM('draft', 'published') NOT NULL DEFAULT 'draft',
     unggulan TINYINT(1) NOT NULL DEFAULT 0,
+    popup TINYINT(1) NOT NULL DEFAULT 0,
     published_at DATETIME NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uq_berita_slug (slug),
     KEY idx_berita_publikasi (status, published_at),
     KEY idx_berita_unggulan (status, unggulan, published_at),
+    KEY idx_berita_popup (popup, status, published_at),
     CONSTRAINT fk_berita_penulis FOREIGN KEY (penulis_id) REFERENCES users(id) ON DELETE SET NULL,
     CONSTRAINT chk_berita_unggulan CHECK (unggulan IN (0, 1))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

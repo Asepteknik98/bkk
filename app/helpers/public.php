@@ -24,6 +24,11 @@ function public_query(string $sql, array $params = []): array
     }
 }
 
+function public_popup_news(): ?array
+{
+    return public_query("SELECT judul,slug,isi,gambar FROM berita WHERE popup=1 AND status='published' AND (published_at IS NULL OR published_at<=NOW()) ORDER BY published_at DESC,id DESC LIMIT 1")[0] ?? null;
+}
+
 function setting(string $key, string $default = ''): string
 {
     static $settings = null;
