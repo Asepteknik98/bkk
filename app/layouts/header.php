@@ -22,6 +22,7 @@ $siteName = setting('site_name', (string) app_config('name'));
 <a class="skip-link" href="#konten">Langsung ke konten</a>
 <div class="topbar"><div class="container portal-container">
     <?php require __DIR__ . '/navbar.php'; ?>
+    <a class="manager-login" href="<?= e(base_url('siswa/')) ?>">Login Siswa</a>
     <a class="manager-login" href="<?= e(base_url('auth/login.php')) ?>">Login Pengelola <span aria-hidden="true">↗</span></a>
 </div></div>
 <header class="site-header">

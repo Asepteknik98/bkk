@@ -9,7 +9,7 @@ CREATE TABLE users (
     email VARCHAR(191) NOT NULL,
     foto_profil VARCHAR(255) NULL,
     password_hash VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'staf_bkk') NOT NULL,
+    role ENUM('admin', 'staf_bkk', 'siswa') NOT NULL,
     aktif TINYINT(1) NOT NULL DEFAULT 1,
     last_login_at DATETIME NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -387,4 +387,12 @@ CREATE TABLE IF NOT EXISTS event_resources (
     updated_by BIGINT UNSIGNED NOT NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_event_resources FOREIGN KEY (event_id) REFERENCES attendance_events(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS student_accounts (
+    user_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+    siswa_id BIGINT UNSIGNED NOT NULL,
+    UNIQUE KEY uq_student_account (siswa_id),
+    CONSTRAINT fk_student_account_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_student_account_student FOREIGN KEY (siswa_id) REFERENCES siswa(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
