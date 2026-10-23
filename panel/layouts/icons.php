@@ -5,6 +5,7 @@ if (!defined('APP_ROOT')) { http_response_code(403); exit; }
 function panel_icon(string $name): string
 {
     $paths = [
+        'pemateri'=>'<circle cx="8" cy="7" r="3"/><path d="M2 21v-4a6 6 0 0 1 12 0v4M15 3h7v12h-6M17 7h3M17 11h3"/>',
         'absensi'=>'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 11h16m-12 5 3 3 5-5"/>',
         'dashboard'=>'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
         'berita'=>'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h3M8 18h8"/>',
