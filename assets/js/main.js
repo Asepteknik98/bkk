@@ -120,26 +120,68 @@ if (document.querySelector('.portal-page')) {
 // Public announcement modal with optional hyperlink support from admin text.
 const publicAnnouncement = document.getElementById('public-announcement-modal');
 if (publicAnnouncement) {
+    const dialog = publicAnnouncement.querySelector('.public-announcement-dialog');
+    const closeButton = publicAnnouncement.querySelector('.public-announcement-close');
+    const dismissalKey = `public-announcement-dismissed:${publicAnnouncement.dataset.dismissalKey || 'default'}`;
+    const cookieName = 'bkk-public-announcement-dismissed';
+    const cookieValue = encodeURIComponent(publicAnnouncement.dataset.dismissalKey || 'default');
+    const wasAnnouncementDismissed = () => {
+        try {
+            if (sessionStorage.getItem(dismissalKey) === '1') return true;
+        } catch (error) {
+            console.warn('Penyimpanan sesi tidak tersedia; memeriksa cookie sesi.', error);
+        }
+        try {
+            return document.cookie.split(';').some(cookie => cookie.trim() === `${cookieName}=${cookieValue}`);
+        } catch (error) {
+            return false;
+        }
+    };
     const dismissAnnouncement = () => {
         publicAnnouncement.hidden = true;
         document.body.classList.remove('announcement-open');
-        try { sessionStorage.setItem('public-announcement-dismissed', '1'); } catch (error) { /* no-op */ }
-    };
-    const shouldShowAnnouncement = () => {
-        try {
-            return sessionStorage.getItem('public-announcement-dismissed') !== '1';
-        } catch (error) {
-            return true;
+        try { sessionStorage.setItem(dismissalKey, '1'); } catch (error) {
+            console.warn('Tidak dapat menyimpan status pengumuman di penyimpanan sesi.', error);
+        }
+        try { document.cookie = `${cookieName}=${cookieValue}; path=/; SameSite=Lax`; } catch (error) {
+            console.warn('Tidak dapat menyimpan status pengumuman di cookie sesi.', error);
+        }
+        const pageContent = document.querySelector('#konten, main');
+        if (pageContent) {
+            if (!pageContent.hasAttribute('tabindex')) pageContent.setAttribute('tabindex', '-1');
+            pageContent.focus();
         }
     };
-    if (shouldShowAnnouncement()) {
+    if (!wasAnnouncementDismissed()) {
         publicAnnouncement.hidden = false;
         document.body.classList.add('announcement-open');
+        closeButton?.focus();
     }
     publicAnnouncement.querySelectorAll('[data-close-announcement]').forEach(button => {
         button.addEventListener('click', dismissAnnouncement);
     });
     document.addEventListener('keydown', event => {
-        if (!publicAnnouncement.hidden && event.key === 'Escape') dismissAnnouncement();
+        if (publicAnnouncement.hidden) return;
+        if (event.key === 'Escape') {
+            dismissAnnouncement();
+            return;
+        }
+        if (event.key !== 'Tab' || !dialog) return;
+        const focusable = [...dialog.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+            .filter(element => element.getClientRects().length > 0);
+        if (!focusable.length) {
+            event.preventDefault();
+            dialog.focus();
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+            event.preventDefault();
+            first.focus();
+        }
     });
 }
