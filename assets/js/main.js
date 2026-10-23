@@ -116,3 +116,30 @@ if (document.querySelector('.portal-page')) {
         }
     });
 }
+
+// Public announcement modal with optional hyperlink support from admin text.
+const publicAnnouncement = document.getElementById('public-announcement-modal');
+if (publicAnnouncement) {
+    const dismissAnnouncement = () => {
+        publicAnnouncement.hidden = true;
+        document.body.classList.remove('announcement-open');
+        try { sessionStorage.setItem('public-announcement-dismissed', '1'); } catch (error) { /* no-op */ }
+    };
+    const shouldShowAnnouncement = () => {
+        try {
+            return sessionStorage.getItem('public-announcement-dismissed') !== '1';
+        } catch (error) {
+            return true;
+        }
+    };
+    if (shouldShowAnnouncement()) {
+        publicAnnouncement.hidden = false;
+        document.body.classList.add('announcement-open');
+    }
+    publicAnnouncement.querySelectorAll('[data-close-announcement]').forEach(button => {
+        button.addEventListener('click', dismissAnnouncement);
+    });
+    document.addEventListener('keydown', event => {
+        if (!publicAnnouncement.hidden && event.key === 'Escape') dismissAnnouncement();
+    });
+}
