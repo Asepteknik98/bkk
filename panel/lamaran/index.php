@@ -9,6 +9,7 @@ $q = input_text($_GET, 'q');
 if (!valid_text($q, 100, false)) { $q = ''; }
 $params = []; $where = '1=1';
 if (isset($statuses[$status])) { $where = 'status=:status'; $params['status']=$status; }
+if ($status==='belum_dilihat') { $where='viewed_at IS NULL'; }
 if ($q !== '') {
     $pattern = '%'.str_replace(['!','%','_'], ['!!','!%','!_'], $q).'%';
     $where .= " AND (nama LIKE :nama ESCAPE '!' OR email LIKE :email ESCAPE '!' OR posisi LIKE :posisi ESCAPE '!' OR perusahaan LIKE :perusahaan ESCAPE '!')";
@@ -20,7 +21,7 @@ $rows = panel_query('SELECT id,nama,email,posisi,perusahaan,status,created_at FR
 panel_start($user,'Lamaran Masuk','lamaran');
 ?>
 <div class="content-management applications-inbox"><div class="page-actions"><h1><?= panel_icon('lamaran') ?> Lamaran Masuk</h1></div>
-<form class="filter-form card" method="get"><label>Cari pelamar / lowongan<input type="search" name="q" maxlength="100" placeholder="Nama, email, posisi, atau perusahaan" value="<?= e($q) ?>"></label><label>Status<select name="status"><option value="">Semua status</option><?php foreach ($statuses as $value=>$label): ?><option value="<?= $value ?>" <?= $status===$value?'selected':'' ?>><?= $label ?></option><?php endforeach; ?></select></label><button type="submit">Cari</button><a class="filter-reset" href="<?= e(base_url('panel/lamaran/')) ?>">Reset</a></form>
+<form class="filter-form card" method="get"><label>Cari pelamar / lowongan<input type="search" name="q" maxlength="100" placeholder="Nama, email, posisi, atau perusahaan" value="<?= e($q) ?>"></label><label>Status<select name="status"><option value="">Semua status</option><option value="belum_dilihat" <?= $status==='belum_dilihat'?'selected':'' ?>>Belum dilihat</option><?php foreach ($statuses as $value=>$label): ?><option value="<?= $value ?>" <?= $status===$value?'selected':'' ?>><?= $label ?></option><?php endforeach; ?></select></label><button type="submit">Cari</button><a class="filter-reset" href="<?= e(base_url('panel/lamaran/')) ?>">Reset</a></form>
 <p><?= $total ?> lamaran &middot; Halaman <?= $page ?> dari <?= $pages ?></p>
 <div class="table-scroll admin-vertical-viewport" data-vertical-list id="applications-list" tabindex="0" role="region" aria-label="Daftar lamaran, gulir ke bawah atau geser ke samping"><table><thead><tr><th><?= panel_icon('akun') ?> Pelamar</th><th><?= panel_icon('lowongan') ?> Lowongan</th><th><?= panel_icon('calendar') ?> Dikirim (WIB)</th><th><?= panel_icon('lamaran') ?> Status</th><th>Tindakan</th></tr></thead><tbody>
 <?php foreach ($rows as $row): ?><tr><td><strong class="inbox-text"><?= e($row['nama']) ?></strong><small><?= e($row['email']) ?></small></td><td><span class="inbox-text"><?= e($row['posisi']) ?></span><small><?= e($row['perusahaan']) ?></small></td><td><?= e($row['created_at']) ?></td><td><span class="badge"><?= e($statuses[$row['status']]) ?></span></td><td><a href="<?= e(base_url('panel/lamaran/detail.php?id='.$row['id'])) ?>"><?= panel_icon('view') ?> Lihat</a></td></tr><?php endforeach; ?>
