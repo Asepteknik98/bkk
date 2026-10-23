@@ -254,11 +254,13 @@ if (document.querySelector('.panel-page')) {
     });
 }
 
-// Expand the sidebar when its program dropdown is opened from icon-only mode.
-document.querySelector('.sidebar-programs>summary')?.addEventListener('click', () => {
-    if (document.documentElement.dataset.sidebar === 'collapsed') {
-        document.querySelector('.sidebar-collapse')?.click();
-    }
+// Both menu groups expand the sidebar when opened from icon-only mode.
+document.querySelectorAll('.sidebar-programs>summary').forEach(summary => {
+    summary.addEventListener('click', () => {
+        if (document.documentElement.dataset.sidebar === 'collapsed') {
+            document.querySelector('.sidebar-collapse')?.click();
+        }
+    });
 });
 
 // Native disclosures remain usable without JavaScript; shortcuts reveal the relevant form.
@@ -276,3 +278,11 @@ const syncCompactFilters = () => document.querySelectorAll('.bmw-filter').forEac
 });
 syncCompactFilters();
 compactFilters.addEventListener('change', syncCompactFilters);
+
+// Start with the compact overview on phones; keep desktop charts expanded.
+const compactDashboard = window.matchMedia('(max-width: 600px)');
+const syncDashboardInsights = () => document.querySelectorAll('.dashboard-insights').forEach(details => {
+    details.open = !compactDashboard.matches;
+});
+syncDashboardInsights();
+compactDashboard.addEventListener('change', syncDashboardInsights);

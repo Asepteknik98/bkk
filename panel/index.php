@@ -11,6 +11,8 @@ $today=(new DateTimeImmutable('now',new DateTimeZone('Asia/Jakarta')))->format('
 $open=(int)panel_query("SELECT COUNT(*) FROM lowongan WHERE status='published' AND batas_lamaran>=:today",['today'=>$today])->fetchColumn();
 $activePartners=(int)panel_query('SELECT COUNT(*) FROM mitra WHERE aktif=1')->fetchColumn();
 $mediaCount=(int)panel_query('SELECT COUNT(*) FROM media')->fetchColumn();
+$unseenApplications=(int)panel_query('SELECT COUNT(*) FROM lamaran WHERE viewed_at IS NULL')->fetchColumn();
+$applications=panel_query('SELECT status,COUNT(*) AS jumlah FROM lamaran GROUP BY status')->fetchAll(PDO::FETCH_KEY_PAIR);
 $tracer=panel_query('SELECT status_kegiatan,COUNT(*) AS jumlah FROM tracer_responses GROUP BY status_kegiatan')->fetchAll(PDO::FETCH_KEY_PAIR);
 $users=$user['role']==='admin'?(int)panel_query('SELECT COUNT(*) FROM users WHERE aktif=1')->fetchColumn():null;
 panel_start($user,'Dashboard','dashboard');
@@ -22,7 +24,9 @@ panel_start($user,'Dashboard','dashboard');
 <section class="card"><span class="stat-icon"><?= panel_icon('mitra') ?></span><h2><a href="<?= e(base_url('panel/mitra/')) ?>">Mitra aktif</a></h2><p><strong><?= $activePartners ?></strong> mitra</p></section>
 <section class="card"><span class="stat-icon"><?= panel_icon('media') ?></span><h2><a href="<?= e(base_url('panel/media/')) ?>">Media</a></h2><p><strong><?= $mediaCount ?></strong> berkas dalam katalog</p></section>
 <?php if($users!==null): ?><section class="card"><span class="stat-icon"><?= panel_icon('pengguna') ?></span><h2><a href="<?= e(base_url('panel/pengguna/')) ?>">Pengguna aktif</a></h2><p><strong><?= $users ?></strong> akun</p></section><?php endif; ?>
+<section class="card stat-applications"><span class="stat-icon"><?= panel_icon('bell') ?><?php if($unseenApplications>0): ?><span class="inbox-new-count" aria-label="<?= $unseenApplications ?> lamaran belum dilihat"><?= $unseenApplications>99?'99+':$unseenApplications ?></span><?php endif; ?></span><h2><a href="<?= e(base_url('panel/lamaran/')) ?>">Lamaran Masuk</a></h2><p><strong><?= (int)array_sum($applications) ?></strong> lamaran</p><p><?= (int)($applications['baru']??0) ?> belum diproses</p></section>
 </div>
+<details class="dashboard-insights" open><summary><?= panel_icon('tracer') ?> Tracer Study <span><?= (int)array_sum($tracer) ?> respons</span><span class="dashboard-insights-toggle" aria-hidden="true">⌄</span></summary>
 <div class="dashboard-charts"><section class="card section-space tracer-summary" aria-labelledby="tracer-chart-title">
     <div class="tracer-summary-heading"><h2 id="tracer-chart-title"><?= panel_icon('tracer') ?> Ringkasan Tracer Study</h2><span class="badge"><?= (int) array_sum($tracer) ?> respons</span></div>
     <p class="muted">Jumlah respons berdasarkan kegiatan alumni, bukan jumlah alumni unik.</p>
@@ -63,7 +67,7 @@ panel_start($user,'Dashboard','dashboard');
         </div>
     </div>
     <?php if (!$tracerTotal): ?><p class="muted">Grafik akan terisi setelah ada respons alumni.</p><?php endif; ?>
-</section></div>
+</section></div></details>
 
 </div>
 <?php panel_end($user); ?>

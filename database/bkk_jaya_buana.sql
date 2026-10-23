@@ -201,9 +201,11 @@ CREATE TABLE IF NOT EXISTS lamaran (
     pesan TEXT NOT NULL,
     submission_key CHAR(64) NOT NULL,
     status ENUM('baru','diproses','diterima','ditolak') NOT NULL DEFAULT 'baru',
+    viewed_at DATETIME NULL DEFAULT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_lamaran_submission (submission_key),
     KEY idx_lamaran_created (created_at, id),
+    KEY idx_lamaran_viewed (viewed_at),
     KEY idx_lamaran_lowongan (lowongan_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

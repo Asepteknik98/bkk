@@ -15,6 +15,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     panel_query('UPDATE lamaran SET status=:status WHERE id=:id',['status'=>$status,'id'=>$id]);
     panel_message('Status lamaran berhasil diperbarui.','panel/lamaran/detail.php?id='.$id);
 }
+panel_query('UPDATE lamaran SET viewed_at=CURRENT_TIMESTAMP WHERE id=:id AND viewed_at IS NULL',['id'=>$id]);
 panel_start($user,'Detail Lamaran','lamaran');
 ?>
 <div class="application-review">
