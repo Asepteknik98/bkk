@@ -11,10 +11,10 @@ try{
         if($key==='contact_email'&&$value!==''&&!filter_var($value,FILTER_VALIDATE_EMAIL)){throw new InvalidArgumentException('Email kontak tidak valid.');}
     }
     if(($data['public_announcement_link_text']??'')!=='' xor ($data['public_announcement_link_url']??'')!==''){throw new InvalidArgumentException('Isi teks tombol dan URL hyperlink pengumuman secara bersamaan.');}
-    foreach(['bkk_logo','school_logo'] as $field){$uploads[$field]=management_upload($field);}
+    foreach(['bkk_logo','school_logo','public_announcement_image'] as $field){$uploads[$field]=management_upload($field);}
     management_transaction(static function()use($data,$uploads,$user):void{
         $values=$data;
-        foreach(['bkk_logo','school_logo'] as $field){
+        foreach(['bkk_logo','school_logo','public_announcement_image'] as $field){
             $old=panel_query('SELECT setting_value FROM settings WHERE setting_key=:key FOR UPDATE',['key'=>$field])->fetchColumn();
             $values[$field]=management_image($field,$old===false?null:$old,(int)$user['id'],$uploads[$field]);
         }

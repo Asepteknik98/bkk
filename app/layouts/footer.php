@@ -19,22 +19,44 @@
             <?php endif; endforeach; ?>
         </div>
     </div>
+</footer>
 <?php $announcement = setting('public_announcement'); ?>
 <?php if ($announcement): ?>
+<?php
+$announcementImage = setting('public_announcement_image');
+$announcementImageUrl = $announcementImage !== '' ? content_image($announcementImage) : '';
+$announcementTitle = setting('public_announcement_title') ?: 'Pengumuman ' . ($siteName ?? 'BKK');
+?>
 <div class="public-announcement-modal" id="public-announcement-modal" hidden>
     <div class="public-announcement-backdrop" data-close-announcement aria-hidden="true"></div>
-    <div class="public-announcement-dialog" role="dialog" aria-modal="true" aria-labelledby="public-announcement-title">
+    <div class="public-announcement-dialog" role="dialog" aria-modal="true" aria-labelledby="public-announcement-title" aria-describedby="public-announcement-content" tabindex="-1">
         <button class="public-announcement-close" type="button" data-close-announcement aria-label="Tutup pengumuman">&times;</button>
-        <p class="eyebrow">Papan informasi</p>
-        <h2 id="public-announcement-title">Pengumuman</h2>
-        <div class="public-announcement-body"><?= render_linked_text($announcement) ?></div>
+        <div class="public-announcement-poster">
+            <?php if ($announcementImageUrl !== '' && $announcementImageUrl !== asset_url('images/placeholder.svg')): ?>
+            <img src="<?= e($announcementImageUrl) ?>" alt="Poster: <?= e($announcementTitle) ?>">
+            <?php else: ?>
+            <div class="public-announcement-poster-placeholder" aria-hidden="true">
+                <span class="public-announcement-poster-mark">BKK</span>
+                <span class="public-announcement-poster-label">INFORMASI SEKOLAH</span>
+                <span class="public-announcement-poster-school"><?= e($siteName ?? 'BKK') ?></span>
+                <span class="public-announcement-poster-caption">Informasi penting untuk siswa dan alumni</span>
+            </div>
+            <?php endif; ?>
+        </div>
+        <div class="public-announcement-content">
+            <p class="public-announcement-eyebrow">Pengumuman sekolah</p>
+            <h2 id="public-announcement-title"><?= e($announcementTitle) ?></h2>
+            <div class="public-announcement-body" id="public-announcement-content"><?= render_linked_text($announcement) ?></div>
         <?php $announcementLinkText = setting('public_announcement_link_text'); $announcementLinkUrl = setting('public_announcement_link_url'); ?>
-        <?php if ($announcementLinkText !== '' && http_url($announcementLinkUrl)): ?>
-        <a class="public-announcement-action" href="<?= e($announcementLinkUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e($announcementLinkText) ?><span aria-hidden="true">↗</span></a>
-        <?php endif; ?>
+        <div class="public-announcement-footer">
+            <?php if ($announcementLinkText !== '' && http_url($announcementLinkUrl)): ?>
+            <a class="public-announcement-action" href="<?= e($announcementLinkUrl) ?>" target="_blank" rel="noopener noreferrer"><?= e($announcementLinkText) ?><span aria-hidden="true">↗</span></a>
+            <?php endif; ?>
+            <button class="public-announcement-continue" type="button" data-close-announcement>Saya Mengerti</button>
+        </div>
+        </div>
     </div>
 </div>
 <?php endif; ?>
-</footer>
 </body>
 </html>

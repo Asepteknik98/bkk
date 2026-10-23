@@ -20,8 +20,8 @@ function management_image_field(string $field,string $label,?string $current): v
 {
     $images=panel_query("SELECT * FROM media WHERE mime_type IN ('image/jpeg','image/png','image/webp') ORDER BY id DESC LIMIT 200")->fetchAll();
     echo '<label for="'.e($field).'">'.e($label).'</label><input id="'.e($field).'" type="file" name="'.e($field).'" accept=".jpg,.jpeg,.png,.webp"><small>JPG/PNG/WebP maksimal 5 MB. Unggahan baru mengalahkan katalog. Berkas lama tetap di katalog media.</small>';
-    if ($current) { echo '<div class="current-image"><img src="'.e(content_image($current)).'" alt="Logo saat ini" width="120"><label class="check-label"><input type="checkbox" name="'.e($field).'_remove" value="1"> Lepaskan logo saat ini</label></div>'; }
-    echo '<label for="'.e($field).'_media">Atau pilih katalog (200 terbaru)</label><select id="'.e($field).'_media" name="'.e($field).'_media"><option value="">Pertahankan / tanpa logo</option>';
+    if ($current) { echo '<div class="current-image"><img src="'.e(content_image($current)).'" alt="'.e($label).' saat ini" width="120"><label class="check-label"><input type="checkbox" name="'.e($field).'_remove" value="1"> Lepaskan gambar saat ini</label></div>'; }
+    echo '<label for="'.e($field).'_media">Atau pilih katalog (200 terbaru)</label><select id="'.e($field).'_media" name="'.e($field).'_media"><option value="">Pertahankan / tanpa gambar</option>';
     foreach ($images as $image) { if (media_is_image($image)) { echo '<option value="'.$image['id'].'">'.e($image['nama_asli']).' (#'.$image['id'].')</option>'; } }
     echo '</select>';
 }
@@ -51,6 +51,7 @@ function management_error(Throwable $exception,string $path): never
 function settings_fields(): array
 {
     return ['site_name'=>['Nama BKK',150,true],'school_name'=>['Nama sekolah',150,true],
+        'public_announcement_title'=>['Judul pengumuman popup',150,false],
         'public_announcement'=>['Pengumuman publik (popup)',5000,false],
         'public_announcement_link_text'=>['Teks tombol hyperlink pengumuman',100,false],
         'public_announcement_link_url'=>['URL hyperlink pengumuman',2048,false],

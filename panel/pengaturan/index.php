@@ -13,7 +13,7 @@ panel_start($user,'Pengaturan','pengaturan');
 <?php
 $groups=[
     ['Identitas & kontak','akun',['site_name','school_name','contact_phone','contact_email','contact_address']],
-    ['Pengumuman publik','news',['public_announcement','public_announcement_link_text','public_announcement_link_url']],
+    ['Pengumuman publik','news',['public_announcement_title','public_announcement','public_announcement_link_text','public_announcement_link_url']],
     ['Media sosial & profil','home',['social_instagram','social_facebook','social_youtube','profile_description']],
 ];
 $fields=settings_fields();
@@ -23,11 +23,12 @@ foreach($groups as [$heading,$icon,$keys]): ?>
 <div class="settings-field <?= in_array($key,['contact_address','profile_description','public_announcement'],true)?'settings-wide':'' ?>"><label for="<?= $key ?>"><?= e($label) ?></label>
 <?php if(in_array($key,['contact_address','profile_description','public_announcement'],true)): ?><textarea id="<?= $key ?>" name="<?= $key ?>" rows="<?= $key==='profile_description'?4:($key==='public_announcement'?3:2) ?>" maxlength="<?= $max ?>"><?= e($data[$key]) ?></textarea>
 <?php else: ?><input id="<?= $key ?>" name="<?= $key ?>" type="<?= str_starts_with($key,'social_')||$key==='public_announcement_link_url'?'url':($key==='contact_email'?'email':'text') ?>" maxlength="<?= $max ?>" value="<?= e($data[$key]) ?>" <?= $required?'required':'' ?>><?php endif; ?>
-<?php if($key==='public_announcement'): ?><small>Masukkan URL langsung untuk mengubahnya menjadi link, atau isi teks tombol dan URL pada kolom di bawah.</small><?php endif; ?>
+<?php if($key==='public_announcement'): ?><small>Teks utama yang ditampilkan pada popup. Pisahkan paragraf dengan baris kosong.</small><?php endif; ?>
 <?php if($key==='public_announcement_link_text'): ?><small>Contoh: Daftar sekarang. Isi bersama URL tujuan.</small><?php endif; ?>
 <?php if($key==='public_announcement_link_url'): ?><small>Gunakan URL lengkap yang diawali https:// atau http://.</small><?php endif; ?>
 </div><?php endforeach; ?></div></section>
 <?php endforeach; ?>
+<section class="card settings-section"><h2><?= panel_icon('media') ?> Poster pengumuman</h2><div class="settings-fields"><div class="settings-field settings-wide"><?php management_image_field('public_announcement_image','Gambar poster popup',setting('public_announcement_image')); ?><small>Poster tampil di sisi kiri popup pada komputer dan di bagian atas pada ponsel. Gunakan JPG, PNG, atau WebP.</small></div></div></section>
 <section class="card settings-logos"><h2><?= panel_icon('media') ?> Logo website</h2><div class="settings-logo-grid">
 <div class="settings-logo-field"><?php management_image_field('bkk_logo','Logo BKK',setting('bkk_logo')); ?></div>
 <div class="settings-logo-field"><?php management_image_field('school_logo','Logo sekolah',setting('school_logo')); ?></div>

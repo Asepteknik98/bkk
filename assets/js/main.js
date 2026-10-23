@@ -122,41 +122,18 @@ const publicAnnouncement = document.getElementById('public-announcement-modal');
 if (publicAnnouncement) {
     const dialog = publicAnnouncement.querySelector('.public-announcement-dialog');
     const closeButton = publicAnnouncement.querySelector('.public-announcement-close');
-    const dismissalKey = `public-announcement-dismissed:${publicAnnouncement.dataset.dismissalKey || 'default'}`;
-    const cookieName = 'bkk-public-announcement-dismissed';
-    const cookieValue = encodeURIComponent(publicAnnouncement.dataset.dismissalKey || 'default');
-    const wasAnnouncementDismissed = () => {
-        try {
-            if (sessionStorage.getItem(dismissalKey) === '1') return true;
-        } catch (error) {
-            console.warn('Penyimpanan sesi tidak tersedia; memeriksa cookie sesi.', error);
-        }
-        try {
-            return document.cookie.split(';').some(cookie => cookie.trim() === `${cookieName}=${cookieValue}`);
-        } catch (error) {
-            return false;
-        }
-    };
     const dismissAnnouncement = () => {
         publicAnnouncement.hidden = true;
         document.body.classList.remove('announcement-open');
-        try { sessionStorage.setItem(dismissalKey, '1'); } catch (error) {
-            console.warn('Tidak dapat menyimpan status pengumuman di penyimpanan sesi.', error);
-        }
-        try { document.cookie = `${cookieName}=${cookieValue}; path=/; SameSite=Lax`; } catch (error) {
-            console.warn('Tidak dapat menyimpan status pengumuman di cookie sesi.', error);
-        }
         const pageContent = document.querySelector('#konten, main');
         if (pageContent) {
             if (!pageContent.hasAttribute('tabindex')) pageContent.setAttribute('tabindex', '-1');
             pageContent.focus();
         }
     };
-    if (!wasAnnouncementDismissed()) {
-        publicAnnouncement.hidden = false;
-        document.body.classList.add('announcement-open');
-        closeButton?.focus();
-    }
+    publicAnnouncement.hidden = false;
+    document.body.classList.add('announcement-open');
+    closeButton?.focus();
     publicAnnouncement.querySelectorAll('[data-close-announcement]').forEach(button => {
         button.addEventListener('click', dismissAnnouncement);
     });
