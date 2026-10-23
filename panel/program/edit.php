@@ -1,4 +1,4 @@
-S<?php
+<?php
 declare(strict_types=1);
 require_once dirname(__DIR__,2).'/app/helpers/programs.php';
 $user=require_role('admin','staf_bkk');$id=positive_id($_GET['id']??null);$data=$id?panel_query('SELECT * FROM program WHERE id=:id',['id'=>$id])->fetch():false;
