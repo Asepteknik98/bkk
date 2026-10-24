@@ -25,11 +25,8 @@
 $popupNews = public_popup_news();
 $announcement = $popupNews['isi'] ?? '';
 ?>
-<?php if ($announcement && empty($_SESSION['public_announcement_seen'])): ?>
+<?php if ($announcement): ?>
 <?php
-// All public pages share this server session, including menus in subdirectories.
-// Mark on display so following the detail link also counts as having seen it.
-$_SESSION['public_announcement_seen'] = true;
 $announcementImage = ($popupNews['gambar'] ?? '');
 $announcementImageUrl = $announcementImage !== '' ? content_image($announcementImage) : '';
 $announcementTitle = $popupNews['judul'];
