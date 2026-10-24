@@ -25,13 +25,24 @@
 $popupNews = public_popup_news();
 $announcement = $popupNews['isi'] ?? '';
 ?>
-<?php if ($announcement): ?>
+<?php if ($announcement && empty($_SESSION['public_announcement_seen'])): ?>
 <?php
+// All public pages share this server session, including menus in subdirectories.
+// Mark on display so following the detail link also counts as having seen it.
+$_SESSION['public_announcement_seen'] = true;
 $announcementImage = ($popupNews['gambar'] ?? '');
 $announcementImageUrl = $announcementImage !== '' ? content_image($announcementImage) : '';
 $announcementTitle = $popupNews['judul'];
+$announcementWebsite = '';
+if (preg_match_all('~(?:https?://|www\.)[^\s<>"\']+~i', $announcement, $websiteMatches)) {
+    foreach ($websiteMatches[0] as $candidate) {
+        $candidate = rtrim($candidate, '.,;:!?)');
+        $candidate = stripos($candidate, 'www.') === 0 ? 'https://' . $candidate : $candidate;
+        if (http_url($candidate)) { $announcementWebsite = $candidate; break; }
+    }
+}
 ?>
-<div class="public-announcement-modal" id="public-announcement-modal" hidden>
+<div class="public-announcement-modal" id="public-announcement-modal" data-site="<?= e(base_url()) ?>" hidden>
     <div class="public-announcement-backdrop" data-close-announcement aria-hidden="true"></div>
     <div class="public-announcement-dialog" role="dialog" aria-modal="true" aria-labelledby="public-announcement-title" aria-describedby="public-announcement-content" tabindex="-1">
         <button class="public-announcement-close" type="button" data-close-announcement aria-label="Tutup pengumuman">&times;</button>
@@ -41,20 +52,23 @@ $announcementTitle = $popupNews['judul'];
             <?php else: ?>
             <div class="public-announcement-poster-placeholder" aria-hidden="true">
                 <span class="public-announcement-poster-mark">BKK</span>
-                <span class="public-announcement-poster-label">INFORMASI SEKOLAH</span>
+                <span class="public-announcement-poster-label">INFORMASI KARIER</span>
                 <span class="public-announcement-poster-school"><?= e($siteName ?? 'BKK') ?></span>
                 <span class="public-announcement-poster-caption">Informasi penting untuk siswa dan alumni</span>
             </div>
             <?php endif; ?>
         </div>
         <div class="public-announcement-content">
-            <p class="public-announcement-eyebrow">Pengumuman sekolah</p>
+            <p class="public-announcement-eyebrow">Berita &amp; informasi lowongan kerja</p>
             <h2 id="public-announcement-title"><?= e($announcementTitle) ?></h2>
             <div class="public-announcement-body" id="public-announcement-content"><?= render_linked_text($announcement) ?></div>
-        <?php $announcementLinkText = 'Baca berita selengkapnya'; $announcementLinkUrl = base_url('detail-berita.php?slug='.rawurlencode($popupNews['slug'])); ?>
+        <?php $announcementLinkText = 'Lihat detail berita / lowongan'; $announcementLinkUrl = base_url('detail-berita.php?slug='.rawurlencode($popupNews['slug'])); ?>
         <div class="public-announcement-footer">
             <a class="public-announcement-action" href="<?= e($announcementLinkUrl) ?>"><?= e($announcementLinkText) ?><span aria-hidden="true">↗</span></a>
-            <button class="public-announcement-continue" type="button" data-close-announcement>Saya Mengerti</button>
+            <?php if ($announcementWebsite !== ''): ?>
+            <a class="public-announcement-action public-announcement-website" href="<?= e($announcementWebsite) ?>" target="_blank" rel="noopener noreferrer">Kunjungi website <span aria-hidden="true">&#8599;</span><small><?= e(parse_url($announcementWebsite, PHP_URL_HOST) ?? '') ?> &middot; tab baru</small></a>
+            <?php endif; ?>
+            <button class="public-announcement-continue" type="button" data-close-announcement>Tutup &amp; lanjutkan ke website</button>
         </div>
         </div>
     </div>

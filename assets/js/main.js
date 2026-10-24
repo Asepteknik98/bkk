@@ -131,9 +131,23 @@ if (publicAnnouncement) {
             pageContent.focus();
         }
     };
-    publicAnnouncement.hidden = false;
-    document.body.classList.add('announcement-open');
-    closeButton?.focus();
+    // One announcement per tab session, including navigation and reloads.
+    const announcementSessionKey = 'bkk:announcement-seen:' + publicAnnouncement.dataset.site;
+    let announcementSeen = false;
+    try {
+        announcementSeen = sessionStorage.getItem(announcementSessionKey) === '1';
+        sessionStorage.setItem(announcementSessionKey, '1');
+    } catch (error) {
+        // Fall back to a session cookie when browser storage is unavailable.
+        const cookieName = 'bkk_announcement_' + encodeURIComponent(publicAnnouncement.dataset.site || 'public');
+        announcementSeen = document.cookie.split('; ').some(cookie => cookie === cookieName + '=1');
+        document.cookie = cookieName + '=1; path=/; SameSite=Lax';
+    }
+    if (!announcementSeen) {
+        publicAnnouncement.hidden = false;
+        document.body.classList.add('announcement-open');
+        closeButton?.focus();
+    }
     publicAnnouncement.querySelectorAll('[data-close-announcement]').forEach(button => {
         button.addEventListener('click', dismissAnnouncement);
     });
