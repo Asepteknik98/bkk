@@ -44,7 +44,8 @@ $pages=max(1,(int)ceil($total/20));$page=min($pages,positive_id($_GET['page']??'
 $rows=$ready?panel_query('SELECT * FROM learning_documents WHERE '.$where.' ORDER BY updated_at DESC,id DESC LIMIT :limit OFFSET :offset',$params+['limit'=>20,'offset'=>($page-1)*20])->fetchAll():[];
 panel_start($user,'Capaian pembelajaran','capaian');
 ?>
-<div class="page-actions"><h1>Capaian pembelajaran</h1><a href="#materi-form" data-open-details="materi-form">Upload dokumen</a><a href="<?= e(base_url('panel/peserta/')) ?>">Data peserta</a><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'capaian']+$filters))) ?>" title="Download Excel capaian pembelajaran"><?= panel_icon('download') ?> Excel</a></div>
+<div class="learning-workspace">
+<div class="page-actions"><h1>Capaian pembelajaran</h1><a href="#materi-form" data-open-details="materi-form">Upload dokumen</a><a href="<?= e(base_url('panel/peserta/')) ?>"><?= panel_icon('back') ?> Kembali ke Data PKL</a><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'capaian']+$filters))) ?>" title="Download Excel capaian pembelajaran"><?= panel_icon('download') ?> Excel</a></div>
 
 <p>Dokumen pembelajaran per angkatan dan kelas industri.</p>
 <?php if(!$ready):?><p class="alert">Fitur belum aktif. Jalankan pembaruan database 010_learning_documents.sql.</p><?php endif;?>
@@ -54,13 +55,13 @@ panel_start($user,'Capaian pembelajaran','capaian');
 <?= csrf_field() ?><input type="hidden" name="aksi" value="simpan">
 
 <label for="judul">Judul<input id="judul" name="judul" maxlength="190" value="<?= e($data['judul']) ?>" required></label>
-<label for="deskripsi">Deskripsi (opsional)<textarea id="deskripsi" name="deskripsi" maxlength="5000" rows="3"><?= e($data['deskripsi']) ?></textarea></label>
 <label for="angkatan">Angkatan<input id="angkatan" name="angkatan" maxlength="4" pattern="(?:19|20|21)[0-9]{2}" inputmode="numeric" list="learning-years" value="<?= e($data['angkatan']) ?>" required></label>
 <datalist id="learning-years"><?php foreach($years as $year):?><option value="<?= e($year) ?>"><?php endforeach;?></datalist>
 <label for="kelas_industri">Kelas industri<input id="kelas_industri" name="kelas_industri" maxlength="150" list="learning-industries" value="<?= e($data['kelas_industri']) ?>" required></label>
 <datalist id="learning-industries"><?php foreach($industries as $industry):?><option value="<?= e($industry) ?>"><?php endforeach;?></datalist>
 <?php if($document):?><p>Dokumen saat ini: <a href="<?= e(base_url('panel/capaian-pembelajaran/download.php?id='.$document['id'])) ?>"><?= e($document['nama_asli']) ?></a>. Kosongkan unggahan untuk mempertahankan dokumen.</p><?php endif;?>
 <label for="dokumen"><?= $id?'Ganti dokumen PDF (opsional)':'Dokumen PDF' ?><input id="dokumen" name="dokumen" type="file" accept=".pdf,application/pdf" <?= !$id?'required':'' ?>></label>
+<label for="deskripsi">Deskripsi (opsional)<textarea id="deskripsi" name="deskripsi" maxlength="5000" rows="2"><?= e($data['deskripsi']) ?></textarea></label>
 <p>PDF maksimal 5 MB. Satu dokumen dapat memuat beberapa capaian pembelajaran.</p>
 <div class="form-actions"><button type="submit" <?= !$ready?'disabled':'' ?>>Simpan dokumen</button><?php if($id):?><a href="<?= e(base_url($listPath)) ?>">Batal edit</a><?php endif;?></div>
 </form>
@@ -77,4 +78,5 @@ panel_start($user,'Capaian pembelajaran','capaian');
 <?php if(!$rows):?><tr><td colspan="6" class="empty-panel">Belum ada dokumen yang sesuai.</td></tr><?php endif;?>
 </tbody></table></div>
 <nav class="pagination" aria-label="Halaman capaian pembelajaran"><?php foreach(['Sebelumnya'=>$page-1,'Berikutnya'=>$page+1] as $label=>$target):if($target<1||$target>$pages){continue;}?><a href="<?= e(base_url('panel/capaian-pembelajaran/?'.http_build_query($filters+['page'=>$target]))) ?>"><?= e($label) ?></a><?php endforeach;?></nav>
+</div>
 <?php panel_end($user); ?>

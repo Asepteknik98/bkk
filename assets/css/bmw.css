@@ -89,3 +89,411 @@ html[data-theme="dark"] .bmw-admin { --panel-bg:#111923; --panel-line:#2b3745; -
 .bmw-public .surface { padding:17px; }
 .bmw-public .form-control,.bmw-public .form-select { font-size:16px; }
 }
+
+/* Compact PKL workspace, scoped to this page. */
+.bmw-admin .pkl-page .page-actions { gap:6px; margin-bottom:12px; }
+.bmw-admin .pkl-page .page-actions h1 { font-size:1.25rem; }
+.bmw-admin .pkl-page .page-actions>a { min-height:36px; padding:7px 10px; font-size:.73rem; }
+.bmw-admin .pkl-page .bmw-disclosure { margin-bottom:10px; border-radius:7px; }
+.bmw-admin .pkl-page .bmw-disclosure>summary { padding:10px 14px; min-height:44px; font-size:.8rem; }
+.bmw-admin .pkl-page .editor-form { padding:14px; gap:12px 16px; }
+.bmw-admin .pkl-page .editor-form>p { margin:0 0 2px; font-size:.73rem; line-height:1.5; color:var(--panel-muted); }
+.bmw-admin .pkl-page .editor-form>label { gap:5px; font-size:.74rem; }
+.bmw-admin .pkl-page .editor-form input:not([type=hidden]),.bmw-admin .pkl-page .editor-form select {
+    min-height:38px; height:38px; padding:8px 10px; margin:0;
+    border-radius:5px; font-size:.8rem; line-height:1.3;
+}
+.bmw-admin .pkl-page .form-actions { padding-top:10px; gap:8px; }
+.bmw-admin .pkl-page .filter-form { padding:12px 14px; gap:10px; }
+@media(min-width:1100px) {
+    .bmw-admin .pkl-page #peserta-form>.editor-form { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media(max-width:600px) {
+    .bmw-admin .pkl-page .page-actions>a { min-height:44px; flex:1 1 auto; }
+    .bmw-admin .pkl-page .editor-form { grid-template-columns:minmax(0,1fr); padding:12px; gap:12px; }
+    .bmw-admin .pkl-page .editor-form input:not([type=hidden]),.bmw-admin .pkl-page .editor-form select { min-height:44px; height:44px; font-size:16px; }
+}
+
+/* Muted action colors for the PKL workspace. */
+.pkl-page { --pkl-blue:#385b7c; --pkl-green:#3b685a; --pkl-purple:#66567b; --pkl-slate:#536477; --pkl-teal:#3b6a70; }
+.bmw-admin .pkl-page .page-actions>a { --pkl-action:var(--pkl-blue); background:var(--pkl-action); border-color:var(--pkl-action); color:#fff; }
+.bmw-admin .pkl-page .page-actions>a:nth-of-type(2) { --pkl-action:var(--pkl-purple); }
+.bmw-admin .pkl-page .page-actions>a:nth-of-type(3) { --pkl-action:var(--pkl-green); }
+.bmw-admin .pkl-page .page-actions>a:nth-of-type(4) { --pkl-action:var(--pkl-slate); }
+.bmw-admin .pkl-page .page-actions>a:nth-of-type(5) { --pkl-action:var(--pkl-teal); }
+.bmw-admin .pkl-page .panel-content button,.bmw-admin .pkl-page button[type=submit] { background:var(--pkl-blue); border-color:var(--pkl-blue); color:#fff; }
+.bmw-admin .pkl-page #peserta-form button[type=submit] { background:var(--pkl-green); border-color:var(--pkl-green); }
+.bmw-admin .pkl-page #impor-form button[type=submit] { background:var(--pkl-teal); border-color:var(--pkl-teal); }
+.bmw-admin .pkl-page #peserta-form>summary { background:#edf4f0; color:#315b4b; }
+.bmw-admin .pkl-page #impor-form>summary { background:#edf3f5; color:#365c67; }
+.bmw-admin .pkl-page .filter-form>a,.bmw-admin .pkl-page .form-actions>a,.bmw-admin .pkl-page .pagination>a,.bmw-admin .pkl-page td:last-child>a {
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    min-height:38px; padding:7px 10px; border:1px solid #d0d9e2; border-radius:6px;
+    background:#edf1f5; color:#3d5269; font-size:.75rem; text-decoration:none;
+}
+.bmw-admin .pkl-page td:last-child>a { background:#eeeaf4; border-color:#dcd4e6; color:#5b4874; }
+.bmw-admin .pkl-page .page-actions>a:hover,.bmw-admin .pkl-page button[type=submit]:not(:disabled):hover { filter:brightness(.9); }
+.bmw-admin .pkl-page .filter-form>a:hover,.bmw-admin .pkl-page .form-actions>a:hover,.bmw-admin .pkl-page .pagination>a:hover,.bmw-admin .pkl-page td:last-child>a:hover { filter:brightness(.95); }
+.bmw-admin .pkl-page button:disabled { opacity:.55; cursor:not-allowed; }
+html[data-theme=dark] .pkl-page { --pkl-blue:#365773; --pkl-green:#365e50; --pkl-purple:#5d4e70; --pkl-slate:#48596c; --pkl-teal:#355d63; }
+html[data-theme=dark] .bmw-admin .pkl-page #peserta-form>summary { background:#233a31; color:#c7dfd2; }
+html[data-theme=dark] .bmw-admin .pkl-page #impor-form>summary { background:#23373e; color:#c5dde4; }
+html[data-theme=dark] .bmw-admin .pkl-page .filter-form>a,html[data-theme=dark] .bmw-admin .pkl-page .form-actions>a,html[data-theme=dark] .bmw-admin .pkl-page .pagination>a,html[data-theme=dark] .bmw-admin .pkl-page td:last-child>a { background:#293747; border-color:#425368; color:#d4e0ed; }
+@media(max-width:600px) {
+    .bmw-admin .pkl-page .filter-form>a,.bmw-admin .pkl-page .form-actions>a,.bmw-admin .pkl-page .pagination>a,.bmw-admin .pkl-page td:last-child>a { min-height:44px; }
+}
+
+/* Muted action colors across the BMW SAKTI program categories. */
+.bmw-admin .program-management .page-actions>a:not(.button) { background:#66567b; border-color:#66567b; color:#fff; }
+.bmw-admin .program-management .page-actions>a.button { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .program-management .program-filters>button[type=submit] { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .program-management .filter-reset,
+.bmw-admin .program-management .row-actions>a,
+.bmw-admin .program-management .pagination>a {
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    min-height:38px; padding:8px 11px; border:1px solid transparent;
+    border-radius:6px; font-size:.76rem; font-weight:550; line-height:1.35;
+    text-decoration:none; box-shadow:none;
+}
+.bmw-admin .program-management .filter-reset { background:#edf1f5; border-color:#d0d9e2; color:#3d5269; }
+.bmw-admin .program-management .row-actions>a { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .program-management .row-actions>a+a { background:#3b6a70; border-color:#3b6a70; color:#fff; }
+.bmw-admin .program-management .row-actions button.danger { background:#f4eae8; border-color:#e4d3cf; color:#80564e; }
+.bmw-admin .program-management .pagination>a { background:#edf1f5; border-color:#d0d9e2; color:#3d5269; }
+.bmw-admin .program-management .page-actions>a:hover,
+.bmw-admin .program-management .program-filters>button:hover,
+.bmw-admin .program-management .row-actions>a:hover { filter:brightness(.9); }
+.bmw-admin .program-management .row-actions button.danger:hover { background:#eaddd9; }
+.bmw-admin .program-management .filter-reset:hover,
+.bmw-admin .program-management .pagination>a:hover { filter:brightness(.95); }
+html[data-theme=dark] .bmw-admin .program-management .row-actions button.danger { background:#49352f; border-color:#6c4d43; color:#edd3c9; }
+html[data-theme=dark] .bmw-admin .program-management .row-actions button.danger:hover { background:#584036; }
+html[data-theme=dark] .bmw-admin .program-management .filter-reset,
+html[data-theme=dark] .bmw-admin .program-management .pagination>a { background:#293747; border-color:#425368; color:#d4e0ed; }
+@media(max-width:600px) {
+    .bmw-admin .program-management .filter-reset,
+    .bmw-admin .program-management .row-actions>a,
+    .bmw-admin .program-management .row-actions button,
+    .bmw-admin .program-management .pagination>a { min-height:44px; }
+}
+
+/* Program inquiry actions follow the shared muted palette. */
+.bmw-admin .program-interest-admin .page-actions>.program-interest-back { background:#66567b; border-color:#66567b; color:#fff; }
+.bmw-admin .program-interest-admin .filter-form>button[type=submit] { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .program-interest-admin .table-scroll td:last-child>a,
+.bmw-admin .program-interest-admin .pagination>a {
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    min-height:38px; padding:8px 11px; border:1px solid transparent;
+    border-radius:6px; font-size:.76rem; font-weight:550; line-height:1.35;
+    text-decoration:none; box-shadow:none;
+}
+.bmw-admin .program-interest-admin .table-scroll td:last-child>a { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .program-interest-admin .pagination>a { background:#edf1f5; border-color:#d0d9e2; color:#3d5269; }
+.bmw-admin .program-interest-admin .page-actions>.program-interest-back:hover,
+.bmw-admin .program-interest-admin .filter-form>button:hover,
+.bmw-admin .program-interest-admin .table-scroll td:last-child>a:hover { filter:brightness(.9); }
+.bmw-admin .program-interest-admin .pagination>a:hover { filter:brightness(.95); }
+html[data-theme=dark] .bmw-admin .program-interest-admin .pagination>a { background:#293747; border-color:#425368; color:#d4e0ed; }
+@media(max-width:600px) {
+    .bmw-admin .program-interest-admin .table-scroll td:last-child>a,
+    .bmw-admin .program-interest-admin .pagination>a { min-height:44px; }
+}
+
+/* Compact program editor: content and publication settings sit side by side. */
+.bmw-admin .program-form-workspace .program-editor {
+    display:grid; grid-template-columns:minmax(0,1.65fr) minmax(260px,1fr);
+    gap:16px; padding:16px; align-items:start;
+}
+.bmw-admin .program-form-workspace .program-editor>.news-editor-main,
+.bmw-admin .program-form-workspace .program-editor>.news-editor-settings { grid-column:auto; gap:5px; }
+.bmw-admin .program-form-workspace .news-editor-settings { padding-left:16px; border-left:1px solid var(--panel-line); border-top:0; }
+.bmw-admin .program-form-workspace .program-editor label { font-size:.75rem; }
+.bmw-admin .program-form-workspace .program-editor input:not([type=checkbox]):not([type=hidden]),
+.bmw-admin .program-form-workspace .program-editor select { min-height:38px; padding:8px 10px; font-size:.8rem; border-radius:5px; }
+.bmw-admin .program-form-workspace .program-editor textarea { font-size:.8rem; padding:9px 10px; border-radius:5px; }
+.bmw-admin .program-form-workspace .program-editor #ringkasan { height:64px; min-height:64px; }
+.bmw-admin .program-form-workspace .program-editor #isi { height:180px; min-height:140px; }
+.bmw-admin .program-form-workspace .program-editor small { font-size:.66rem; line-height:1.5; }
+.bmw-admin .program-form-workspace .page-actions>a { background:#66567b; border-color:#66567b; color:#fff; }
+.bmw-admin .program-form-workspace .form-actions>button[type=submit] { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .program-form-workspace .form-actions>a {
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    min-height:38px; padding:8px 12px; border:1px solid #e4d3cf;
+    border-radius:6px; background:#f4eae8; color:#80564e;
+    font-size:.76rem; text-decoration:none;
+}
+.bmw-admin .program-form-workspace input[type=file]::file-selector-button { padding:6px 10px; margin-right:8px; border:0; border-radius:4px; background:#385b7c; color:#fff; font:inherit; cursor:pointer; }
+.bmw-admin .program-form-workspace .page-actions>a:hover,
+.bmw-admin .program-form-workspace .form-actions>button:hover { filter:brightness(.9); }
+.bmw-admin .program-form-workspace .form-actions>a:hover { background:#eaddd9; }
+html[data-theme=dark] .bmw-admin .program-form-workspace .form-actions>a { background:#49352f; border-color:#6c4d43; color:#edd3c9; }
+html[data-theme=dark] .bmw-admin .program-form-workspace .form-actions>a:hover { background:#584036; }
+@media(max-width:900px) {
+    .bmw-admin .program-form-workspace .program-editor { grid-template-columns:minmax(0,1fr); padding:14px; }
+    .bmw-admin .program-form-workspace .news-editor-settings { padding:12px 0 0; border-left:0; border-top:1px solid var(--panel-line); }
+}
+@media(max-width:600px) {
+    .bmw-admin .program-form-workspace .program-editor input:not([type=checkbox]):not([type=hidden]),
+    .bmw-admin .program-form-workspace .program-editor select { min-height:44px; font-size:16px; }
+    .bmw-admin .program-form-workspace .program-editor textarea { font-size:16px; }
+    .bmw-admin .program-form-workspace .form-actions>a { min-height:44px; }
+}
+
+/* Compact learning documents workspace with muted action colors. */
+.bmw-admin .learning-workspace .page-actions { gap:7px; margin-bottom:12px; }
+.bmw-admin .learning-workspace .page-actions>a:first-of-type { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .learning-workspace .page-actions>a:nth-of-type(2) { background:#66567b; border-color:#66567b; color:#fff; }
+.bmw-admin .learning-workspace .page-actions>a.button { background:#3b6a70; border-color:#3b6a70; color:#fff; }
+.bmw-admin .learning-workspace .bmw-disclosure { margin-bottom:10px; border-radius:7px; }
+.bmw-admin .learning-workspace .bmw-disclosure>summary { padding:10px 14px; min-height:44px; background:#edf4f0; color:#315b4b; font-size:.8rem; }
+.bmw-admin .learning-workspace .editor-form { padding:14px; gap:12px 16px; }
+.bmw-admin .learning-workspace .editor-form>label { gap:5px; font-size:.75rem; }
+.bmw-admin .learning-workspace .filter-form { padding:12px 14px; gap:10px; }
+.bmw-admin .learning-workspace .filter-form>button[type=submit] { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .learning-workspace .form-actions>button[type=submit] { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .learning-workspace .filter-form>a,
+.bmw-admin .learning-workspace .form-actions>a,
+.bmw-admin .learning-workspace .row-actions>a,
+.bmw-admin .learning-workspace .pagination>a {
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    min-height:38px; padding:8px 11px; border:1px solid #d0d9e2;
+    border-radius:6px; background:#edf1f5; color:#3d5269;
+    font-size:.76rem; text-decoration:none;
+}
+.bmw-admin .learning-workspace .row-actions>a:first-child { background:#3b6a70; border-color:#3b6a70; color:#fff; }
+.bmw-admin .learning-workspace .row-actions>a:nth-child(2) { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .learning-workspace .row-actions button.danger,
+.bmw-admin .learning-workspace .form-actions>a { background:#f4eae8; border-color:#e4d3cf; color:#80564e; }
+.bmw-admin .learning-workspace input[type=file]::file-selector-button { padding:6px 10px; margin-right:8px; border:0; border-radius:4px; background:#66567b; color:#fff; font:inherit; cursor:pointer; }
+.bmw-admin .learning-workspace .page-actions>a:hover,
+.bmw-admin .learning-workspace button:not(:disabled):hover,
+.bmw-admin .learning-workspace .row-actions>a:hover { filter:brightness(.92); }
+html[data-theme=dark] .bmw-admin .learning-workspace .bmw-disclosure>summary { background:#233a31; color:#c7dfd2; }
+html[data-theme=dark] .bmw-admin .learning-workspace .filter-form>a,
+html[data-theme=dark] .bmw-admin .learning-workspace .pagination>a { background:#293747; border-color:#425368; color:#d4e0ed; }
+html[data-theme=dark] .bmw-admin .learning-workspace .row-actions button.danger,
+html[data-theme=dark] .bmw-admin .learning-workspace .form-actions>a { background:#49352f; border-color:#6c4d43; color:#edd3c9; }
+@media(max-width:600px) {
+    .bmw-admin .learning-workspace .filter-form>a,
+    .bmw-admin .learning-workspace .form-actions>a,
+    .bmw-admin .learning-workspace .row-actions>a,
+    .bmw-admin .learning-workspace .pagination>a { min-height:44px; }
+}
+
+/* Dense upload form with aligned fields and no unused grid cells. */
+.bmw-admin .learning-workspace #materi-form>.editor-form {
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+    padding:14px; gap:10px 14px; align-items:start;
+}
+.bmw-admin .learning-workspace #materi-form datalist { display:none; }
+.bmw-admin .learning-workspace #materi-form label[for=judul],
+.bmw-admin .learning-workspace #materi-form label[for=dokumen] { grid-column:span 2; }
+.bmw-admin .learning-workspace #materi-form label[for=deskripsi] { grid-column:1/-1; }
+.bmw-admin .learning-workspace #materi-form label { gap:4px; margin:0; font-size:.74rem; }
+.bmw-admin .learning-workspace #materi-form input:not([type=hidden]):not([type=file]) {
+    min-height:38px; height:38px; margin:0; padding:8px 10px; font-size:.8rem; border-radius:5px;
+}
+.bmw-admin .learning-workspace #materi-form input[type=file] { min-height:38px; margin:0; padding:4px 7px; font-size:.76rem; border-radius:5px; }
+.bmw-admin .learning-workspace #materi-form textarea { min-height:60px; height:60px; margin:0; padding:8px 10px; font-size:.8rem; border-radius:5px; resize:vertical; }
+.bmw-admin .learning-workspace #materi-form p { margin:0; font-size:.69rem; line-height:1.5; }
+.bmw-admin .learning-workspace #materi-form .form-actions { padding-top:10px; gap:8px; }
+@media(max-width:600px) {
+    .bmw-admin .learning-workspace #materi-form>.editor-form { grid-template-columns:minmax(0,1fr); padding:12px; }
+    .bmw-admin .learning-workspace #materi-form label[for=judul],
+    .bmw-admin .learning-workspace #materi-form label[for=dokumen] { grid-column:1/-1; }
+    .bmw-admin .learning-workspace #materi-form input:not([type=hidden]):not([type=file]),
+    .bmw-admin .learning-workspace #materi-form input[type=file] { min-height:44px; height:auto; font-size:16px; }
+    .bmw-admin .learning-workspace #materi-form textarea { font-size:16px; }
+}
+
+/* Attendance overview action colors. */
+.bmw-admin .attendance-workspace .page-actions>a:first-of-type { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .attendance-workspace .page-actions>a:nth-of-type(2) { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .attendance-workspace .page-actions>a:nth-of-type(3) { background:#66567b; border-color:#66567b; color:#fff; }
+.bmw-admin .attendance-workspace .page-actions>a.button { background:#3b6a70; border-color:#3b6a70; color:#fff; }
+.bmw-admin .attendance-workspace #kegiatan-form>summary { background:#edf4f0; color:#315b4b; }
+.bmw-admin .attendance-workspace #kegiatan-form button[type=submit] { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .attendance-workspace .filter-form>button[type=submit] { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .attendance-workspace .filter-form>a,
+.bmw-admin .attendance-workspace td:last-child>a,
+.bmw-admin .attendance-workspace .pagination>a {
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    min-height:38px; padding:8px 11px; border:1px solid #d0d9e2;
+    border-radius:6px; background:#edf1f5; color:#3d5269;
+    font-size:.76rem; text-decoration:none;
+}
+.bmw-admin .attendance-workspace .filter-form>a { background:#f4eae8; border-color:#e4d3cf; color:#80564e; }
+.bmw-admin .attendance-workspace td:last-child>a:first-child { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .attendance-workspace td:last-child>a:nth-child(2) { background:#66567b; border-color:#66567b; color:#fff; }
+.bmw-admin .attendance-workspace .page-actions>a:hover,
+.bmw-admin .attendance-workspace button:not(:disabled):hover,
+.bmw-admin .attendance-workspace td:last-child>a:hover { filter:brightness(.92); }
+.bmw-admin .attendance-workspace .filter-form>a:hover { background:#eaddd9; }
+html[data-theme=dark] .bmw-admin .attendance-workspace #kegiatan-form>summary { background:#233a31; color:#c7dfd2; }
+html[data-theme=dark] .bmw-admin .attendance-workspace .filter-form>a { background:#49352f; border-color:#6c4d43; color:#edd3c9; }
+html[data-theme=dark] .bmw-admin .attendance-workspace .filter-form>a:hover { background:#584036; }
+html[data-theme=dark] .bmw-admin .attendance-workspace .pagination>a { background:#293747; border-color:#425368; color:#d4e0ed; }
+@media(max-width:600px) {
+    .bmw-admin .attendance-workspace .filter-form>a,
+    .bmw-admin .attendance-workspace td:last-child>a,
+    .bmw-admin .attendance-workspace .pagination>a { min-height:44px; }
+}
+
+/* Compact event creation form, without changing attendance behavior. */
+.bmw-admin .attendance-workspace .page-actions { gap:7px; margin-bottom:12px; }
+.bmw-admin .attendance-workspace #kegiatan-form { margin-bottom:10px; border-radius:7px; }
+.bmw-admin .attendance-workspace #kegiatan-form>summary { min-height:44px; padding:10px 14px; font-size:.8rem; }
+.bmw-admin .attendance-workspace #kegiatan-form>.editor-form { padding:14px; gap:10px 14px; align-items:start; }
+.bmw-admin .attendance-workspace #kegiatan-form label { gap:4px; margin:0; font-size:.74rem; }
+.bmw-admin .attendance-workspace #kegiatan-form input:not([type=hidden]),
+.bmw-admin .attendance-workspace #kegiatan-form select { min-height:38px; height:38px; padding:8px 10px; margin:0; border-radius:5px; font-size:.8rem; }
+.bmw-admin .attendance-workspace #kegiatan-form textarea { min-height:60px; height:60px; padding:8px 10px; margin:0; border-radius:5px; font-size:.8rem; resize:vertical; }
+.bmw-admin .attendance-workspace #kegiatan-form p { margin:0; font-size:.69rem; line-height:1.5; }
+.bmw-admin .attendance-workspace #kegiatan-form button[type=submit] { grid-column:1/-1; justify-self:start; margin:0; }
+@media(min-width:1100px) {
+    .bmw-admin .attendance-workspace #kegiatan-form>.editor-form { grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr)); }
+}
+@media(max-width:600px) {
+    .bmw-admin .attendance-workspace #kegiatan-form>.editor-form { grid-template-columns:minmax(0,1fr); padding:12px; }
+    .bmw-admin .attendance-workspace #kegiatan-form input:not([type=hidden]),
+    .bmw-admin .attendance-workspace #kegiatan-form select { min-height:44px; height:44px; font-size:16px; }
+    .bmw-admin .attendance-workspace #kegiatan-form textarea { font-size:16px; }
+}
+
+/* Attendance recap actions follow the module palette. */
+.bmw-admin .attendance-recap .page-actions>a:not(.button) { background:#66567b; border-color:#66567b; color:#fff; }
+.bmw-admin .attendance-recap .page-actions>a.button { background:#3b6a70; border-color:#3b6a70; color:#fff; }
+.bmw-admin .attendance-recap .filter-form>button[type=submit] { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .attendance-recap .filter-form>a,
+.bmw-admin .attendance-recap .pagination>a {
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    min-height:38px; padding:8px 11px; border:1px solid #d0d9e2;
+    border-radius:6px; background:#edf1f5; color:#3d5269;
+    font-size:.76rem; text-decoration:none;
+}
+.bmw-admin .attendance-recap .filter-form>a { background:#f4eae8; border-color:#e4d3cf; color:#80564e; }
+.bmw-admin .attendance-recap .page-actions>a:hover,
+.bmw-admin .attendance-recap .filter-form>button:hover { filter:brightness(.92); }
+.bmw-admin .attendance-recap .filter-form>a:hover { background:#eaddd9; }
+.bmw-admin .attendance-recap .pagination>a:hover { filter:brightness(.95); }
+html[data-theme=dark] .bmw-admin .attendance-recap .filter-form>a { background:#49352f; border-color:#6c4d43; color:#edd3c9; }
+html[data-theme=dark] .bmw-admin .attendance-recap .filter-form>a:hover { background:#584036; }
+html[data-theme=dark] .bmw-admin .attendance-recap .pagination>a { background:#293747; border-color:#425368; color:#d4e0ed; }
+@media(max-width:600px) {
+    .bmw-admin .attendance-recap .filter-form>a,
+    .bmw-admin .attendance-recap .pagination>a { min-height:44px; }
+}
+
+/* Speaker list: color-only overrides. */
+.bmw-admin .speaker-list-actions>a:first-of-type { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .speaker-list-actions>a:nth-of-type(2) { background:#66567b; border-color:#66567b; color:#fff; }
+.bmw-admin .speaker-list-actions>a:nth-of-type(3) { background:#3b6a70; border-color:#3b6a70; color:#fff; }
+.bmw-admin .panel-content:has(>.speaker-list-actions) .filter-form>button[type=submit] { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .panel-content:has(>.speaker-list-actions) .filter-form>a { background:#f4eae8; border-color:#e4d3cf; color:#80564e; }
+.bmw-admin .panel-content:has(>.speaker-list-actions) .row-actions>a:first-child { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .panel-content:has(>.speaker-list-actions) .row-actions>a:nth-child(2) { background:#385b7c; border-color:#385b7c; color:#fff; }
+.bmw-admin .panel-content:has(>.speaker-list-actions) .row-actions>a:nth-child(3) { background:#3b6a70; border-color:#3b6a70; color:#fff; }
+.bmw-admin .panel-content:has(>.speaker-list-actions) .pagination>a { background:#edf1f5; border-color:#d0d9e2; color:#3d5269; }
+.bmw-admin .speaker-list-actions>a:hover,
+.bmw-admin .panel-content:has(>.speaker-list-actions) .filter-form>button:hover,
+.bmw-admin .panel-content:has(>.speaker-list-actions) .row-actions>a:hover { filter:brightness(.92); }
+.bmw-admin .panel-content:has(>.speaker-list-actions) .filter-form>a:hover { background:#eaddd9; }
+html[data-theme=dark] .bmw-admin .panel-content:has(>.speaker-list-actions) .filter-form>a { background:#49352f; border-color:#6c4d43; color:#edd3c9; }
+html[data-theme=dark] .bmw-admin .panel-content:has(>.speaker-list-actions) .filter-form>a:hover { background:#584036; }
+html[data-theme=dark] .bmw-admin .panel-content:has(>.speaker-list-actions) .pagination>a { background:#293747; border-color:#425368; color:#d4e0ed; }
+
+/* Compact speaker rows for large lists. Full details and CV remain in the profile. */
+.bmw-admin .speaker-compact-list { max-height:520px; overflow:auto; }
+.bmw-admin .speaker-compact-list table { width:100%; min-width:650px; table-layout:fixed; }
+.bmw-admin .speaker-compact-list th:first-child { width:30%; }
+.bmw-admin .speaker-compact-list th:nth-child(2) { width:23%; }
+.bmw-admin .speaker-compact-list th:nth-child(3) { width:20%; }
+.bmw-admin .speaker-compact-list th:nth-child(4) { width:9%; }
+.bmw-admin .speaker-compact-list th:last-child { width:18%; }
+.bmw-admin .speaker-compact-list th { position:sticky; top:0; z-index:1; background:var(--panel-soft); }
+.bmw-admin .speaker-compact-list th,.bmw-admin .speaker-compact-list td { padding:9px 12px; font-size:.74rem; vertical-align:middle; }
+.speaker-identity { display:flex; align-items:center; gap:9px; min-width:0; }
+.speaker-identity>div { min-width:0; }
+.speaker-identity img,.speaker-placeholder { width:32px; height:32px; flex:0 0 32px; border-radius:7px; object-fit:cover; }
+.speaker-placeholder { display:grid; place-items:center; background:var(--panel-soft); color:var(--panel-muted); }
+.speaker-identity strong,.speaker-identity small,.speaker-cell-text { display:block; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bmw-admin .speaker-compact-list .speaker-identity small { margin-top:2px; font-size:.66rem; color:var(--panel-muted); }
+.bmw-admin .speaker-compact-list .row-actions { display:flex; flex-wrap:nowrap; gap:5px; }
+.bmw-admin .speaker-compact-list .row-actions>a { min-height:32px; padding:6px 8px; font-size:.7rem; }
+.bmw-admin .speaker-compact-list .row-actions>a.speaker-edit { min-width:32px; padding:6px; }
+@media(max-width:600px) {
+    .bmw-admin .speaker-compact-list { max-height:65vh; }
+    .bmw-admin .speaker-compact-list th:last-child { width:22%; }
+    .bmw-admin .speaker-compact-list th:first-child { width:26%; }
+    .bmw-admin .speaker-compact-list .row-actions>a { min-height:44px; }
+    .bmw-admin .speaker-compact-list .row-actions>a.speaker-edit { min-width:44px; }
+}
+
+/* Compact speaker editor with local icons and muted actions. */
+.bmw-admin .speaker-form-workspace .editor-form { padding:14px; gap:12px 16px; align-items:start; }
+.bmw-admin .speaker-form-workspace datalist { display:none; }
+.bmw-admin .speaker-form-workspace .editor-form>label { gap:5px; font-size:.74rem; }
+.speaker-form-workspace label>span,.speaker-form-workspace legend { display:flex; align-items:center; gap:6px; }
+.speaker-form-workspace label>span>.panel-icon,.speaker-form-workspace legend>.panel-icon { width:14px; height:14px; flex-shrink:0; color:var(--panel-muted); }
+.bmw-admin .speaker-form-workspace .editor-form input:not([type=hidden]):not([type=checkbox]):not([type=file]) { min-height:38px; height:38px; margin:0; padding:8px 10px; border-radius:5px; font-size:.8rem; }
+.bmw-admin .speaker-form-workspace .editor-form>label:has(input[type=file]) { grid-column:auto; }
+.bmw-admin .speaker-form-workspace input[type=file] { min-height:38px; margin:0; padding:4px 7px; font-size:.76rem; border-radius:5px; }
+.bmw-admin .speaker-form-workspace textarea { min-height:64px; height:64px; margin:0; padding:8px 10px; font-size:.8rem; border-radius:5px; resize:vertical; }
+.bmw-admin .speaker-form-workspace .editor-form>p,.bmw-admin .speaker-form-workspace fieldset p { margin:0; font-size:.69rem; line-height:1.5; }
+.bmw-admin .speaker-form-workspace fieldset { min-width:0; padding:10px 12px; border:1px solid var(--panel-line); border-radius:6px; }
+.bmw-admin .speaker-form-workspace legend { font-size:.75rem; padding:0 5px; }
+.bmw-admin .speaker-form-workspace .page-actions>a { background:#66567b; border-color:#66567b; color:#fff; }
+.bmw-admin .speaker-form-workspace .form-actions>button[type=submit] { background:#3b685a; border-color:#3b685a; color:#fff; }
+.bmw-admin .speaker-form-workspace .form-actions>a { display:inline-flex; align-items:center; gap:7px; min-height:38px; padding:8px 12px; border:1px solid #e4d3cf; border-radius:6px; background:#f4eae8; color:#80564e; font-size:.76rem; text-decoration:none; }
+.bmw-admin .speaker-form-workspace input[type=file]::file-selector-button { padding:6px 10px; margin-right:8px; border:0; border-radius:4px; background:#385b7c; color:#fff; font:inherit; cursor:pointer; }
+.bmw-admin .speaker-form-workspace #foto::file-selector-button { background:#66567b; }
+.bmw-admin .speaker-form-workspace .page-actions>a:hover,.bmw-admin .speaker-form-workspace button:hover { filter:brightness(.92); }
+.bmw-admin .speaker-form-workspace .form-actions>a:hover { background:#eaddd9; }
+html[data-theme=dark] .bmw-admin .speaker-form-workspace .form-actions>a { background:#49352f; border-color:#6c4d43; color:#edd3c9; }
+html[data-theme=dark] .bmw-admin .speaker-form-workspace .form-actions>a:hover { background:#584036; }
+@media(min-width:1200px) {
+    .bmw-admin .speaker-form-workspace .editor-form { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .bmw-admin .speaker-form-workspace .editor-form>label:has(input[type=file]) { grid-column:span 2; }
+}
+@media(max-width:600px) {
+    .bmw-admin .speaker-form-workspace .editor-form { grid-template-columns:minmax(0,1fr); padding:12px; }
+    .bmw-admin .speaker-form-workspace .editor-form input:not([type=hidden]):not([type=checkbox]):not([type=file]),
+    .bmw-admin .speaker-form-workspace input[type=file] { min-height:44px; height:auto; font-size:16px; }
+    .bmw-admin .speaker-form-workspace textarea { font-size:16px; }
+    .bmw-admin .speaker-form-workspace .form-actions>a { min-height:44px; }
+}
+
+/* Compact program inquiry list. */
+.bmw-admin .interest-list .page-actions { margin-bottom:12px; gap:8px; }
+.bmw-admin .interest-list .page-actions h1 { font-size:1.15rem; }
+.bmw-admin .interest-list .page-actions>.program-interest-back { min-height:36px; padding:7px 10px; font-size:.72rem; }
+.bmw-admin .interest-list .filter-form.card {
+    display:grid; grid-template-columns:minmax(0,1.7fr) minmax(150px,1fr) auto;
+    gap:10px; padding:12px; border-radius:7px; margin-bottom:12px;
+}
+.bmw-admin .interest-list .filter-form label { min-width:0; gap:4px; font-size:.73rem; margin:0; }
+.bmw-admin .interest-list .filter-form select { min-height:38px; height:38px; padding:7px 10px; font-size:.78rem; border-radius:5px; }
+.bmw-admin .interest-list .filter-form>button[type=submit] { min-height:38px; padding:7px 11px; font-size:.73rem; border-radius:5px; }
+.bmw-admin .interest-list>p { margin:10px 0; font-size:.72rem; }
+.bmw-admin .interest-list .table-scroll { max-height:480px; overflow:auto; border-radius:7px; }
+.bmw-admin .interest-list table { width:100%; min-width:600px; }
+.bmw-admin .interest-list th,.bmw-admin .interest-list td { padding:9px 11px; font-size:.74rem; }
+.bmw-admin .interest-list th { position:sticky; top:0; background:var(--panel-soft); z-index:1; }
+.bmw-admin .interest-list td small { font-size:.65rem; margin-top:2px; }
+.bmw-admin .interest-list .table-scroll td:last-child>a { min-height:32px; padding:6px 8px; font-size:.7rem; }
+.inquiry-status { display:inline-block; padding:3px 7px; border-radius:5px; font-size:.66rem; white-space:nowrap; }
+.inquiry-status-baru { background:#e8eff7; color:#355a7c; }
+.inquiry-status-diproses { background:#f4eddf; color:#7b6334; }
+.inquiry-status-selesai { background:#e8f1ec; color:#38614e; }
+html[data-theme=dark] .inquiry-status-baru { background:#293c51; color:#cadcf0; }
+html[data-theme=dark] .inquiry-status-diproses { background:#463d2b; color:#e6d3a9; }
+html[data-theme=dark] .inquiry-status-selesai { background:#2a4035; color:#c6e2d0; }
+@media(max-width:600px) {
+    .bmw-admin .interest-list .page-actions h1 { font-size:1.05rem; }
+    .bmw-admin .interest-list .page-actions>.program-interest-back { min-height:44px; flex:0 1 auto; }
+    .bmw-admin .interest-list .filter-form.card { grid-template-columns:minmax(0,1fr) auto; padding:10px; gap:8px; }
+    .bmw-admin .interest-list .filter-form label:first-child { grid-column:1/-1; }
+    .bmw-admin .interest-list .filter-form select { min-height:44px; height:44px; font-size:16px; }
+    .bmw-admin .interest-list .filter-form>button[type=submit],
+    .bmw-admin .interest-list .table-scroll td:last-child>a { min-height:44px; }
+}

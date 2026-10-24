@@ -88,7 +88,7 @@ function account_photo_field(array $account): void
     ?>
     <div class="profile-photo-field">
         <?php if($photo): ?><img class="profile-photo-preview" src="<?= e($photo) ?>" alt="Foto profil saat ini" width="64" height="64"><?php endif; ?>
-        <div><label for="profile_photo">Foto profil</label><input type="file" id="profile_photo" name="profile_photo" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"><small>JPG, PNG, atau WebP, maksimal 5 MB.</small>
+        <div><label for="profile_photo"><?= panel_icon('media') ?> Foto profil</label><input type="file" id="profile_photo" name="profile_photo" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"><small>JPG, PNG, atau WebP, maksimal 5 MB.</small>
         <?php if($photo): ?><label class="check-label"><input type="checkbox" name="remove_photo" value="1"> Hapus foto saat ini</label><?php endif; ?></div>
     </div>
     <?php

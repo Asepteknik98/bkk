@@ -13,7 +13,7 @@
         </div></details>
         <?php $masterActive=in_array($activePanel??'',['peserta','capaian','absensi','pemateri','program-minat'],true); ?>
         <details class="sidebar-programs" data-sidebar-group="master" data-active="<?= $masterActive?'true':'false' ?>" <?= $masterActive?'open':'' ?>><summary title="Master Data"><?= panel_icon('master') ?><span class="sidebar-label">Master Data</span><span class="sidebar-program-caret" aria-hidden="true"><?= panel_icon('down') ?></span></summary><div>
-        <?php foreach(['peserta'=>['panel/peserta/','Data Peserta'],'capaian'=>['panel/capaian-pembelajaran/','Capaian Pembelajaran'],'absensi'=>['panel/absensi/','Absensi Kegiatan'],'pemateri'=>['panel/pemateri/','Pemateri Kelas']] as $module=>[$modulePath,$moduleLabel]): ?>
+        <?php foreach(['peserta'=>['panel/peserta/','Data PKL'],'capaian'=>['panel/capaian-pembelajaran/','Capaian Pembelajaran'],'absensi'=>['panel/absensi/','Absensi Kegiatan'],'pemateri'=>['panel/pemateri/','Pemateri Kelas']] as $module=>[$modulePath,$moduleLabel]): ?>
         <a href="<?= e(base_url($modulePath)) ?>" title="<?= e($moduleLabel) ?>" <?= ($activePanel??'')===$module?'aria-current="page"':'' ?>><?= panel_icon($module) ?><span class="sidebar-label"><?= e($moduleLabel) ?></span></a>
         <?php endforeach; ?>
         <a href="<?= e(base_url('panel/program-minat/')) ?>" title="Minat dan pertanyaan" <?= ($activePanel??'')==='program-minat'?'aria-current="page"':'' ?>><?= panel_icon('message') ?><span class="sidebar-label">Minat &amp; pertanyaan</span></a></div></details>

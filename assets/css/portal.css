@@ -816,3 +816,91 @@
 .program-interest-form button { min-height:44px; justify-self:start; }
 .interest-response { border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:16px 0; margin:16px 0; }
 @media(max-width:600px) { .program-interest-cta { align-items:flex-start; flex-direction:column; } .program-interest-form { grid-template-columns:minmax(0,1fr); } .program-interest-page .surface { padding:16px; } }
+
+.footer-meta-links .social-icon { width:16px; height:16px; flex:0 0 16px; }
+.footer-meta-links a { gap:6px; }
+@media(max-width:600px) { .footer-meta-links a { min-height:44px; } }
+
+/* Public social links: compact rows, never a stack of platform names. */
+.profile-social-section h2 { margin:0 0 12px; font-size:1rem; }
+.profile-social-links { display:flex; align-items:center; gap:8px; overflow-x:auto; padding:2px 2px 6px; scrollbar-width:thin; }
+.profile-social-links a { display:inline-flex; align-items:center; justify-content:center; gap:7px; flex:0 0 auto; min-height:40px; padding:8px 12px; border:1px solid #dce4ed; border-radius:7px; background:#f5f7fa; color:#385b7c; font-size:.78rem; text-decoration:none; white-space:nowrap; }
+.profile-social-links .social-icon { width:18px; height:18px; flex:0 0 18px; }
+.profile-social-links a:hover { background:#eaf0f6; border-color:#b4c7d9; }
+.profile-social-links a:focus-visible { outline:2px solid #385b7c; outline-offset:2px; }
+.site-footer-compact .footer-compact-bottom { flex-direction:row; align-items:center; justify-content:space-between; gap:8px 16px; }
+.site-footer-compact .footer-meta-links { display:flex; flex-wrap:nowrap; align-items:center; gap:4px; min-width:0; max-width:100%; overflow-x:auto; scrollbar-width:thin; }
+.site-footer-compact .footer-meta-links a { display:inline-flex; align-items:center; justify-content:center; flex:0 0 36px; width:36px; min-height:36px; padding:0; border-radius:6px; color:#dce6f2; }
+.site-footer-compact .footer-meta-links a:hover { background:#ffffff15; color:#ffe1a2; }
+.site-footer-compact .footer-meta-links .social-icon { width:17px; height:17px; }
+.site-footer-compact .footer-compact-bottom>span { flex:0 0 auto; font-size:.62rem; }
+@media(max-width:600px) {
+    .profile-social-links a { min-height:44px; }
+    .site-footer-compact .footer-compact-bottom { flex-wrap:wrap; row-gap:0; padding-top:4px; padding-bottom:4px; }
+    .site-footer-compact .footer-meta-links { width:100%; }
+    .site-footer-compact .footer-meta-links a { flex-basis:40px; width:40px; min-height:44px; }
+}
+
+/* Empty social links remain visible without navigating to a placeholder URL. */
+.profile-social-links>.social-unavailable { display:inline-flex; align-items:center; justify-content:center; gap:7px; flex:0 0 auto; min-height:40px; padding:8px 12px; border:1px solid #dce4ed; border-radius:7px; background:#f5f7fa; color:#536b82; font-size:.78rem; white-space:nowrap; cursor:default; }
+.site-footer-compact .footer-meta-links>.social-unavailable { display:inline-flex; align-items:center; justify-content:center; flex:0 0 36px; width:36px; min-height:36px; color:#c5d4e5; cursor:default; }
+@media(max-width:600px) {
+    .profile-social-links>.social-unavailable { min-height:44px; }
+    .site-footer-compact .footer-meta-links>.social-unavailable { flex-basis:40px; width:40px; min-height:44px; }
+}
+
+/* Minimal footer: compact spacing and a centered, single social row on phones. */
+.site-footer-compact { margin-top:16px; }
+.site-footer-compact .footer-compact-main { padding-top:10px; padding-bottom:8px; gap:6px 16px; }
+.site-footer-compact .footer-brand { font-size:.76rem; letter-spacing:0; }
+.site-footer-compact .footer-links { gap:0 12px; }
+.site-footer-compact .footer-links a { min-height:32px; font-size:.66rem; white-space:nowrap; }
+.site-footer-compact .footer-links svg { width:13px; height:13px; margin-right:4px; }
+.site-footer-compact .footer-compact-bottom { padding-top:2px; padding-bottom:2px; min-height:36px; }
+.site-footer-compact .footer-compact-bottom>span { font-size:.58rem; }
+.site-footer-compact .footer-meta-links { gap:2px; }
+.site-footer-compact .footer-meta-links>a,
+.site-footer-compact .footer-meta-links>.social-unavailable { flex-basis:34px; width:34px; min-height:34px; }
+.site-footer-compact .footer-meta-links .social-icon { width:15px; height:15px; }
+@media(max-width:767.98px) {
+    .site-footer-compact .footer-compact-main { align-items:center; padding-top:8px; padding-bottom:4px; gap:2px; }
+    .site-footer-compact .footer-brand { font-size:.7rem; }
+    .site-footer-compact .footer-links { justify-content:center; flex-wrap:nowrap; gap:0 10px; min-width:0; }
+    .site-footer-compact .footer-links a { font-size:.6rem; }
+    .site-footer-compact .footer-compact-bottom { flex-direction:column-reverse; align-items:center; gap:0; padding-top:0; padding-bottom:6px; }
+    .site-footer-compact .footer-meta-links { width:100%; justify-content:center; gap:0; }
+    .site-footer-compact .footer-meta-links>a,
+    .site-footer-compact .footer-meta-links>.social-unavailable { flex:0 0 12.5%; width:auto; max-width:44px; min-height:44px; }
+    .site-footer-compact .footer-compact-bottom>span { line-height:1.4; font-size:.55rem; }
+}
+@media(max-width:359.98px) {
+    .site-footer-compact .footer-links { gap:0 7px; }
+    .site-footer-compact .footer-links a { font-size:.56rem; }
+}
+
+/* Minimal public profile: two concise panels and one compact social row. */
+.profile-page .page-heading { padding:0 0 10px; margin-bottom:10px; border:0; border-radius:0; background:transparent; box-shadow:none; }
+.profile-page .page-heading .eyebrow { display:none; }
+.profile-page .page-heading h1 { font-size:1.35rem; margin:0 0 3px; }
+.profile-page .page-heading>p:last-child { margin:0; font-size:.74rem; }
+.profile-page .content-column { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:start; gap:12px; }
+.profile-page .surface { padding:14px 16px; border-radius:8px; min-width:0; }
+.profile-page .section-space { margin-top:0; }
+.profile-page .surface h2 { font-size:.9rem; margin:0 0 8px; }
+.profile-page .surface p { font-size:.76rem; line-height:1.6; margin:0 0 8px; }
+.profile-page .surface>.eyebrow { display:none; }
+.profile-page .contact-list { grid-template-columns:68px minmax(0,1fr); gap:6px 10px; font-size:.74rem; margin:0 0 8px; }
+.profile-page .contact-list dt,.profile-page .contact-list dd { margin:0; }
+.profile-page .profile-social-section { grid-column:1/-1; padding:12px 16px; }
+.profile-page .profile-social-section h2 { font-size:.8rem; margin-bottom:8px; }
+.profile-page .profile-social-links { gap:6px; padding:0 0 2px; }
+.profile-page .profile-social-links>a,
+.profile-page .profile-social-links>.social-unavailable { min-height:34px; padding:6px 9px; gap:6px; border-radius:6px; font-size:.7rem; }
+.profile-page .profile-social-links .social-icon { width:16px; height:16px; flex-basis:16px; }
+@media(max-width:767.98px) {
+    .profile-page .content-column { grid-template-columns:minmax(0,1fr); gap:10px; }
+    .profile-page .page-heading h1 { font-size:1.2rem; }
+    .profile-page .surface { padding:12px; }
+    .profile-page .profile-social-links>a,
+    .profile-page .profile-social-links>.social-unavailable { min-height:44px; }
+}

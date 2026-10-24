@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once dirname(__DIR__) . '/bootstrap.php';
 require_once __DIR__ . '/jobs.php';
+require_once __DIR__ . '/social.php';
 
 /** Pembacaan publik gagal dengan pemberitahuan, tanpa menampilkan detail koneksi. */
 function public_query(string $sql, array $params = []): array

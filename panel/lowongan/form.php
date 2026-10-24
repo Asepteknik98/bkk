@@ -6,6 +6,7 @@ $images=panel_query("SELECT * FROM media WHERE mime_type IN ('image/jpeg','image
 if($data['media_id']!==''&&!in_array((int)$data['media_id'],array_map('intval',array_column($images,'id')),true)){$selected=panel_query('SELECT * FROM media WHERE id=:id',['id'=>(int)$data['media_id']])->fetch();if($selected){$images[]=$selected;}}
 panel_start($user,$id?'Edit Lowongan':'Tambah Lowongan','lowongan');
 ?>
+<div class="vacancy-workspace">
 <div class="page-actions"><h1><?= $id?'Edit Lowongan':'Tambah Lowongan' ?></h1><a href="<?= e(base_url('panel/lowongan/')) ?>">← Daftar lowongan</a></div>
 <?php if($errors):?><div class="alert" role="alert"><strong>Lowongan belum disimpan.</strong><ul><?php foreach($errors as $error):?><li><?= e($error) ?></li><?php endforeach;?></ul><p>Pilih kembali berkas unggahan jika diperlukan.</p></div><?php endif;?>
 <form class="editor-form card vacancy-editor" method="post" action="<?= e(base_url('panel/lowongan/simpan.php')) ?>" enctype="multipart/form-data"><?= csrf_field() ?><input type="hidden" name="id" value="<?= $id??'' ?>">
@@ -19,4 +20,5 @@ panel_start($user,$id?'Edit Lowongan':'Tambah Lowongan','lowongan');
 <?php if($data['gambar']):?><div class="current-image"><img src="<?= e(content_image($data['gambar'])) ?>" alt="Poster lowongan saat ini" width="240"><label class="check-label"><input type="checkbox" name="hapus_gambar" value="1" <?= $data['hapus_gambar']?'checked':'' ?>> Lepaskan poster saat ini</label></div><?php endif;?>
 <label for="media_id">Atau pilih poster katalog (200 gambar terbaru)</label><select id="media_id" name="media_id"><option value="">Pertahankan poster / tanpa poster</option><?php foreach($images as $image):if(!media_is_image($image)){continue;}?><option value="<?= $image['id'] ?>" <?= (string)$image['id']===$data['media_id']?'selected':'' ?>>#<?= $image['id'] ?> — <?= e($image['nama_asli']) ?></option><?php endforeach;?></select><small>Poster yang dilepas/diganti tetap tersedia di <a href="<?= e(base_url('panel/media/')) ?>">katalog media</a>.</small>
 </div><div class="form-actions"><button type="submit">Simpan lowongan</button><a href="<?= e(base_url('panel/lowongan/')) ?>">Batal</a></div></form>
+</div>
 <?php panel_end($user); ?>

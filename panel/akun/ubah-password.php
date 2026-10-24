@@ -21,8 +21,8 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 }
 panel_start($user,'Ubah Password','akun');
 ?>
-<h1>Ubah Password</h1><form class="editor-form card" method="post"><?= csrf_field() ?>
-<label for="old_password">Password lama</label><input id="old_password" name="old_password" type="password" autocomplete="current-password" maxlength="72" required>
+<h1><?= panel_icon('lock') ?> Ubah Password</h1><form class="editor-form card password-change-form" method="post"><?= csrf_field() ?>
+<label for="old_password"><?= panel_icon('lock') ?> Password lama</label><input id="old_password" name="old_password" type="password" autocomplete="current-password" maxlength="72" required>
 <label for="password">Password baru (12–72 byte)</label><input id="password" name="password" type="password" autocomplete="new-password" maxlength="72" required>
-<label for="confirmation">Ulangi password baru</label><input id="confirmation" name="confirmation" type="password" autocomplete="new-password" maxlength="72" required><button type="submit">Ubah password</button></form>
+<label for="confirmation"><?= panel_icon('check-circle') ?> Ulangi password baru</label><input id="confirmation" name="confirmation" type="password" autocomplete="new-password" maxlength="72" required><button type="submit"><?= panel_icon('save') ?> Ubah password</button></form>
 <?php panel_end($user); ?>
