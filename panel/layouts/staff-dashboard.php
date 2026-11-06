@@ -8,6 +8,7 @@ panel_start($user,'Dashboard','dashboard');
     if(!user_can($user,$module) || $module==='mou'){continue;}
     if($module==='absensi'&&!user_can($user,'peserta')){continue;}
     if($module==='pkl'&&!user_can($user,'peserta')){continue;}
+    if($module==='kelas-industri'&&!user_can($user,'peserta')){continue;}
     if($module==='biaya-perjalanan'&&(!user_can($user,'pkl')||!user_can($user,'peserta'))){continue;}
     if($module==='whatsapp'&&(!user_can($user,'lamaran')||!user_can($user,'tracer-study'))){continue;}
     $available++;

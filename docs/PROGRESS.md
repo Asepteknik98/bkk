@@ -1,5 +1,12 @@
 # Progres BKK SMK JAYA BUANA
 
+## Pengembangan lanjutan — Tahap 4 BMW Sakti dan Kelas Industri (6 November 2026)
+
+- Deskripsi publik BMW Sakti memakai settings lama dengan draft/publikasi, editor berizin Program, CSRF dan versi. Navigasi publik/panel ditambahkan tanpa mengganti katalog program lama.
+- Operasional Kelas Industri memakai mitra, pemateri dan siswa lama. Rencana 1–500 menghasilkan slot pertemuan bernomor, jadwal/status dan rekap Terlaksana dibanding rencana. Pengurangan rencana melindungi pertemuan yang sudah diisi. Peserta/jadwal tetap privat; izin kelas-industri+peserta diwajibkan termasuk unduhan.
+- Migrasi tambahan 021 disiapkan dan diuji impor ulang; database asli tidak dimigrasikan. Tidak membuat akun atau menimpa data lama.
+- 77 pemeriksaan HTTP Tahap 4, 70 regresi HTTP Tahap 3, 63 regresi HTTP Tahap 2, dan regresi CLI lulus pada lingkungan sementara. Panduan file/penerapan dan batas pengujian: docs/BMW-KELAS-INDUSTRI.md. Tidak melanjutkan tahap lain.
+
 ## Pengembangan lanjutan — Tahap 3 Jadwal PKL dan perjalanan dinas (6 November 2026)
 
 - Menambahkan jadwal monitoring mingguan, pertemuan orang tua/wali, dan sidang berdasarkan penempatan/periode PKL, dengan penugasan guru, tanggal/jam WIB, lokasi/alamat, status, hasil monitoring, dan tindak lanjut.
