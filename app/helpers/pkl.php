@@ -69,6 +69,10 @@ function pkl_save(array $data,?int $id,int $version,int $actor): int
             if(panel_query('SELECT placement_id FROM pkl_final_reports WHERE placement_id=:id AND tanggal_laporan<:mulai',['id'=>$id,'mulai'=>$data['tanggal_mulai']])->fetch()){
                 throw new InvalidArgumentException('Tanggal mulai baru melewati tanggal laporan akhir yang tersimpan.');
             }
+            $hasSchedules=(bool)panel_query("SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='pkl_schedules'")->fetchColumn();
+            if($hasSchedules&&panel_query("SELECT id FROM pkl_schedules WHERE placement_id=:id AND jenis='monitoring' AND (tanggal<:mulai OR tanggal>:selesai) LIMIT 1",['id'=>$id,'mulai'=>$data['tanggal_mulai'],'selesai'=>$data['tanggal_selesai']])->fetch()){
+                throw new InvalidArgumentException('Periode baru akan mengeluarkan jadwal monitoring yang sudah ada. Periksa jadwal terlebih dahulu.');
+            }
         }elseif(!panel_query('SELECT id FROM siswa WHERE id=:id',['id'=>(int)$data['siswa_id']])->fetch()){
             throw new InvalidArgumentException('Siswa tidak ditemukan pada data peserta.');
         }

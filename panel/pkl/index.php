@@ -17,7 +17,7 @@ $pages=max(1,(int)ceil($total/20));$page=min($pages,positive_id($_GET['page']??'
 $rows=$ready?panel_query('SELECT p.*,s.nama,s.nis'.$from.' ORDER BY p.tanggal_mulai DESC,p.id DESC LIMIT :limit OFFSET :offset',$params+['limit'=>20,'offset'=>($page-1)*20])->fetchAll():[];
 panel_start($user,'Praktik Kerja Lapangan','pkl');
 ?>
-<div class="page-actions"><h1>Praktik Kerja Lapangan (PKL)</h1><a class="button" href="<?= e(base_url('panel/pkl/form.php')) ?>">Tambah penempatan PKL</a><a href="<?= e(base_url('panel/peserta/')) ?>">Data siswa / peserta</a></div>
+<div class="page-actions"><h1>Praktik Kerja Lapangan (PKL)</h1><a href="<?= e(base_url('panel/pkl/jadwal.php')) ?>">Jadwal monitoring, pertemuan &amp; sidang</a><a class="button" href="<?= e(base_url('panel/pkl/form.php')) ?>">Tambah penempatan PKL</a><a href="<?= e(base_url('panel/peserta/')) ?>">Data siswa / peserta</a></div>
 <p>Kelola penempatan, penugasan pembimbing, jurnal harian, rekap mingguan, dan laporan akhir. Pengelola mencatat jurnal atas nama siswa.</p>
 <?php if(!$ready): ?><p class="notice">Modul belum aktif. Impor database/updates/019_pkl.sql. Riwayat PKL lama pada data peserta tetap tersedia.</p><?php endif; ?>
 <form class="filter-form card" method="get"><label>Cari siswa, NIS, tempat, atau guru<input name="q" maxlength="100" value="<?= e($q) ?>"></label><label>Status<select name="status"><?php foreach([''=>'Semua','aktif'=>'Aktif','selesai'=>'Selesai','arsip'=>'Arsip'] as $key=>$label): ?><option value="<?= $key ?>" <?= $status===$key?'selected':'' ?>><?= $label ?></option><?php endforeach; ?></select></label><button>Tampilkan</button><a href="<?= e(base_url('panel/pkl/')) ?>">Reset</a></form>

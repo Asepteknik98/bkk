@@ -1,5 +1,12 @@
 # Progres BKK SMK JAYA BUANA
 
+## Pengembangan lanjutan — Tahap 3 Jadwal PKL dan perjalanan dinas (6 November 2026)
+
+- Menambahkan jadwal monitoring mingguan, pertemuan orang tua/wali, dan sidang berdasarkan penempatan/periode PKL, dengan penugasan guru, tanggal/jam WIB, lokasi/alamat, status, hasil monitoring, dan tindak lanjut.
+- Perjalanan dinas dapat dikaitkan ke monitoring dari penempatan yang sama. Tujuan/petugas/tanggal, nominal DECIMAL dan sumber sekolah/pribadi disimpan terpisah. Izin biaya-perjalanan+pkl+peserta diwajibkan, termasuk URL/POST/unduhan. Ekspor jadwal tidak memuat biaya.
+- Migrasi tambahan 020 disiapkan dan diuji impor ulang; database asli tidak dimigrasikan. Jadwal lama dilindungi saat periode PKL diedit; konflik versi dan CSRF diperiksa. Tidak membuat akun guru/wali/siswa.
+- 70 pemeriksaan HTTP Tahap 3 dan 63 regresi HTTP Tahap 2 lulus pada salinan aplikasi/database; regresi CLI, sintaks 181 PHP dan diff check lulus. Panduan dan batas pengujian: docs/PKL-JADWAL-PERJALANAN.md. Tidak melanjutkan tahap lain.
+
 ## Pengembangan lanjutan — Tahap 2 PKL (6 November 2026)
 
 - Modul penempatan PKL memakai identitas dari tabel siswa lama dan tabel penempatan/jurnal/laporan tambahan. Kolom tempat_pkl/tahun_pkl lama tidak ditimpa; beberapa periode per siswa didukung.
