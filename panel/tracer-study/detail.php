@@ -13,6 +13,7 @@ panel_start($user,'Detail Respons Alumni','tracer');
 ?>
 <div class="alumni-detail">
 <div class="page-actions"><h1><?= panel_icon('akun') ?> Detail Alumni</h1><a href="<?= e(base_url('panel/tracer-study/?'.http_build_query(['tahun_lulus'=>(string)$row['tahun_lulus']]))) ?>"><?= panel_icon('back') ?> Daftar alumni</a></div>
+<p><a class="button" href="<?= e(base_url('panel/tracer-study/tautan.php?id='.$id)) ?>">Kelola tautan formulir alumni</a></p>
 <section class="card alumni-detail-card">
 <header class="alumni-detail-heading"><div><h2><?= e($row['nama_lengkap']) ?></h2><p><?= e($row['jurusan']) ?> &middot; Angkatan <?= (int)$row['tahun_lulus'] ?></p></div><span class="badge"><?= e(tracer_statuses()[$row['status_kegiatan']]??$row['status_kegiatan']) ?></span></header>
 <div class="alumni-detail-grid">

@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__).'/app/helpers/panel.php';
 require_once APP_ROOT.'/app/helpers/tracer.php';
 $user=require_role('admin','staf_bkk');
+if($user['role']==='staf_bkk'){require __DIR__.'/layouts/staff-dashboard.php';exit;}
 $counts=[];
 foreach(['berita','lowongan','program'] as $table){
     $counts[$table]=panel_query("SELECT status,COUNT(*) AS jumlah FROM $table GROUP BY status")->fetchAll(PDO::FETCH_KEY_PAIR);

@@ -9,6 +9,12 @@ try {
     account_change((int)$user['id'], true, static function (array $actor) use ($id, &$upload): void {
         $data = account_identity($_POST, $id); $role = input_text($_POST, 'role');
         if (!in_array($role, ['admin','staf_bkk'], true)) { throw new InvalidArgumentException('Role tidak valid.'); }
+        $permissions=$_POST['permissions']??[];
+        if (!is_array($permissions)) {
+            throw new InvalidArgumentException('Pilihan izin tidak valid.');
+        }
+        foreach($permissions as $permission){if(!is_string($permission)){throw new InvalidArgumentException('Pilihan izin tidak valid.');}}
+        if(array_diff($permissions,array_keys(permission_modules()))){throw new InvalidArgumentException('Pilihan izin tidak valid.');}
         if ($id) {
             $old = panel_query('SELECT * FROM users WHERE id=:id FOR UPDATE', ['id'=>$id])->fetch();
             if (!$old) { throw new InvalidArgumentException('Akun tidak ditemukan.'); }
@@ -19,6 +25,11 @@ try {
             $hash = account_password(is_string($_POST['password'] ?? null) ? $_POST['password'] : '', is_string($_POST['confirmation'] ?? null) ? $_POST['confirmation'] : '');
             $photo=account_photo([],(int)$actor['id'],$upload);
             panel_query('INSERT INTO users(nama,username,email,role,password_hash,aktif,foto_profil) VALUES(:nama,:username,:email,:role,:hash,1,:foto)', $data+['role'=>$role,'hash'=>$hash,'foto'=>$photo]);
+            $id=(int)db()->lastInsertId();
+        }
+        panel_query('DELETE FROM user_permissions WHERE user_id=:id',['id'=>$id]);
+        if($role==='staf_bkk'){
+            foreach(array_unique($permissions) as $permission){panel_query('INSERT INTO user_permissions(user_id,module) VALUES(:id,:module)',['id'=>$id,'module'=>$permission]);}
         }
     });
     panel_message('Akun berhasil disimpan.', 'panel/pengguna/');

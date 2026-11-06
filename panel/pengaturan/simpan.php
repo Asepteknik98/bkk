@@ -7,7 +7,7 @@ try{
         $value=input_text($_POST,$key);$data[$key]=$value;
         if(!valid_text($value,$max,$required)){throw new InvalidArgumentException($label.' tidak valid atau terlalu panjang.');}
         if($value!==''&&str_starts_with($key,'social_')&&!http_url($value)){throw new InvalidArgumentException($label.' harus URL http/https.');}
-        if($key==='contact_email'&&$value!==''&&!filter_var($value,FILTER_VALIDATE_EMAIL)){throw new InvalidArgumentException('Email kontak tidak valid.');}
+        if(in_array($key,['contact_email','manager_email'],true)&&$value!==''&&!filter_var($value,FILTER_VALIDATE_EMAIL)){throw new InvalidArgumentException('Email kontak tidak valid.');}
     }
     foreach(['bkk_logo','school_logo'] as $field){$uploads[$field]=management_upload($field);}
     management_transaction(static function()use($data,$uploads,$user):void{

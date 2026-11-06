@@ -6,6 +6,8 @@ DirectoryIndex index.php
     RewriteEngine On
     RewriteRule (^|/)\. - [F,L]
     RewriteRule ^(?:app|database|storage|docs)(?:/|$) - [F,L,NC]
+    # Reserved private document locations must never become static public downloads.
+    RewriteRule ^uploads/(?:mou|biaya-perjalanan|private)(?:/|$) - [F,L,NC]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^ 404.php [END]

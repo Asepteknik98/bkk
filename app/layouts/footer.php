@@ -5,6 +5,8 @@
             <a class="footer-brand" href="<?= e(base_url()) ?>">BKK SMKS JAYA BUANA</a>
         </div>
         <nav class="footer-links" aria-label="Navigasi footer">
+            <a href="<?= e(base_url('privasi.php')) ?>">Privasi</a>
+            <a href="<?= e(base_url('hak-cipta.php')) ?>">Hak cipta</a>
             <a href="<?= e(base_url('profil.php')) ?>">Profil &amp; kontak</a>
             <a href="<?= e(base_url('berita.php')) ?>">Berita</a>
             <a href="<?= e(base_url('lowongan-kerja/')) ?>">Lowongan</a>

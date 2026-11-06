@@ -50,7 +50,7 @@ function management_error(Throwable $exception,string $path): never
 
 function settings_fields(): array
 {
-    return ['site_name'=>['Nama BKK',150,true],'school_name'=>['Nama sekolah',150,true],
+    return ['manager_name'=>['Nama pengelola / penanggung jawab',150,false], 'manager_unit'=>['Unit pengelola',200,false], 'manager_address'=>['Alamat pengelola',2000,false], 'manager_email'=>['Email layanan privasi',191,false], 'manager_phone'=>['Telepon pengelola',50,false], 'copyright_owner'=>['Pemegang hak cipta konten sekolah',200,false], 'privacy_retention'=>['Keterangan masa simpan data',2000,false], 'site_name'=>['Nama BKK',150,true],'school_name'=>['Nama sekolah',150,true],
         'contact_address'=>['Alamat',2000,false],'contact_phone'=>['Nomor kontak',50,false],
         'contact_email'=>['Email kontak',191,false],'social_instagram'=>['Instagram (URL)',2048,false],
         'social_facebook'=>['Facebook (URL)',2048,false],'social_youtube'=>['YouTube (URL)',2048,false],

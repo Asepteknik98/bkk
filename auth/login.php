@@ -47,7 +47,7 @@ unset($_SESSION['login_error']);
         <button type="submit">Masuk</button>
         </form>
         <p class="login-return">Ingin melihat informasi BKK? <a href="<?= e(base_url()) ?>">Ke beranda</a></p>
-        <p class="login-role">Khusus Admin dan Pengguna/Pengelola.</p>
+        <p class="login-role">Khusus Admin dan Staf BKK.</p>
         </div>
     </section>
     <aside class="login-visual" aria-label="Portal BKK">

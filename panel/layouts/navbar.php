@@ -3,17 +3,17 @@
 require_once APP_ROOT . '/app/helpers/accounts.php';
 require_once APP_ROOT . '/app/helpers/public.php';
 $logos = site_logos();
-$newApplications = (int)panel_query('SELECT COUNT(*) FROM lamaran WHERE viewed_at IS NULL')->fetchColumn();
+$newApplications = user_can($user,'lamaran') ? (int)panel_query('SELECT COUNT(*) FROM lamaran WHERE viewed_at IS NULL')->fetchColumn() : 0;
 $applicationNotification = $newApplications > 0 ? $newApplications.' lamaran belum dilihat' : 'Tidak ada lamaran belum dilihat';
 ?>
 <header class="navbar">
     <button class="sidebar-open-button icon-button" type="button" aria-controls="panel-sidebar" aria-expanded="false" aria-label="Buka menu panel"><?= panel_icon('menu') ?></button>
     <a class="brand" href="<?= e(base_url('panel/index.php')) ?>"><span class="identity-logos"><img src="<?= e($logos['school_logo']) ?>" alt="Logo SMK JAYA BUANA" width="48" height="48"><img src="<?= e($logos['bkk_logo']) ?>" alt="Logo Pusat Pengembangan Karir Peserta" width="48" height="48"></span><span><?= e(app_config('name')) ?></span></a>
     <div class="navbar-account">
-        <a class="application-notification icon-button" href="<?= e(base_url('panel/lamaran/?status=belum_dilihat')) ?>" aria-label="<?= e($applicationNotification) ?>" title="<?= e($applicationNotification) ?>">
+        <?php if(user_can($user,'lamaran')): ?><a class="application-notification icon-button" href="<?= e(base_url('panel/lamaran/?status=belum_dilihat')) ?>" aria-label="<?= e($applicationNotification) ?>" title="<?= e($applicationNotification) ?>">
             <?= panel_icon('bell') ?>
             <?php if($newApplications > 0): ?><span class="application-notification-count" aria-hidden="true"><?= $newApplications > 99 ? '99+' : $newApplications ?></span><?php endif; ?>
-        </a>
+        </a><?php endif; ?>
         <div class="account-dropdown">
             <button class="account-avatar account-menu-toggle" type="button" aria-label="Menu akun" aria-expanded="false" aria-controls="account-menu"><?php $profilePhoto=account_photo_url($user); if($profilePhoto): ?><img class="account-profile-photo" src="<?= e($profilePhoto) ?>" alt="" width="32" height="32"><?php else: ?><?= panel_icon('akun') ?><?php endif; ?></button>
             <div class="account-menu" id="account-menu" hidden>
@@ -21,6 +21,6 @@ $applicationNotification = $newApplications > 0 ? $newApplications.' lamaran bel
                 <form action="<?= e(base_url('auth/logout.php')) ?>" method="post"><?= csrf_field() ?><button class="account-menu-logout" type="submit"><?= panel_icon('logout') ?>Keluar</button></form>
             </div>
         </div>
-        <a class="account-link" href="<?= e(base_url('panel/akun/profil.php')) ?>"><strong><?= e($user['nama']) ?></strong><small><?= $user['role']==='admin'?'Administrator':'Pengguna' ?></small></a>
+        <a class="account-link" href="<?= e(base_url('panel/akun/profil.php')) ?>"><strong><?= e($user['nama']) ?></strong><small><?= $user['role']==='admin'?'Admin':'Staf BKK' ?></small></a>
     </div>
 </header>
