@@ -1,5 +1,13 @@
 # Progres BKK SMK JAYA BUANA
 
+## Pengembangan lanjutan — Tahap 2 PKL (6 November 2026)
+
+- Modul penempatan PKL memakai identitas dari tabel siswa lama dan tabel penempatan/jurnal/laporan tambahan. Kolom tempat_pkl/tahun_pkl lama tidak ditimpa; beberapa periode per siswa didukung.
+- Penugasan guru dan pembimbing industri berupa data penempatan, tanpa akun baru. Operasional hanya Admin atau Staf dengan izin pkl dan peserta, termasuk unduhan Excel/HTML.
+- Jurnal tanggal/kegiatan/catatan, rekap Senin–Minggu ISO, laporan akhir teks dan dokumen cetak, validasi periode, CSRF, pengikatan jurnal ke penempatan, dan pemeriksaan versi tersedia.
+- Migrasi 019 bersifat tambahan dan diuji impor ulang. Database asli belum dimigrasikan atau diisi data uji. Panduan penerapan, file, penggunaan, dan batas pengujian terdapat di docs/PKL.md.
+- 63 pemeriksaan HTTP pada salinan aplikasi/database dan data sintetis lulus; tidak ada warning/error PHP. Regresi CLI dan sintaks PHP juga diperiksa. Tidak melanjutkan tahap lain.
+
 ## Tahap 1 — Fondasi proyek
 
 - Dibuat struktur direktori utama tanpa file CRUD kosong.

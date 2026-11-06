@@ -6,7 +6,7 @@ function permission_modules(): array
     return ['berita'=>'Berita & kegiatan','lowongan'=>'Lowongan','lamaran'=>'Lamaran & berkas pribadi',
         'program'=>'Program BMW SAKTI','tracer-study'=>'Data alumni & tautan formulir','media'=>'Media publik',
         'mitra'=>'Mitra','whatsapp'=>'Kontak & pesan WhatsApp','peserta'=>'Data siswa / PKL',
-        'capaian-pembelajaran'=>'Capaian pembelajaran','absensi'=>'Absensi & data peserta',
+        'pkl'=>'Praktik Kerja Lapangan (PKL)','capaian-pembelajaran'=>'Capaian pembelajaran','absensi'=>'Absensi & data peserta',
         'pemateri'=>'Pemateri & dokumen','program-minat'=>'Minat & pertanyaan',
         'mou'=>'Dokumen MoU (dicadangkan)','biaya-perjalanan'=>'Biaya perjalanan (dicadangkan)'];
 }
@@ -28,7 +28,7 @@ function user_can(array $user, string $module): bool
 
 function require_permission(array $user, string $module): void
 {
-    $dependencies = ['whatsapp'=>['lamaran','tracer-study'], 'absensi'=>['peserta']];
+    $dependencies = ['whatsapp'=>['lamaran','tracer-study'], 'absensi'=>['peserta'], 'pkl'=>['peserta']];
     $allowed=user_can($user, $module);
     foreach ($dependencies[$module] ?? [] as $required) { $allowed=$allowed && user_can($user,$required); }
     if (!$allowed) {

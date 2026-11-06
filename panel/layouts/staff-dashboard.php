@@ -7,6 +7,7 @@ panel_start($user,'Dashboard','dashboard');
 <?php $available=0; foreach(permission_modules() as $module=>$label):
     if(!user_can($user,$module) || in_array($module,['mou','biaya-perjalanan'],true)){continue;}
     if($module==='absensi'&&!user_can($user,'peserta')){continue;}
+    if($module==='pkl'&&!user_can($user,'peserta')){continue;}
     if($module==='whatsapp'&&(!user_can($user,'lamaran')||!user_can($user,'tracer-study'))){continue;}
     $available++;
 ?><section class="card"><h2><a href="<?= e(base_url('panel/'.$module.'/')) ?>"><?= e($label) ?></a></h2></section><?php endforeach; ?>
