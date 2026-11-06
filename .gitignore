@@ -20,6 +20,7 @@
 /storage/sessions/
 /storage/media-trash/
 /storage/application-files/
+/storage/mou/
 /storage/logs/*
 !/storage/logs/.gitkeep
 /uploads/*

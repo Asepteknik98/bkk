@@ -8,7 +8,7 @@ function permission_modules(): array
         'mitra'=>'Mitra','whatsapp'=>'Kontak & pesan WhatsApp','peserta'=>'Data siswa / PKL',
         'pkl'=>'Praktik Kerja Lapangan (PKL)','capaian-pembelajaran'=>'Capaian pembelajaran','absensi'=>'Absensi & data peserta',
         'pemateri'=>'Pemateri & dokumen','kelas-industri'=>'Kelas Industri (operasional)','program-minat'=>'Minat & pertanyaan',
-        'mou'=>'Dokumen MoU (dicadangkan)','biaya-perjalanan'=>'Perjalanan dinas & biaya'];
+        'mou'=>'Riwayat & dokumen MoU','biaya-perjalanan'=>'Perjalanan dinas & biaya'];
 }
 
 function user_can(array $user, string $module): bool
@@ -28,7 +28,7 @@ function user_can(array $user, string $module): bool
 
 function require_permission(array $user, string $module): void
 {
-    $dependencies = ['whatsapp'=>['lamaran','tracer-study'], 'absensi'=>['peserta'], 'pkl'=>['peserta'], 'kelas-industri'=>['peserta'], 'biaya-perjalanan'=>['pkl','peserta']];
+    $dependencies = ['whatsapp'=>['lamaran','tracer-study'], 'absensi'=>['peserta'], 'pkl'=>['peserta'], 'kelas-industri'=>['peserta'], 'mou'=>['mitra'], 'biaya-perjalanan'=>['pkl','peserta']];
     $allowed=user_can($user, $module);
     foreach ($dependencies[$module] ?? [] as $required) { $allowed=$allowed && user_can($user,$required); }
     if (!$allowed) {

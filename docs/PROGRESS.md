@@ -1,5 +1,12 @@
 # Progres BKK SMK JAYA BUANA
 
+## Pengembangan lanjutan — Tahap 5 Mitra, Kampus dan MoU (6 November 2026)
+
+- Mempertahankan mitra sebagai data induk; profil tambahan memuat klaster industri dalam/luar negeri, bidang, alamat, negara, dan PIC privat. Direktori Kampus Dalam Negeri memakai negara Indonesia yang sudah diisi; data lama tidak diklasifikasi otomatis.
+- Riwayat MoU menyimpan nomor, tanggal, dan PDF privat pada storage/mou. Status Belum Berlaku/Aktif/Kedaluwarsa dihitung per hari WIB; perpanjangan menambah dokumen baru yang merujuk dokumen lama. Riwayat tidak ditimpa.
+- Izin mou+mitra diperiksa untuk URL/unggah/unduh. PDF tidak dimasukkan ke media publik; kegagalan penyimpanan membersihkan unggahan baru dengan perlindungan dokumen tersimpan. Data PIC dan MoU tidak masuk beranda publik.
+- Migrasi tambahan 022 disiapkan dan diuji impor ulang; database asli belum dimigrasikan. Panduan: docs/MITRA-MOU.md. 73 pemeriksaan HTTP Tahap 5, 77 regresi Tahap 4, 70 regresi Tahap 3, regresi CLI, sintaks 199 PHP dan diff check lulus. Tidak melanjutkan tahap lain.
+
 ## Pengembangan lanjutan — Tahap 4 BMW Sakti dan Kelas Industri (6 November 2026)
 
 - Deskripsi publik BMW Sakti memakai settings lama dengan draft/publikasi, editor berizin Program, CSRF dan versi. Navigasi publik/panel ditambahkan tanpa mengganti katalog program lama.
