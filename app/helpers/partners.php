@@ -60,6 +60,12 @@ function partner_save(array $data,?array $profile,?int $version,?int $id,int $ac
         $oldProfile=$ready&&$id?panel_query('SELECT * FROM mitra_profiles WHERE mitra_id=:id FOR UPDATE',['id'=>$id])->fetch():null;
         if($profile&&(int)($oldProfile['version']??0)!==$version){throw new InvalidArgumentException('Mitra sudah diubah pengelola lain. Muat ulang sebelum menyimpan.');}
         if($old&&$old['jenis']==='perusahaan'&&$data['jenis']==='kampus'){
+            foreach(['industry_forum_invitees','industry_idea_links'] as $table){
+                if(panel_query('SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=:table',['table'=>$table])->fetchColumn()
+                    &&panel_query('SELECT mitra_id FROM '.$table.' WHERE mitra_id=:id LIMIT 1',['id'=>$id])->fetch()){
+                    throw new InvalidArgumentException('Perusahaan masih direferensikan Sarasehan atau tautan mitra. Jenis tidak dapat diganti menjadi kampus.');
+                }
+            }
             $hasClasses=(bool)panel_query("SELECT 1 FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='industry_classes'")->fetchColumn();
             if($hasClasses&&panel_query('SELECT id FROM industry_classes WHERE mitra_id=:id LIMIT 1',['id'=>$id])->fetch()){
                 throw new InvalidArgumentException('Perusahaan ini masih dipakai Kelas Industri. Jenis mitra tidak dapat diganti menjadi kampus.');

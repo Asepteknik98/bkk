@@ -1,5 +1,12 @@
 # Progres BKK SMK JAYA BUANA
 
+## Pengembangan lanjutan — Tahap 6 Sarasehan dan Kotak Ide Industri (6 November 2026)
+
+- Jadwal Sarasehan memuat nama, tanggal/jam WIB, lokasi/tautan, mitra undangan, PIC sekolah dan PIC per mitra; data mitra/profil dipakai kembali. Izin sarasehan+mitra diterapkan termasuk simpan dan Excel.
+- Kotak Ide privat memakai izin ide-industri+mitra. Tautan perusahaan aktif memakai token hash, batas waktu, pencabutan/rotasi, sekali kirim dan binding formulir agar tidak berpindah perusahaan. Tidak memberikan login/dashboard atau akses riwayat kepada mitra.
+- Isi/kontak hanya dibaca pengelola berizin; konfirmasi mitra tanpa data usulan, input di-escape, CSRF dan pembatas pengiriman tersedia. Perubahan status tidak menimpa isi/kontak asli. Data tidak ditambahkan ke publik atau ekspor Sarasehan.
+- Migrasi tambahan 023 disiapkan dan diuji impor ulang; database asli belum dimigrasikan. 86 pemeriksaan HTTP Tahap 6, 73 regresi HTTP Tahap 5, 77 regresi HTTP Tahap 4, regresi CLI, sintaks 212 PHP dan diff check lulus. Panduan/batas pengujian: docs/SARASEHAN-KOTAK-IDE.md. Tidak melanjutkan tahap lain.
+
 ## Pengembangan lanjutan — Tahap 5 Mitra, Kampus dan MoU (6 November 2026)
 
 - Mempertahankan mitra sebagai data induk; profil tambahan memuat klaster industri dalam/luar negeri, bidang, alamat, negara, dan PIC privat. Direktori Kampus Dalam Negeri memakai negara Indonesia yang sudah diisi; data lama tidak diklasifikasi otomatis.

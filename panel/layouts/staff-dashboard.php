@@ -7,6 +7,7 @@ panel_start($user,'Dashboard','dashboard');
 <?php $available=0; foreach(permission_modules() as $module=>$label):
     if(!user_can($user,$module)){continue;}
     if($module==='mou'&&!user_can($user,'mitra')){continue;}
+    if(in_array($module,['sarasehan','ide-industri'],true)&&!user_can($user,'mitra')){continue;}
     if($module==='absensi'&&!user_can($user,'peserta')){continue;}
     if($module==='pkl'&&!user_can($user,'peserta')){continue;}
     if($module==='kelas-industri'&&!user_can($user,'peserta')){continue;}

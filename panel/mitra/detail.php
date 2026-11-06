@@ -6,6 +6,7 @@ try{$partner=partner_find($id);}catch(InvalidArgumentException){panel_not_found(
 panel_start($user,'Detail mitra','mitra');
 ?>
 <div class="page-actions"><h1><?= e($partner['nama']) ?></h1><a href="<?= e(base_url('panel/mitra/')) ?>">Daftar mitra</a><a href="<?= e(base_url('panel/mitra/edit.php?id='.$id)) ?>">Edit profil / PIC</a><?php if(user_can($user,'mou')): ?><a href="<?= e(base_url('panel/mou/?mitra_id='.$id)) ?>">Riwayat MoU</a><?php endif; ?></div>
+<?php if($partner['jenis']==='perusahaan'&&user_can($user,'ide-industri')): ?><p><a href="<?= e(base_url('panel/ide-industri/tautan.php?mitra_id='.$id)) ?>">Kelola tautan Kotak Ide untuk mitra ini</a></p><?php endif; ?>
 <section class="card"><?php if($partner['logo']&&managed_upload_path($partner['logo'])): ?><img src="<?= e(base_url($partner['logo'])) ?>" alt="Logo <?= e($partner['nama']) ?>" width="96"><?php endif; ?>
 <dl class="response-details"><dt>Jenis</dt><dd><?= $partner['jenis']==='kampus'?'Kampus':'Perusahaan' ?></dd><dt>Klaster</dt><dd><?= e($partner['jenis']==='kampus'?($partner['negara']==='Indonesia'?'Kampus Dalam Negeri':'Negara belum dilengkapi'):(partner_clusters()[$partner['klaster']]??'Belum diklasifikasikan')) ?></dd>
 <?php foreach(partner_profile_fields() as $key=>[$label,$max]): ?><dt><?= e($label) ?></dt><dd><?= nl2br(e($partner[$key]?:'Belum diisi')) ?></dd><?php endforeach; ?>
