@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__,2).'/app/helpers/panel.php';
 require_once APP_ROOT.'/app/helpers/validation.php';
 $user = require_role('admin','staf_bkk');
+require_once APP_ROOT.'/app/helpers/careers.php';
 $statuses = ['baru'=>'Baru','diproses'=>'Diproses','diterima'=>'Diterima','ditolak'=>'Ditolak'];
 $status = input_text($_GET, 'status');
 $q = input_text($_GET, 'q');
@@ -15,6 +16,7 @@ if ($q !== '') {
     $where .= " AND (nama LIKE :nama ESCAPE '!' OR email LIKE :email ESCAPE '!' OR posisi LIKE :posisi ESCAPE '!' OR perusahaan LIKE :perusahaan ESCAPE '!')";
     foreach (['nama','email','posisi','perusahaan'] as $field) { $params[$field] = $pattern; }
 }
+$where.=career_legacy_visibility($user);
 $total = (int)panel_query('SELECT COUNT(*) FROM lamaran WHERE '.$where, $params)->fetchColumn();
 $pages = max(1,(int)ceil($total/25)); $page = min($pages,positive_id($_GET['page'] ?? '1') ?? 1);
 $rows = panel_query('SELECT id,nama,email,posisi,perusahaan,status,created_at FROM lamaran WHERE '.$where.' ORDER BY created_at DESC,id DESC LIMIT :limit OFFSET :offset', $params+['limit'=>25,'offset'=>($page-1)*25])->fetchAll();

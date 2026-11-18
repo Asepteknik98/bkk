@@ -3,10 +3,12 @@ if (!isset($user) || $user['role']!=='staf_bkk') { http_response_code(403); exit
 panel_start($user,'Dashboard','dashboard');
 ?>
 <h1>Dashboard Staf BKK</h1><p>Selamat datang, <?= e($user['nama']) ?>. Modul berikut tersedia sesuai izin Admin.</p>
+<?php require APP_ROOT.'/app/layouts/career-dashboard.php'; ?>
 <div class="summary-grid">
 <?php $available=0; foreach(permission_modules() as $module=>$label):
     if(!user_can($user,$module)){continue;}
     if($module==='mou'&&!user_can($user,'mitra')){continue;}
+    if($module==='hasil-alumni'&&!user_can($user,'tracer-study')){continue;}
     if(in_array($module,['sarasehan','ide-industri'],true)&&!user_can($user,'mitra')){continue;}
     if($module==='absensi'&&!user_can($user,'peserta')){continue;}
     if($module==='pkl'&&!user_can($user,'peserta')){continue;}

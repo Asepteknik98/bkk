@@ -35,7 +35,12 @@ function alumni_link_update(string $hash,array $input): array
     try{
         $owner=alumni_link_find($hash,true);
         if(!$owner){throw new InvalidArgumentException('Tautan tidak berlaku lagi.');}
-        $data=alumni_bound_input($input,$owner);$errors=tracer_errors($data);
+        $data=alumni_bound_input($input,$owner);
+        require_once __DIR__.'/careers.php';
+        $careerEnabled=employment_ready();$work=$careerEnabled?career_work_input($input):null;
+        if($work&&$data['status_kegiatan']==='bekerja'){$data['nama_perusahaan']=$work['kerja_perusahaan'];$data['posisi_pekerjaan']=$work['kerja_posisi'];}
+        $errors=tracer_errors($data);
+        if($work){$errors=array_merge($errors,career_work_errors($work));if($data['status_kegiatan']==='bekerja'&&$work['status_kerja']!=='sudah_bekerja'){$errors[]='Status kegiatan Bekerja harus dilengkapi data sudah mulai bekerja.';}}
         if($errors){db()->rollBack();return $errors;}
         $values=[];$set=[];
         foreach(tracer_fields() as $field=>$label){
@@ -45,6 +50,7 @@ function alumni_link_update(string $hash,array $input): array
         $values+=['id'=>$owner['tracer_id'],'consent'=>(int)$data['wa_consent'],'version'=>TRACER_CONSENT_VERSION];
         $query=db()->prepare('UPDATE tracer_responses SET '.implode(',',$set).',wa_consent=:consent,wa_consent_at=IF(:consent_time=1,UTC_TIMESTAMP(),NULL),persetujuan_data=1,persetujuan_at=UTC_TIMESTAMP(),versi_persetujuan=:version WHERE id=:id');
         $values['consent_time']=(int)$data['wa_consent'];$query->execute($values);
+        if($careerEnabled){career_work_save_locked((int)$owner['tracer_id'],$work);}
         // Preserve prior WhatsApp opt-out; a form submission never silently removes it.
         $query=db()->prepare('UPDATE alumni_form_links SET used_at=UTC_TIMESTAMP() WHERE id=:id');$query->execute(['id'=>$owner['link_id']]);
         db()->commit();return [];

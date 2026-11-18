@@ -3,7 +3,8 @@
 require_once APP_ROOT . '/app/helpers/accounts.php';
 require_once APP_ROOT . '/app/helpers/public.php';
 $logos = site_logos();
-$newApplications = user_can($user,'lamaran') ? (int)panel_query('SELECT COUNT(*) FROM lamaran WHERE viewed_at IS NULL')->fetchColumn() : 0;
+require_once APP_ROOT.'/app/helpers/careers.php';
+$newApplications = user_can($user,'lamaran') ? (int)panel_query('SELECT COUNT(*) FROM lamaran WHERE viewed_at IS NULL'.career_legacy_visibility($user))->fetchColumn() : 0;
 $applicationNotification = $newApplications > 0 ? $newApplications.' lamaran belum dilihat' : 'Tidak ada lamaran belum dilihat';
 ?>
 <header class="navbar">

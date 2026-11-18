@@ -1,5 +1,12 @@
 # Progres BKK SMK JAYA BUANA
 
+## Pengembangan lanjutan — Tahap 7 Lowongan dan hasil alumni (6 November 2026)
+
+- Memperbaiki URL lowongan yang semula dikosongkan. Lowongan baru/edit wajib URL rekrutmen dan konfirmasi pengelola, dengan jenis hubungan kerja terkelola. Jenis awal Harian Lepas/PKWT/PKWTT tanpa uraian hukum rekaan; penjelasan/rujukan diisi sekolah.
+- Tautan alumni Tahap 1 dipakai untuk pencatatan lamaran, hasil seleksi dan rincian kerja; tidak membuat akun/token terpisah. Seleksi selesai wajib hasil Lolos/Tidak Lolos. Belum Mengisi dan Dalam Proses dibedakan.
+- Dashboard internal menampilkan nama/hasil dan rekap otomatis. Keterserapan hanya dari laporan sudah mulai bekerja lengkap, terpisah dari jumlah alumni Lolos. Deduplikasi NISN dan batas populasi tracer dijelaskan di dashboard; data lama tidak ditebak sebagai pekerjaan aktual.
+- Migrasi tambahan 024 disiapkan dan diuji impor ulang; database asli belum dimigrasikan. 86 pemeriksaan HTTP Tahap 7, 86 regresi Tahap 6, 73 regresi Tahap 5, regresi CLI, sintaks 221 PHP dan diff check lulus. Panduan/batas pengujian: docs/LOWONGAN-HASIL-ALUMNI.md. Tidak melanjutkan tahap lain.
+
 ## Pengembangan lanjutan — Tahap 6 Sarasehan dan Kotak Ide Industri (6 November 2026)
 
 - Jadwal Sarasehan memuat nama, tanggal/jam WIB, lokasi/tautan, mitra undangan, PIC sekolah dan PIC per mitra; data mitra/profil dipakai kembali. Izin sarasehan+mitra diterapkan termasuk simpan dan Excel.

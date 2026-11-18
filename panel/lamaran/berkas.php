@@ -6,6 +6,7 @@ $user = require_role('admin','staf_bkk');
 $id = positive_id($_GET['id'] ?? '');
 $file = $id ? panel_query('SELECT b.* FROM lamaran_berkas b INNER JOIN lamaran l ON l.id=b.lamaran_id WHERE b.id=:id',['id'=>$id])->fetch() : null;
 if (!$file || !preg_match('/^[a-f0-9]{48}\.(pdf|jpg|png)$/D',$file['nama_simpan'])) { panel_not_found(); }
+require_once APP_ROOT.'/app/helpers/careers.php';career_application_guard($user,(int)$file['lamaran_id']);
 $path = application_file_directory().'/'.$file['nama_simpan'];
 if (!is_file($path)) { panel_not_found(); }
 session_write_close();

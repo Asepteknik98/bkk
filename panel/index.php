@@ -22,6 +22,7 @@ $speakerCount=(int)panel_query('SELECT COUNT(*) FROM speakers')->fetchColumn();
 panel_start($user,'Dashboard','dashboard');
 ?>
 <div class="dashboard-view"><header class="dashboard-heading"><h1><?= panel_icon('dashboard') ?> Dashboard</h1><p>Selamat datang, <?= e($user['nama']) ?>. Berikut ringkasan data BKK saat ini.</p></header>
+<?php require APP_ROOT.'/app/layouts/career-dashboard.php'; ?>
 <div class="summary-grid">
 <?php foreach(['berita'=>'Berita','lowongan'=>'Lowongan','program'=>'Program'] as $key=>$label): ?><section class="card"><span class="stat-icon"><?= panel_icon($key) ?></span><h2><a href="<?= e(base_url('panel/'.$key.'/')) ?>"><?= $label ?></a></h2><p><strong><?= array_sum($counts[$key]) ?></strong> total</p><p><?= (int)($counts[$key]['published']??0) ?> published · <?= (int)($counts[$key]['draft']??0) ?> draft</p></section><?php endforeach; ?>
 <section class="card"><span class="stat-icon"><?= panel_icon('lowongan') ?></span><h2><a href="<?= e(base_url('panel/lowongan/?status=open')) ?>">Lowongan dibuka</a></h2><p><strong><?= $open ?></strong> aktif</p><p>Published, batas lamaran belum lewat (WIB).</p></section>
