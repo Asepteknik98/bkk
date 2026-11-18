@@ -1874,3 +1874,23 @@ html[data-theme=dark] #career-results .career-status-working { background:#203c3
 }
 
 .panel-page .sidebar nav { flex-wrap:nowrap; overflow-x:hidden; }
+
+/* Vacancy list: spreadsheet-style cell boundaries. */
+.panel-page .vacancy-sheet { --sheet-line:#becddd; border:1px solid var(--sheet-line); border-radius:4px; }
+.panel-page .vacancy-sheet table { width:100%; border-collapse:collapse; border-spacing:0; }
+.panel-page .vacancy-sheet th,
+.panel-page .vacancy-sheet td { border:1px solid var(--sheet-line); padding:12px 14px; vertical-align:middle; }
+.panel-page .vacancy-sheet thead th { background:#e9f0f8; color:#284969; font-weight:650; }
+.panel-page .vacancy-sheet th:first-child,
+.panel-page .vacancy-sheet td:first-child { border-left:0; }
+.panel-page .vacancy-sheet th:last-child,
+.panel-page .vacancy-sheet td:last-child { border-right:0; }
+.panel-page .vacancy-sheet thead tr:first-child th { border-top:0; }
+.panel-page .vacancy-sheet tbody tr:last-child td { border-bottom:0; }
+.panel-page .vacancy-sheet tbody tr:hover,
+.panel-page .vacancy-sheet tbody tr:focus-within { background:var(--panel-soft); }
+html[data-theme=dark] .panel-page .vacancy-sheet { --sheet-line:#4b6075; }
+html[data-theme=dark] .panel-page .vacancy-sheet thead th { background:#263b50; color:#dae7f5; }
+@media(max-width:900px) {
+    .panel-page .vacancy-sheet table { min-width:800px; }
+}
