@@ -69,7 +69,7 @@ if (document.querySelector('.panel-page')) {
         if (panelRoot.dataset.drawer !== 'open') return;
         if (event.key === 'Escape') { closeDrawer(); return; }
         if (event.key === 'Tab') {
-            const controls = Array.from(sidebar.querySelectorAll('a,button')).filter(el => el.getClientRects().length);
+            const controls = Array.from(sidebar.querySelectorAll('a,button,summary')).filter(el => el.getClientRects().length);
             const first = controls[0], last = controls[controls.length - 1];
             if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
             else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
@@ -85,6 +85,28 @@ if (document.querySelector('.panel-page')) {
         panelRoot.dataset.sidebar = panelRoot.dataset.sidebar === 'collapsed' ? 'expanded' : 'collapsed';
         savePreference('bkk.panel.sidebar', panelRoot.dataset.sidebar);
         syncCollapse();
+    });
+    // One visible menu group at a time; native details still work without JS.
+    const sidebarGroups = [...sidebar.querySelectorAll('.sidebar-menu-group')];
+    const syncGroup = group => group.querySelector('summary').setAttribute('aria-expanded', String(group.open));
+    sidebarGroups.forEach(group => {
+        syncGroup(group);
+        group.addEventListener('toggle', () => {
+            if (group.open) sidebarGroups.forEach(other => {
+                if (other !== group && other.open) { other.open = false; syncGroup(other); }
+            });
+            syncGroup(group);
+        });
+        group.querySelector('summary').addEventListener('click', event => {
+            if (!mobile.matches && panelRoot.dataset.sidebar === 'collapsed') {
+                event.preventDefault();
+                panelRoot.dataset.sidebar = 'expanded';
+                savePreference('bkk.panel.sidebar', 'expanded');
+                syncCollapse();
+                group.open = true;
+                syncGroup(group);
+            }
+        });
     });
     const syncTheme = () => {
         const dark = panelRoot.dataset.theme === 'dark';
