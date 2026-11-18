@@ -23,7 +23,7 @@
 .latest-strip { min-height:40px; gap:14px; padding-top:8px; padding-bottom:8px; font-size:.75rem; }
 .latest-label { display:inline-flex; gap:8px; align-items:center; color:#765523; }
 .latest-label>span { color:#bd8b31; }
-.home-intro { position:relative; gap:24px; align-items:center; padding:20px 24px; margin:16px 0 24px; border:1px solid #dfe7f4; border-radius:14px; background-color:#f8fbff; background-image:linear-gradient(110deg,#ffffffed,#edf4fff2),url('../images/batik-sekolah.png'); background-size:auto,220px auto; background-repeat:no-repeat,repeat; box-shadow:none; }
+.home-intro { position:relative; gap:24px; align-items:center; padding:20px 24px; margin:16px 0 24px; border:1px solid #dfe7f4; border-radius:14px; background-color:#f8fbff; background-image:linear-gradient(110deg,#ffffffed,#edf4fff2),url('../images/batik-sekolah.webp'); background-size:auto,220px auto; background-repeat:no-repeat,repeat; box-shadow:none; }
 .home-intro>div:first-child { min-width:0; }
 .home-intro .eyebrow { font-size:.6rem; letter-spacing:.08em; margin-bottom:8px; }
 .home-intro h1 { font-size:clamp(1.4rem,2.2vw,1.9rem); line-height:1.25; }
@@ -174,7 +174,7 @@
 .pagination-nav { gap:14px; }
 .topbar,.site-footer {
     background-color:#112b47;
-    background-image:linear-gradient(110deg,#112b47f5,#193955e8),url('../images/batik-sekolah.png');
+    background-image:linear-gradient(110deg,#112b47f5,#193955e8),url('../images/batik-sekolah.webp');
     background-size:auto,186px auto;
 }
 .site-header { background:#fff; }
@@ -906,3 +906,36 @@
     .profile-page .profile-social-links>a,
     .profile-page .profile-social-links>.social-unavailable { min-height:44px; }
 }
+
+/* Readability and touch refinements; keep the compact portal layout. */
+.site-footer-compact .footer-brand { font-size:.85rem; }
+.site-footer-compact .footer-links { flex-wrap:wrap; gap:0 14px; }
+.site-footer-compact .footer-links a { min-height:44px; font-size:.75rem; white-space:normal; }
+.site-footer-compact .footer-compact-bottom>span { font-size:.7rem; line-height:1.6; }
+.site-footer-compact .footer-meta-links>a,
+.site-footer-compact .footer-meta-links>.social-unavailable { min-height:44px; }
+.portal-page .home-actions .button { min-height:44px; }
+.portal-page .home-program-link { min-height:44px; }
+.portal-page .profile-page .surface p,
+.portal-page .profile-page .contact-list { font-size:.875rem; line-height:1.75; }
+.portal-page .profile-page .page-heading>p:last-child { font-size:.875rem; }
+.portal-page .profile-page .surface h2 { font-size:1rem; }
+.portal-page .news-grid>.news-story-card .text-link { display:inline-flex; align-items:center; min-height:44px; font-size:.75rem; }
+@media(max-width:767.98px) {
+    .site-footer-compact .footer-links { justify-content:center; gap:0 14px; }
+    .site-footer-compact .footer-links a { font-size:.75rem; }
+    .site-footer-compact .footer-compact-bottom>span { font-size:.7rem; }
+    .portal-page .home-intro-content>p { font-size:.875rem; line-height:1.75; }
+    .portal-page .public-tracer-page .tracer-form label { font-size:.875rem; }
+    .portal-page .public-tracer-page .tracer-form p { font-size:.8125rem; line-height:1.75; }
+    .portal-page .public-tracer-page .page-heading>p:last-child { font-size:.875rem; }
+}
+
+/* Anchor screen-reader-only card labels inside the scrollable card. */
+.news-story-card .text-link { position:relative; }
+
+.portal-page .news-slider-controls button { width:44px; height:44px; }
+
+.portal-page .public-tracer-page .tracer-form input:not([type=checkbox]),
+.portal-page .public-tracer-page .tracer-form select,
+.portal-page .public-tracer-page .tracer-form textarea { font-size:16px; min-height:44px; }
