@@ -6,7 +6,7 @@ require_once APP_ROOT . '/app/helpers/application-files.php';
 $slug = input_text($_GET, 'slug');
 $job = valid_text($slug, 191) ? (public_query("SELECT * FROM lowongan WHERE slug=:slug AND status='published' LIMIT 1", ['slug'=>$slug])[0] ?? null) : null;
 if (!$job) { http_response_code(empty($GLOBALS['public_database_unavailable']) ? 404 : 503); require APP_ROOT.'/404.php'; exit; }
-$data = application_input([]); $errors = []; $success = false;
+$data = application_input([]); $errors = []; $success = false; $usedSubmission = false;
 $keyName = 'application_key_' . $job['id'];
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if ((int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0 && empty($_POST) && empty($_FILES)) {
@@ -14,6 +14,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         exit('Ukuran unggahan melebihi batas server. Kembali ke formulir dan pilih berkas maksimal 2 MB per berkas, total maksimal 6 MB.');
     }
     require_post_csrf();
+    unset($_SESSION['application_received_' . $job['id']]);
     $data = application_input($_POST);
     $errors = application_errors($data);
     if (($_POST['consent'] ?? '') !== '1') { $errors[] = 'Persetujuan pengiriman data wajib dicentang.'; }
@@ -27,19 +28,30 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $check = $pdo->prepare('SELECT * FROM lowongan WHERE id=:id FOR UPDATE');
             $check->execute(['id'=>$job['id']]); $current = $check->fetch();
             if (!$current || !job_is_open($current)) { throw new InvalidArgumentException('Lowongan ini sudah tidak menerima lamaran.'); }
-            $exists = $pdo->prepare('SELECT id FROM lamaran WHERE submission_key=:key');
+            $exists = $pdo->prepare('SELECT * FROM lamaran WHERE submission_key=:key');
             $exists->execute(['key'=>$key]);
-            if (!$exists->fetchColumn()) {
+            $existing = $exists->fetch();
+            $waConsent=($_POST['wa_consent']??'')==='1';
+            if ($existing) {
+                $usedSubmission = true;
+                $reusedMessage = 'Formulir ini sudah pernah dikirim. Buka formulir baru untuk membuat lamaran lain.';
+                if ((int)$existing['lowongan_id'] !== (int)$job['id'] || array_diff_assoc($data, $existing) || (bool)$existing['wa_consent'] !== $waConsent) {
+                    throw new InvalidArgumentException($reusedMessage);
+                }
+                $files = validate_application_files($_FILES);
+                if (!application_files_match($pdo, (int)$existing['id'], $files)) {
+                    throw new InvalidArgumentException($reusedMessage);
+                }
+            } else {
                 if ((int)($_SESSION['last_application_at'] ?? 0) > time()-60) { throw new InvalidArgumentException('Tunggu satu menit sebelum mengirim lamaran berikutnya.'); }
                 $files = validate_application_files($_FILES);
                 $insert = $pdo->prepare('INSERT INTO lamaran (lowongan_id,posisi,perusahaan,nama,email,telepon,pendidikan,alamat,pesan,submission_key,created_at,wa_consent,wa_consent_at) VALUES (:lowongan_id,:posisi,:perusahaan,:nama,:email,:telepon,:pendidikan,:alamat,:pesan,:submission_key,:created_at,:wa_consent,:wa_consent_at)');
-                $waConsent=($_POST['wa_consent']??'')==='1';
                 $insert->execute($data + ['wa_consent'=>(int)$waConsent,'wa_consent_at'=>$waConsent?date('Y-m-d H:i:s'):null,'lowongan_id'=>$current['id'],'posisi'=>$current['posisi'],'perusahaan'=>$current['perusahaan'],'submission_key'=>$key,'created_at'=>(new DateTimeImmutable('now',new DateTimeZone('Asia/Jakarta')))->format('Y-m-d H:i:s')]);
                 save_application_files($pdo, (int)$pdo->lastInsertId(), $files, $moved);
             }
             $pdo->commit();
             $_SESSION['last_application_at'] = time();
-            $_SESSION['application_received_' . $job['id']] = true;
+            $_SESSION['application_received_' . $job['id']] = $key;
             redirect('lowongan-kerja/lamar.php?slug='.rawurlencode($slug).'&terkirim=1', 303);
         } catch (Throwable $exception) {
             if (db()->inTransaction()) { db()->rollBack(); }
@@ -50,7 +62,15 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     }
     if ($errors) { http_response_code(422); }
 }
-$success = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' && ($_GET['terkirim'] ?? '') === '1' && !empty($_SESSION['application_received_' . $job['id']]);
+$receipt = $_SESSION['application_received_' . $job['id']] ?? null;
+$success = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' && ($_GET['terkirim'] ?? '') === '1'
+    && is_string($receipt) && isset($_SESSION[$keyName]) && hash_equals($_SESSION[$keyName], $receipt);
+// Keep the token for an exact POST replay, but never reuse it on a new form.
+if (!$success && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' && isset($_SESSION[$keyName])) {
+    $used = db()->prepare('SELECT 1 FROM lamaran WHERE submission_key=:key LIMIT 1');
+    $used->execute(['key'=>$_SESSION[$keyName]]);
+    if ($used->fetchColumn()) { unset($_SESSION[$keyName], $_SESSION['application_received_' . $job['id']]); }
+}
 if (!isset($_SESSION[$keyName])) { $_SESSION[$keyName] = bin2hex(random_bytes(32)); }
 $pageTitle = 'Lamar ' . $job['posisi']; $activePage = 'lowongan-kerja/';
 require APP_ROOT . '/app/layouts/header.php';
@@ -61,10 +81,12 @@ require APP_ROOT . '/app/layouts/header.php';
 <p class="eyebrow"><?= e($job['perusahaan']) ?></p><h1 data-public-icon="job">Lamar <?= e($job['posisi']) ?></h1>
 <?php if ($success): ?>
 <div role="status"><h2>Lamaran berhasil dikirim</h2><p>Lamaran Anda sudah masuk ke panel pengelola BKK untuk ditinjau. Pengelola dapat menghubungi Anda melalui email atau nomor telepon yang dicantumkan.</p><p>Pengiriman lamaran belum berarti diterima bekerja.</p></div>
+<?php if (job_is_open($job)): ?><a class="text-link" href="<?= e(base_url('lowongan-kerja/lamar.php?slug='.rawurlencode($slug))) ?>">Buka formulir baru</a><?php endif; ?>
 <?php elseif (!job_is_open($job)): ?><p>Lowongan ini sudah tidak menerima lamaran.</p>
 <?php else: ?>
 <p>Isi data dan unggah berkas untuk mengajukan lamaran melalui BKK. Data akan ditinjau pengelola BKK dan tidak otomatis dikirim ke perusahaan. Untuk mendaftar langsung ke perusahaan, gunakan tautan rekrutmen pada detail lowongan.</p>
 <?php if ($errors): ?><div class="alert" role="alert"><strong>Lamaran belum terkirim.</strong><ul><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
+<?php if ($usedSubmission && $errors): ?><p><a class="text-link" href="<?= e(base_url('lowongan-kerja/lamar.php?slug='.rawurlencode($slug))) ?>">Buka formulir baru</a></p><?php endif; ?>
 <form method="post" action="<?= e(base_url('lowongan-kerja/lamar.php?slug='.rawurlencode($slug))) ?>" class="application-form" enctype="multipart/form-data">
 <?= csrf_field() ?><input type="hidden" name="submission_key" value="<?= e($_SESSION[$keyName]) ?>">
 <fieldset class="application-personal"><legend data-public-icon="user">Data pelamar</legend>

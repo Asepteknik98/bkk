@@ -47,6 +47,26 @@ function application_file_directory(): string
     return APP_ROOT.'/storage/application-files';
 }
 
+/** Only identical data and uploads may replay a completed submission. */
+function application_files_match(PDO $pdo, int $applicationId, array $files): bool
+{
+    $query = $pdo->prepare('SELECT jenis,nama_simpan FROM lamaran_berkas WHERE lamaran_id=:id');
+    $query->execute(['id'=>$applicationId]);
+    $stored = $query->fetchAll(PDO::FETCH_ASSOC);
+    if (count($stored) !== count($files)) { return false; }
+    $stored = array_column($stored, null, 'jenis');
+    foreach ($files as $file) {
+        $name = $stored[$file['jenis']]['nama_simpan'] ?? '';
+        if (!preg_match('/^[a-f0-9]{48}\.(?:pdf|jpg|png)$/D', $name)) { return false; }
+        $path = application_file_directory().'/'.$name;
+        if (!is_file($path)) { return false; }
+        $savedHash = hash_file('sha256', $path);
+        $uploadedHash = hash_file('sha256', $file['tmp_name']);
+        if ($savedHash === false || $uploadedHash === false || !hash_equals($savedHash, $uploadedHash)) { return false; }
+    }
+    return true;
+}
+
 function save_application_files(PDO $pdo, int $applicationId, array $files, array &$moved): void
 {
     $directory = application_file_directory();
