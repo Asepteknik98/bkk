@@ -573,3 +573,23 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 
 - Header judul/sapaan dashboard Admin/Staf memakai batik sekolah lokal batik-sekolah.webp yang sudah ada, dengan lapisan gradasi lembut agar teks tetap jelas. Tema gelap memiliki lapisan gelap tersendiri. Ukuran header, border, kartu dan fungsi tidak berubah; URL relatif CSS tetap mendukung subfolder. Hanya assets/css/panel-theme.css berubah.
 - Diff check dan keberadaan aset lulus. Tidak mengubah SQL/data atau menjalankan ulang browser/database untuk perubahan latar ini.
+
+## Batik pada judul kartu dan grafik dashboard (20 November 2026)
+
+- Semua bidang judul kartu ringkasan dashboard Admin memakai batik sekolah lokal yang dibaurkan dengan warna kartu dan lapisan gelap agar teks putih tetap jelas. Header grafik Tracer, komposisi alumni dan PKL memakai batik dengan lapisan terang lembut; tema gelap memiliki lapisan gelap. Judul kartu dashboard Staf mengikuti pola batik lembut. Hover judul Admin tidak lagi menghilangkan gambar latar. Ukuran kartu, angka dan fungsi tidak berubah.
+- Hanya assets/css/panel-theme.css berubah; aset batik-sekolah.webp yang sama digunakan melalui URL relatif subfolder. Diff check lulus. Chrome pada fixture sembilan judul kartu/panel dengan CSS/aset asli, viewport 504/1182px, memastikan seluruhnya memakai latar batik dan tidak overflow; screenshot desktop diperiksa. Tidak mengubah database/SQL; artefak QA dibersihkan.
+
+## Warna kartu menyatu dengan batik (20 November 2026)
+
+- Lapisan judul batik kartu Admin kini memakai tint dari --stat-bg kartu masing-masing (92-88%) sehingga tidak lagi berupa pita hitam kontras dengan badan kartu. Garis pemisah dibuat lebih lembut; hover mempertahankan pola dan palet yang sama. Deklarasi lama tetap sebagai fallback untuk browser tanpa color-mix. Ukuran/kolom/angka/tautan dan data tidak berubah. Hanya assets/css/panel-theme.css berubah.
+- Diff check lulus; perhitungan kontras teks putih terhadap skenario pola putih paling terang pada 12 palet seluruhnya minimal 4.5:1. Chrome menggunakan CSS/aset asli dan fixture 12 kartu pada viewport 504/1182px membuktikan tint terpakai, lapisan normal, semua kategori tampil dan tanpa overflow. Screenshot desktop diperiksa. Tidak ada perubahan database/SQL; artefak QA dibersihkan.
+
+## Batik kartu ringkasan dibatalkan (20 November 2026)
+
+- Mengikuti koreksi pengguna, batik di judul kartu ringkasan Admin/Staf dihapus, termasuk aturan hover dan tema gelap. Judul kembali memakai bidang polos lembut yang menyatu dengan warna kartu; dimensi, garis Excel, angka dan tautan tetap. Batik pada header utama/grafik tidak termasuk kartu pada gambar dan tetap mengikuti keputusan sebelumnya. Hanya assets/css/panel-theme.css berubah.
+- Diff check dan pemeriksaan selector memastikan latar judul summary-grid tidak lagi merujuk gambar batik. Tidak mengubah SQL/data atau menguji ulang database/browser untuk penghapusan latar ini.
+
+## Daftar Berita seperti Excel (20 November 2026)
+
+- Berita & Kegiatan memiliki header ringkas berbingkai, ikon eksplisit pada judul/filter/tombol dan tabel panel-sheet bergaris vertikal/horizontal dengan header sticky/area gulir maksimal 430px. Label published ditampilkan sebagai Dipublikasikan tanpa mengubah nilai database/filter. Tindakan Edit (biru lembut), Lihat publik, dan Hapus (merah lembut) sejajar, sama tinggi dan tetap memakai handler/CSRF/konfirmasi lama. CSS scoped news-list-page mendukung tema gelap serta target 44px HP.
+- File: panel/berita/index.php, assets/css/panel-theme.css. Query, pagination sepuluh baris, aturan is_public, popup/unggulan dan akses tidak berubah. Lint PHP dan diff check lulus. Chrome dengan template PHP/CSS asli serta fixture terbit/draft/terbit belum publik, viewport 504/1182px, dua tema: tiga baris/form konfirmasi, tautan publik hanya satu sesuai kondisi, garis solid, tombol sama tinggi/muat dan tanpa overflow. Screenshot desktop diperiksa. Tidak menguji CRUD/database ulang untuk perubahan presentasi; artefak QA dibersihkan.
