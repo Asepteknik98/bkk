@@ -2296,3 +2296,80 @@ html[data-theme=dark] .news-form-page { --news-form-line:#44566d; --news-form-he
 html[data-theme=dark] .news-form-page .page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
 @media(max-width:900px) { .panel-page .news-form-page .news-editor { grid-template-columns:minmax(0,1fr); }.panel-page .news-form-page .news-editor-settings { border-left:0; border-top:1px solid var(--news-form-line); } }
 @media(max-width:600px) { .panel-page .news-form-page .news-editor :is(input:not([type=checkbox]):not([type=hidden]),select,textarea) { min-height:44px; font-size:16px; }.news-form-page .form-actions>span { width:100%; } }
+
+/* Katalog media: lembar berkas ringkas dengan batas sel yang jelas. */
+.panel-page .media-catalog { max-width:1060px; margin-inline:auto; --media-sheet-line:#bdcfe2; }
+.panel-page .media-catalog .page-actions { padding:10px 12px; border:1px solid var(--media-sheet-line); border-radius:5px; background:var(--panel-surface); margin-bottom:12px; }
+.panel-page .media-catalog .page-actions h1 { font-size:1.15rem; }
+.panel-page .media-catalog .media-tools .card { padding:10px; border-radius:5px; border-color:var(--media-sheet-line); }
+.panel-page .media-catalog .media-tools .filter-form { align-content:start; padding-top:18px; }
+.panel-page .media-catalog .media-count { font-size:.75rem; margin:12px 0 8px; }
+.panel-page .media-catalog .media-sheet { max-height:430px; overflow:auto; border:1px solid var(--media-sheet-line); border-radius:5px; scrollbar-width:thin; }
+.media-sheet table { width:100%; border-collapse:collapse; table-layout:fixed; margin:0; }
+.media-sheet th:first-child { width:48%; }
+.media-sheet th:nth-child(2) { width:26%; }
+.panel-page .media-sheet :is(th,td) { padding:8px 12px; border-right:1px solid var(--media-sheet-line); border-bottom:1px solid var(--media-sheet-line); font-size:.75rem; vertical-align:middle; overflow-wrap:anywhere; }
+.panel-page .media-sheet th { position:sticky; top:0; z-index:1; background:#e8f0fa; color:#284e72; text-align:left; }
+.panel-page .media-sheet tr:last-child td { border-bottom:0; }
+.panel-page .media-sheet :is(th,td):last-child { border-right:0; }
+.media-file { display:flex; gap:10px; align-items:center; min-width:0; }
+.media-file>div:last-child { min-width:0; }
+.media-file strong { font-size:.76rem; font-weight:600; }
+.media-sheet small { display:block; color:var(--panel-muted); font-size:.68rem; margin-top:3px; }
+.media-thumb { width:44px; height:44px; flex:0 0 44px; display:grid; place-items:center; background:var(--panel-soft); border:1px solid var(--media-sheet-line); border-radius:3px; }
+.media-thumb img { width:42px; height:42px; object-fit:contain; }
+.panel-page .media-catalog .media-sheet .row-actions { flex-wrap:nowrap; gap:6px; }
+.panel-page .media-catalog .media-sheet .row-actions a { background:#edf5fc; color:#285777; border:1px solid #c4d7e9; }
+.panel-page .media-catalog .media-sheet .row-actions button { background:#fff3f3; color:#a13e3e; border:1px solid #ecc3c3; }
+.media-sheet :is(a,button,input):focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] .media-catalog { --media-sheet-line:#44566d; }
+html[data-theme=dark] .panel-page .media-sheet th { background:#223246; color:#d9e8fa; }
+@media(max-width:700px) { .media-sheet table { min-width:630px; }.panel-page .media-catalog .media-tools { grid-template-columns:minmax(0,1fr); }.panel-page .media-catalog .media-tools input { font-size:16px; }.panel-page .media-catalog .media-sheet .row-actions :is(a,button) { min-height:44px; } }
+
+/* Batik header and ten-page navigation for the media catalog. */
+.panel-page .media-catalog .page-actions { background-image:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp'); background-size:auto,180px auto; background-repeat:no-repeat,repeat; }
+html[data-theme=dark] .panel-page .media-catalog .page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+.media-sheet th:first-child { width:43%; }
+.media-sheet th:nth-child(2) { width:24%; }
+.panel-page .media-catalog .media-sheet .row-actions .media-edit { background:#eef2ff; color:#355c9e; border-color:#c4d2f2; }
+.media-pagination { display:flex; flex-wrap:wrap; gap:5px; }
+.media-pagination a[aria-current=page] { background:#183b5e; color:#fff; border-color:#183b5e; font-weight:700; }
+.media-pagination a[aria-label] .panel-auto-icon { display:none; }
+.panel-page .media-edit-page { max-width:720px; }
+.panel-page .media-edit-page .editor-form { padding:14px; gap:10px; border-radius:5px; border-color:var(--media-sheet-line); }
+.panel-page .media-edit-page .form-actions { border-top:1px solid var(--media-sheet-line); padding-top:10px; }
+@media(max-width:700px) { .media-sheet table { min-width:740px; }.media-pagination a { min-width:40px; min-height:44px; }.media-edit-page input:not([type=hidden]) { font-size:16px; min-height:44px; } }
+
+/* Form lowongan: sel terstruktur, kompak, dan header batik. */
+.vacancy-form-page { max-width:960px; margin-inline:auto; --vacancy-line:#bdcfe2; --vacancy-head:#e8f0fa; }
+.panel-page .vacancy-form-page .page-actions { padding:10px 12px; margin-bottom:12px; border:1px solid var(--vacancy-line); border-radius:5px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
+.vacancy-form-page .page-actions h1 { display:flex; align-items:center; gap:8px; font-size:1.1rem; margin:0; }
+.panel-page .vacancy-form-page .vacancy-editor { display:grid; grid-template-columns:minmax(0,1fr) 320px; padding:0; gap:0; align-items:stretch; border:1px solid var(--vacancy-line); border-radius:5px; overflow:hidden; }
+.panel-page .vacancy-form-page .vacancy-main { display:block; }
+.panel-page .vacancy-form-page .vacancy-settings { display:block; padding:0; border-left:1px solid var(--vacancy-line); }
+.vacancy-form-page .vacancy-editor h2 { display:flex; align-items:center; gap:7px; font-size:.8rem; padding:8px 10px; margin:0; background:var(--vacancy-head); border-bottom:1px solid var(--vacancy-line); }
+.vacancy-form-page .vacancy-editor h2 small { margin-left:auto; }
+.vacancy-form-page .vacancy-fields,.vacancy-form-page .vacancy-texts { gap:0; margin:0; }
+.vacancy-form-page .vacancy-field { padding:9px 10px; border-bottom:1px solid var(--vacancy-line); gap:6px; align-content:start; }
+.vacancy-form-page .vacancy-field:nth-child(odd) { border-right:1px solid var(--vacancy-line); }
+.vacancy-form-page .vacancy-main>small { display:block; padding:8px 10px; }
+.vacancy-form-page .vacancy-section+.vacancy-section { border-top:1px solid var(--vacancy-line); }
+.vacancy-section-body { display:grid; gap:8px; padding:9px 10px; }
+.panel-page .vacancy-form-page .form-columns { gap:10px; margin:0; }
+.panel-page .vacancy-form-page .vacancy-editor label { display:flex; gap:6px; align-items:center; font-size:.76rem; margin:0 0 5px; }
+.panel-page .vacancy-form-page .vacancy-editor :is(input:not([type=checkbox]):not([type=hidden]),select,textarea) { min-width:0; width:100%; max-width:100%; min-height:38px; padding:7px 9px; font-size:14px; border-radius:4px; box-sizing:border-box; }
+.panel-page .vacancy-form-page .vacancy-editor textarea { height:150px; min-height:100px; resize:vertical; }
+.panel-page .vacancy-form-page .vacancy-editor small,.vacancy-section-body>p { font-size:.71rem; line-height:1.6; color:var(--panel-muted); margin:0; }
+.panel-page .vacancy-form-page .vacancy-editor .check-label { align-items:flex-start; font-size:.72rem; line-height:1.65; }
+.vacancy-form-page .check-label input { flex:0 0 18px; width:18px; height:18px; margin:3px 0 0; accent-color:#356658; }
+.vacancy-form-page .check-label>.panel-auto-icon { display:none; }
+.vacancy-form-page .current-image { padding:8px; border:1px solid var(--vacancy-line); border-radius:4px; }
+.vacancy-form-page .current-image img { display:block; width:auto; max-width:100%; max-height:100px; object-fit:contain; margin-bottom:8px; }
+.panel-page .vacancy-form-page .form-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:10px 12px; margin:0; background:var(--panel-soft); border-top:1px solid var(--vacancy-line); }
+.vacancy-form-page .form-actions>span { margin-right:auto; font-size:.72rem; color:var(--panel-muted); }
+.vacancy-form-page .form-actions :is(a,button) { min-height:40px; display:inline-flex; align-items:center; gap:7px; font-size:.76rem; }
+.vacancy-form-page :is(input,select,textarea,button,a):focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] .vacancy-form-page { --vacancy-line:#44566d; --vacancy-head:#223246; }
+html[data-theme=dark] .panel-page .vacancy-form-page .page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+@media(max-width:900px) { .panel-page .vacancy-form-page .vacancy-editor { grid-template-columns:minmax(0,1fr); }.panel-page .vacancy-form-page .vacancy-settings { border-left:0; border-top:1px solid var(--vacancy-line); } }
+@media(max-width:600px) { .vacancy-form-page .vacancy-fields,.vacancy-form-page .vacancy-texts { grid-template-columns:minmax(0,1fr); }.vacancy-form-page .vacancy-field:nth-child(odd) { border-right:0; }.panel-page .vacancy-form-page .vacancy-editor :is(input:not([type=checkbox]):not([type=hidden]),select,textarea) { min-height:44px; font-size:16px; }.vacancy-form-page .form-actions>span { width:100%; }.vacancy-form-page .form-actions :is(a,button) { min-height:44px; } }

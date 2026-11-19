@@ -615,3 +615,21 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 
 - Lebar form Tambah/Edit Berita diperkecil dari 1150 ke 960px, panel samping desktop 300px. Padding sel/header dan ukuran judul dirapatkan, textarea ringkasan 60px/isi 180px tetap bisa diperbesar, serta preview gambar maksimal 100px. Breakpoint satu kolom dan input 16px/44px HP tetap. Header halaman memakai batik sekolah lokal dengan lapisan terang/gelap; isi form tetap bergaris Excel. Hanya assets/css/panel-theme.css berubah.
 - Diff check, keberadaan aset dan aturan breakpoint diperiksa. Tidak ada perubahan field, handler, SQL/data atau pengujian database ulang.
+
+## Katalog Media ringkas bergaris (20 November 2026)
+
+- Kartu berkas diganti tabel seperti Excel dengan kolom Berkas, Jenis/ukuran, dan Tindakan. Thumbnail 44px, nama berkas dapat membungkus, garis sel jelas, tombol Unduh/Hapus sejajar dengan warna berbeda. Lebar halaman maksimal 1060px; daftar memiliki scroll internal maksimal 430px dan header tetap. Pada HP tabel dapat digeser dalam kotaknya dan tombol tindakan minimal 44px.
+- Bagian unggah dan pencarian tetap terpisah dan dirapatkan. Query/filter/pagination 12 berkas, handler upload/unduh/hapus, CSRF, konfirmasi penghapusan, dan pemeriksaan berkas tetap dipakai. Tanpa perubahan SQL atau data.
+- File: panel/media/index.php, assets/css/panel-theme.css. Lint PHP dan git diff --check lulus. Belum diuji ulang melalui browser/database; pemeriksaan ini mencakup sintaks dan kode tampilan.
+
+## Media: header batik, edit nama, pagination 10 (20 November 2026)
+
+- Header katalog/edit media memakai batik lokal berlapis terang/gelap. Tindakan Edit, Unduh, Hapus sejajar; tabel tetap bergaris dan scroll internal. Daftar maksimal 10 berkas per halaman; slider menampilkan maksimal 10 nomor bergeser dengan Sebelumnya/Berikutnya dan mempertahankan pencarian, tanpa membatasi total halaman.
+- Halaman baru panel/media/edit.php untuk mengubah nama tampilan berkas. Ekstensi dan path acak tetap, tidak mengganti file atau referensi konten. Login/role dan izin media diperiksa server pada GET/POST, simpan POST+CSRF, prepared UPDATE, validasi panjang/nama tanpa traversal atau karakter kontrol, output di-escape. Tidak ada SQL baru atau perubahan data operasional saat pengembangan.
+- File utama panel/media/index.php, panel/media/edit.php, assets/css/panel-theme.css. Lint kedua PHP dan diff check lulus. Pengujian CLI sintetis: 9 kasus validasi nama, render pagination awal/tengah/akhir (10 nomor, satu aktif, pencarian tetap); limit query 10 diperiksa. Browser dan simpan database langsung belum diuji.
+
+## Form lowongan ringkas seperti Excel (20 November 2026)
+
+- Tambah/Edit Lowongan dibatasi 960px, header batik lokal lembut, ikon eksplisit pada judul/tindakan dan tiga bagian: Informasi pekerjaan, Publikasi & pendaftaran, Poster opsional. Sel isian bergaris dengan header biru lembut; padding ringkas, textarea 150px dapat diperbesar dan preview maksimal 100px. Desktop dua kolom, layar kecil satu kolom, input HP 16px/minimal 44px. Tema gelap memakai warna sel/header sesuai.
+- File panel/lowongan/form.php dan assets/css/panel-theme.css. Semua field/required, CSRF, handler, unggahan, pilihan katalog, konfirmasi tautan resmi, tanggal WIB, status dan pesan error tetap. Label published menjadi Dipublikasikan. Tidak ada SQL atau perubahan data operasional.
+- Lint PHP dan diff check lulus. Render sintetis template lama/baru memastikan nama seluruh field sama, tiga judul bagian, pembungkus section berpasangan, textarea di-escape, pilihan status/konfirmasi resmi dan tujuan simpan tetap. Browser/perangkat fisik dan CRUD database belum diuji ulang.
