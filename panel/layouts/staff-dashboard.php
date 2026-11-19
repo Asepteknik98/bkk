@@ -2,7 +2,7 @@
 if (!isset($user) || $user['role']!=='staf_bkk') { http_response_code(403); exit; }
 panel_start($user,'Dashboard','dashboard');
 ?>
-<h1>Dashboard Staf BKK</h1><p>Selamat datang, <?= e($user['nama']) ?>. Modul berikut tersedia sesuai izin Admin.</p>
+<div class="dashboard-sheet staff-dashboard-sheet"><header class="dashboard-heading"><h1>Dashboard Staf BKK</h1><p>Selamat datang, <?= e($user['nama']) ?>. Modul berikut tersedia sesuai izin Admin.</p></header>
 <div class="summary-grid">
 <?php $available=0; foreach(permission_modules() as $module=>$label):
     if(!user_can($user,$module)){continue;}
@@ -17,4 +17,5 @@ panel_start($user,'Dashboard','dashboard');
     $available++;
 ?><section class="card"><h2><a href="<?= e(base_url('panel/'.$module.'/')) ?>"><?= e($label) ?></a></h2></section><?php endforeach; ?>
 </div><?php if(!$available): ?><p>Belum ada izin operasional. Hubungi Admin BKK.</p><?php endif; ?>
+</div>
 <?php panel_end($user); ?>

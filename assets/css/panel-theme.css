@@ -1229,12 +1229,6 @@ html[data-sidebar="collapsed"] .sidebar-program-caret,html[data-sidebar="collaps
     .dashboard-view .donut-legend { width:100%; }
 }
 
-.dashboard-chart-actions { display:flex; justify-content:flex-end; margin-top:12px; }
-.dashboard-chart-actions:has(.chart-replay[hidden]) { display:none; }
-.panel-page .chart-replay { display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:8px 12px; border:1px solid var(--panel-line); border-radius:6px; background:var(--panel-surface); color:var(--panel-text); font-size:.75rem; cursor:pointer; }
-.panel-page .chart-replay[hidden] { display:none; }
-.panel-page .chart-replay:hover { background:var(--panel-soft); }
-.panel-page .chart-replay:focus-visible { outline:2px solid var(--panel-text); outline-offset:2px; }
 
 /* Vertical columns: value above, category below, with a shared baseline. */
 .dashboard-view .dashboard-column-chart {
@@ -2162,3 +2156,64 @@ html[data-theme=dark] .dashboard-view .tracer-sheet-summary .tracer-summary-head
 html[data-theme=dark] .fan-legend button { background:var(--panel-soft); }
 @media(max-width:600px) { .tracer-fan-layout { gap:10px; grid-template-columns:minmax(110px,.75fr) minmax(0,1.25fr); }.fan-legend { gap:7px; }.fan-legend button { gap:7px; min-height:50px; }.fan-legend-number { min-width:30px; font-size:.95rem; }.fan-legend-text { font-size:.72rem; }.fan-total strong { font-size:1.2rem; }.fan-total>span { font-size:.6rem; } }
 @media(max-width:420px) { .tracer-fan-layout { grid-template-columns:minmax(0,1fr); }.tracer-fan { max-width:165px; }.fan-legend button { min-height:48px; }.fan-legend-text { font-size:.78rem; }.fan-total strong { font-size:1.4rem; } }
+.panel-page .dashboard-view .pkl-completion-card { --pkl-chart-line:#becddd; padding:0; background:var(--panel-surface); border:1px solid var(--pkl-chart-line); border-radius:6px; overflow:hidden; }
+.pkl-completion-card .tracer-summary-heading { padding:12px 14px; margin:0; background:#e9f0f8; border-bottom:1px solid var(--pkl-chart-line); }
+.dashboard-view .pkl-completion-card .tracer-summary-heading h2 { color:var(--panel-text); font-size:.87rem; }
+.pkl-completion-note { margin:0; padding:10px 14px; color:var(--panel-muted); font-size:.75rem; line-height:1.6; }
+.pkl-completion-layout { display:grid; grid-template-columns:175px minmax(0,1fr); gap:22px; align-items:center; padding:8px 18px 18px; }
+.pkl-completion-stat { border-right:1px solid var(--pkl-chart-line); padding-right:18px; }
+.pkl-completion-stat>strong { display:block; font-size:2rem; line-height:1.2; color:var(--panel-text); }
+.pkl-completion-stat>strong>small { font-size:1rem; margin-left:3px; }
+.pkl-completion-stat>span { display:block; font-size:.78rem; color:var(--panel-muted); margin-top:5px; }
+.pkl-completion-stat>p { margin:8px 0 0; font-size:.73rem; color:var(--panel-muted); }
+.pkl-completion-graph { min-width:0; }
+.pkl-completion-bar { display:flex; height:36px; border-radius:5px; overflow:hidden; background:var(--panel-soft); border:1px solid var(--pkl-chart-line); }
+.pkl-completion-bar>span { display:flex; align-items:center; justify-content:center; min-width:0; overflow:hidden; font-size:.75rem; font-weight:600; white-space:nowrap; }
+.pkl-bar-filled { background:#277c62; color:#fff; }.pkl-bar-missing { background:#e8b95b; color:#403011; }
+.pkl-completion-scale { display:flex; justify-content:space-between; padding-top:6px; color:var(--panel-muted); font-size:.67rem; }
+.pkl-completion-legend { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin:14px 0 0; border:1px solid var(--pkl-chart-line); border-radius:5px; }
+.pkl-completion-legend>div { padding:10px 12px; min-width:0; }.pkl-completion-legend>div+div { border-left:1px solid var(--pkl-chart-line); }
+.pkl-completion-legend dt { display:flex; align-items:center; gap:7px; font-size:.75rem; font-weight:400; color:var(--panel-muted); }
+.pkl-completion-legend dd { margin:6px 0 0; color:var(--panel-muted); font-size:.74rem; }
+.pkl-completion-legend dd>strong { color:var(--panel-text); font-size:1rem; }
+.pkl-completion-legend dd>small { float:right; font-size:.72rem; }
+.pkl-legend-dot { width:9px; height:9px; border-radius:2px; flex-shrink:0; }.pkl-legend-dot.is-filled { background:#277c62; }.pkl-legend-dot.is-missing { background:#e8b95b; }
+.dashboard-view .pkl-completion-card .pkl-completion-link { display:flex; align-items:center; gap:7px; min-height:44px; margin:0; padding:10px 14px; border-top:1px solid var(--pkl-chart-line); background:var(--panel-soft); color:var(--panel-text); font-size:.76rem; text-decoration:none; }
+.pkl-completion-link .panel-icon { width:17px; height:17px; }.pkl-completion-link .panel-icon:last-child { margin-left:auto; }
+.pkl-completion-link:focus-visible { outline:2px solid #438dce; outline-offset:-3px; }
+html[data-theme=dark] .panel-page .dashboard-view .pkl-completion-card { --pkl-chart-line:#44566d; }
+html[data-theme=dark] .pkl-completion-card .tracer-summary-heading { background:#223246; }
+@media(max-width:600px) { .pkl-completion-layout { grid-template-columns:minmax(0,1fr); gap:14px; padding:4px 14px 14px; }.pkl-completion-stat { border-right:0; border-bottom:1px solid var(--pkl-chart-line); padding:0 0 12px; }.pkl-completion-stat>strong { font-size:1.7rem; }.pkl-completion-legend>div { padding:9px; }.pkl-completion-legend dt { font-size:.7rem; } }
+/* Shorter dashboard counters; category headers remain part of each card. */
+@media(min-width:601px) {
+    .panel-page .dashboard-view .summary-grid .card { padding:7px 12px; }
+    .panel-page .dashboard-view .summary-grid .card h2 { display:flex; align-items:center; align-self:stretch; gap:5px; min-height:28px; padding:5px 12px; margin:-7px -12px 5px; border-bottom:1px solid #ffffff2b; background:#ffffff14; line-height:1.3; }
+    .panel-page .dashboard-view .summary-grid .card h2 a { flex:1; min-width:0; text-decoration:none; }
+    .panel-page .dashboard-view .summary-grid .card:has(a:hover) h2 { background:#ffffff24; }
+    .panel-page .dashboard-view .summary-grid .card p { margin:2px 0; line-height:1.3; }
+    .panel-page .dashboard-view .summary-grid .card p strong { font-size:1.35rem; line-height:1.1; }
+    .panel-page .dashboard-view .summary-grid .card p:last-child { margin-bottom:0; }
+    .panel-page .dashboard-view .summary-grid .stat-applications h2 { padding-right:32px; }
+}
+@media(max-width:600px) {
+    .panel-page .dashboard-view .summary-grid .card { min-height:60px; padding:8px 10px; gap:6px; }
+    .panel-page .dashboard-view .summary-grid .card h2 { padding:4px 6px; border:1px solid #ffffff2b; border-radius:4px; background:#ffffff14; }
+    .panel-page .dashboard-view .summary-grid .card h2 a { text-decoration:none; }
+}
+.dashboard-sheet { --dashboard-sheet-line:#becddd; --dashboard-sheet-head:#e9f0f8; }
+.dashboard-sheet>.dashboard-heading { border:1px solid var(--dashboard-sheet-line); border-radius:4px; padding:12px 14px; background-color:var(--panel-surface); background-image:linear-gradient(105deg,#fffffffa,#f0f5ffdc),url('../images/batik-sekolah.webp'); background-size:auto,180px auto; background-repeat:no-repeat,repeat; }
+.dashboard-sheet .summary-grid { outline:1px solid var(--dashboard-sheet-line); outline-offset:3px; border-radius:3px; }
+.panel-page .dashboard-sheet .summary-grid>.card { border:1px solid var(--dashboard-sheet-line); border-radius:3px; }
+.dashboard-sheet .summary-grid .card h2 { border-bottom-color:var(--dashboard-sheet-line); }
+.panel-page .dashboard-sheet .dashboard-charts>.card { border:1px solid var(--dashboard-sheet-line); border-radius:4px; }
+.dashboard-sheet .dashboard-insights { margin-top:18px; }
+.panel-page .dashboard-sheet .dashboard-charts>.tracer-fan-card { padding:0; }
+.dashboard-sheet .tracer-fan-card>h2 { padding:12px 14px; margin:0; border-bottom:1px solid var(--dashboard-sheet-line); background:var(--dashboard-sheet-head); }
+.dashboard-sheet .tracer-fan-card>.muted { margin:10px 14px; }
+.dashboard-sheet .tracer-fan-layout { margin:14px; }
+.dashboard-sheet .tracer-sheet-summary .tracer-summary-heading,.dashboard-sheet .pkl-completion-card .tracer-summary-heading { border-color:var(--dashboard-sheet-line); }
+.staff-dashboard-sheet .dashboard-heading h1 { margin:0 0 6px; font-size:1.25rem; }
+.staff-dashboard-sheet .dashboard-heading p { margin:0; }
+.staff-dashboard-sheet .summary-grid { margin-top:18px; }
+html[data-theme=dark] .dashboard-sheet { --dashboard-sheet-line:#44566d; --dashboard-sheet-head:#223246; }
+html[data-theme=dark] .dashboard-sheet>.dashboard-heading { background-image:linear-gradient(105deg,#182432fa,#182e44df),url('../images/batik-sekolah.webp'); }

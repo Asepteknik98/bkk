@@ -21,7 +21,7 @@ $eventCount=(int)panel_query('SELECT COUNT(*) FROM attendance_events')->fetchCol
 $speakerCount=(int)panel_query('SELECT COUNT(*) FROM speakers')->fetchColumn();
 panel_start($user,'Dashboard','dashboard');
 ?>
-<div class="dashboard-view"><header class="dashboard-heading"><h1><?= panel_icon('dashboard') ?> Dashboard</h1><p>Selamat datang, <?= e($user['nama']) ?>. Berikut ringkasan data BKK saat ini.</p></header>
+<div class="dashboard-view dashboard-sheet"><header class="dashboard-heading"><h1><?= panel_icon('dashboard') ?> Dashboard</h1><p>Selamat datang, <?= e($user['nama']) ?>. Berikut ringkasan data BKK saat ini.</p></header>
 <div class="summary-grid">
 <?php foreach(['berita'=>'Berita','lowongan'=>'Lowongan','program'=>'Program'] as $key=>$label): ?><section class="card"><span class="stat-icon"><?= panel_icon($key) ?></span><h2><a href="<?= e(base_url('panel/'.$key.'/')) ?>"><?= $label ?></a></h2><p><strong><?= array_sum($counts[$key]) ?></strong> total</p><p><?= (int)($counts[$key]['published']??0) ?> published · <?= (int)($counts[$key]['draft']??0) ?> draft</p></section><?php endforeach; ?>
 <section class="card"><span class="stat-icon"><?= panel_icon('lowongan') ?></span><h2><a href="<?= e(base_url('panel/lowongan/?status=open')) ?>">Lowongan dibuka</a></h2><p><strong><?= $open ?></strong> aktif</p><p>Published, batas lamaran belum lewat (WIB).</p></section>
@@ -39,7 +39,6 @@ panel_start($user,'Dashboard','dashboard');
 <?php endforeach; ?>
 </div>
 <section class="dashboard-insights" aria-label="Grafik PKL dan Tracer Study">
-<div class="dashboard-chart-actions"><button type="button" class="chart-replay" hidden><?= panel_icon('reset') ?> Putar ulang animasi</button></div>
 <div class="dashboard-charts"><section class="card section-space tracer-summary tracer-sheet-summary" aria-labelledby="tracer-chart-title">
     <div class="tracer-summary-heading"><h2 id="tracer-chart-title"><?= panel_icon('tracer') ?> Ringkasan Tracer Study</h2><span class="badge"><?= (int) array_sum($tracer) ?> respons</span></div>
     <p class="tracer-sheet-note">Jumlah respons menurut kegiatan alumni, bukan jumlah alumni unik.</p>
@@ -77,16 +76,16 @@ panel_start($user,'Dashboard','dashboard');
     </div>
     <?php if(!$tracerTotal): ?><p class="muted">Belum ada respons. Bidang warna akan muncul setelah data tersedia.</p><?php endif; ?>
 </section>
-<section class="card tracer-summary pkl-summary" aria-labelledby="pkl-chart-title">
-    <div class="tracer-summary-heading"><h2 id="pkl-chart-title"><?= panel_icon('peserta') ?> Kelengkapan Data PKL</h2><span class="badge"><?= (int)$participantStats['total'] ?> peserta</span></div>
-    <p class="muted">Riwayat PKL terisi jika tempat atau tahun PKL sudah dicatat.</p>
-    <dl class="tracer-chart dashboard-column-chart" aria-label="Grafik kelengkapan riwayat PKL, persentase dari seluruh peserta">
-        <?php foreach(['Riwayat terisi'=>(int)$participantStats['pkl'],'Belum terisi'=>(int)$participantStats['total']-(int)$participantStats['pkl']] as $label=>$value): $percent=(int)$participantStats['total']>0 ? (int)round($value/(int)$participantStats['total']*100) : 0; ?>
-        <div class="tracer-chart-row"><dt><?= e($label) ?></dt><dd><span class="tracer-chart-track" aria-hidden="true"><span class="tracer-chart-bar" style="height:<?= $percent ?>%"></span></span><strong><?= $value ?><span class="sr-only"> peserta, <?= $percent ?> persen</span></strong></dd></div>
-        <?php endforeach; ?>
-    </dl>
-    <?php if(!(int)$participantStats['total']): ?><p class="muted">Grafik akan terisi setelah data peserta ditambahkan.</p><?php endif; ?>
-    <a href="<?= e(base_url('panel/peserta/')) ?>">Lihat data peserta &rarr;</a>
+<section class="card tracer-summary pkl-summary pkl-completion-card" aria-labelledby="pkl-chart-title">
+    <?php $pklTotal=(int)$participantStats['total'];$pklFilled=(int)$participantStats['pkl'];$pklMissing=$pklTotal-$pklFilled;$pklPercent=$pklTotal?$pklFilled/$pklTotal*100:0;$pklMissingPercent=$pklTotal?$pklMissing/$pklTotal*100:0; ?>
+    <div class="tracer-summary-heading"><h2 id="pkl-chart-title"><?= panel_icon('peserta') ?> Kelengkapan Data PKL</h2><span class="badge"><?= $pklTotal ?> siswa</span></div>
+    <p class="pkl-completion-note">Riwayat dianggap terisi jika tempat atau tahun PKL sudah dicatat.</p>
+    <div class="pkl-completion-layout"><div class="pkl-completion-stat"><strong><?= $pklTotal?number_format($pklPercent,1,',','.'):'-' ?><?php if($pklTotal): ?><small>%</small><?php endif; ?></strong><span>riwayat terisi</span><p><?= $pklFilled ?> dari <?= $pklTotal ?> siswa</p></div>
+    <div class="pkl-completion-graph"><div class="pkl-completion-bar" role="img" aria-label="<?= $pklFilled ?> siswa memiliki riwayat PKL; <?= $pklMissing ?> siswa belum terisi; total <?= $pklTotal ?> siswa"><span class="pkl-bar-filled" style="width:<?= number_format($pklPercent,4,'.','') ?>%" title="Riwayat terisi: <?= $pklFilled ?> siswa"><?php if($pklPercent>=15): ?><?= number_format($pklPercent,1,',','.') ?>%<?php endif; ?></span><span class="pkl-bar-missing" style="width:<?= number_format($pklMissingPercent,4,'.','') ?>%" title="Belum terisi: <?= $pklMissing ?> siswa"><?php if($pklMissingPercent>=15): ?><?= number_format($pklMissingPercent,1,',','.') ?>%<?php endif; ?></span></div>
+    <div class="pkl-completion-scale" aria-hidden="true"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+    <dl class="pkl-completion-legend"><div><dt><span class="pkl-legend-dot is-filled" aria-hidden="true"></span>Riwayat terisi</dt><dd><strong><?= $pklFilled ?></strong> siswa <small><?= number_format($pklPercent,1,',','.') ?>%</small></dd></div><div><dt><span class="pkl-legend-dot is-missing" aria-hidden="true"></span>Belum terisi</dt><dd><strong><?= $pklMissing ?></strong> siswa <small><?= number_format($pklMissingPercent,1,',','.') ?>%</small></dd></div></dl></div></div>
+    <?php if(!$pklTotal): ?><p class="pkl-completion-note">Belum ada data siswa. Grafik akan terisi setelah data ditambahkan.</p><?php endif; ?>
+    <a class="pkl-completion-link" href="<?= e(base_url('panel/peserta/')) ?>"><?= panel_icon('identity') ?> Kelola data siswa <?= panel_icon('next') ?></a>
 </section></div></section>
 
 </div>
