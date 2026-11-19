@@ -2533,3 +2533,69 @@ html[data-theme=dark] .alumni-applications-page { --alumni-picker-line:#44566d; 
 html[data-theme=dark] .panel-page .alumni-applications-page>.page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
 html[data-theme=dark] .alumni-manage { background:#203e33; border-color:#416653; color:#b8e2cc!important; }
 @media(max-width:600px) { .alumni-picker-sheet table { min-width:640px; }.alumni-list-heading { flex-wrap:wrap; }.alumni-manage,.alumni-picker-pagination a { min-height:44px; }.panel-page .alumni-search input { font-size:16px; min-height:44px; } }
+
+/* Data alumni: lembar bergaris dengan header dan filter ringkas. */
+.alumni-list { --alumni-grid-line:#bdcfe2; --alumni-grid-head:#e8f0fa; width:100%; min-width:0; }
+.panel-page .alumni-list>.page-actions { padding:10px 12px; margin-bottom:10px; border:1px solid var(--alumni-grid-line); border-radius:5px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
+.alumni-list h1 { font-size:1.1rem; margin:0; }
+.alumni-list>p { font-size:.73rem; margin:9px 0; line-height:1.6; }
+.panel-page .alumni-list .page-actions .row-actions { gap:6px; }
+.panel-page .alumni-list .page-actions .row-actions>a { min-height:36px; padding:7px 10px; font-size:.73rem; border-radius:4px; }
+.alumni-list .alumni-cohorts { gap:0; padding:0; margin:10px 0; border:1px solid var(--alumni-grid-line); border-radius:4px; overflow-x:auto; flex-wrap:nowrap; background:var(--panel-surface); }
+.alumni-list .alumni-cohorts>span { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; margin:0; white-space:nowrap; font-size:.73rem; background:var(--alumni-grid-head); }
+.panel-page .alumni-list .alumni-cohorts>a { flex-shrink:0; margin:0; border:0; border-left:1px solid var(--alumni-grid-line); border-radius:0; padding:8px 12px; min-height:36px; font-size:.73rem; background:var(--panel-surface); }
+.panel-page .alumni-list .filter-form { gap:8px; padding:9px 10px; margin-bottom:10px; border:1px solid var(--alumni-grid-line); border-radius:5px; }
+.panel-page .alumni-list .filter-form label { font-size:.73rem; gap:5px; }
+.panel-page .alumni-list .filter-form :is(select,button,a) { min-height:36px; border-radius:4px; font-size:.75rem; }
+.panel-page .alumni-list .alumni-list-viewport { max-height:min(360px,55vh); border:1px solid var(--alumni-grid-line); border-radius:5px; scrollbar-gutter:stable; }
+.alumni-list-viewport table { width:100%; border-collapse:collapse; margin:0; }
+.panel-page .alumni-list-viewport :is(th,td) { padding:8px 10px; border-right:1px solid var(--alumni-grid-line); border-bottom:1px solid var(--alumni-grid-line); font-size:.74rem; line-height:1.5; vertical-align:middle; }
+.panel-page .alumni-list-viewport th { background:var(--alumni-grid-head); color:var(--panel-text); font-size:.72rem; }
+.panel-page .alumni-list-viewport :is(th,td):last-child { border-right:0; }
+.panel-page .alumni-list-viewport tr:last-child td { border-bottom:0; }
+.panel-page .alumni-list .alumni-view-link { min-height:34px; padding:5px 9px; border-radius:4px; font-size:.72rem; background:#edf3ff; color:#355c9e; border-color:#c4d2f2; }
+.alumni-list :is(a,select,button,input,.alumni-list-viewport):focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] .alumni-list { --alumni-grid-line:#44566d; --alumni-grid-head:#223246; }
+html[data-theme=dark] .panel-page .alumni-list>.page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+html[data-theme=dark] .panel-page .alumni-list .alumni-view-link { background:#253a53; color:#c0d7ff; border-color:#445b78; }
+@media(max-width:600px) { .panel-page .alumni-list .page-actions .row-actions>a,.panel-page .alumni-list .alumni-view-link,.panel-page .alumni-list .filter-form :is(select,button,a),.panel-page .alumni-list .alumni-cohorts>a { min-height:44px; }.panel-page .alumni-list .filter-form select { font-size:16px; } }
+
+/* Penyusunan WhatsApp: lembar penerima/pesan yang ringkas. */
+.wa-sheet-page { --wa-sheet-line:#bdcfe2; --wa-sheet-head:#e8f0fa; }
+.panel-page .wa-sheet-page>.page-actions { padding:10px 12px; margin-bottom:8px; border:1px solid var(--wa-sheet-line); border-radius:5px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
+.wa-sheet-page .page-actions h1 { font-size:1.1rem; margin:0; }
+.wa-sheet-page .wa-intro { font-size:.73rem; margin-bottom:9px; }
+.wa-sheet-page .wa-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; margin-bottom:12px; border:1px solid var(--wa-sheet-line); border-radius:4px; overflow:hidden; background:var(--panel-surface); }
+.wa-sheet-page .wa-steps li { padding:7px 10px; border-right:1px solid var(--wa-sheet-line); font-size:.73rem; }
+.wa-sheet-page .wa-steps li:last-child { border-right:0; }
+.wa-sheet-page .wa-steps li>span { width:22px; height:22px; flex-shrink:0; border-radius:4px; background:var(--wa-sheet-head); }
+.panel-page .wa-sheet-page .wa-filters { display:flex; flex-wrap:wrap; align-items:flex-end; gap:8px; padding:9px 10px; border-radius:5px; border-color:var(--wa-sheet-line); }
+.wa-sheet-page .wa-filters label { flex:1 1 160px; font-size:.73rem; }
+.panel-page .wa-sheet-page .wa-filters :is(input,select,button,a) { min-height:38px; border-radius:4px; font-size:.75rem; }
+.wa-sheet-page .wa-result { margin:9px 0; font-size:.75rem; }
+.wa-sheet-page .wa-result span { font-size:.71rem; }
+.wa-sheet-page .wa-compose { gap:12px; }
+.panel-page .wa-sheet-page .wa-compose>.card { padding:10px; border:1px solid var(--wa-sheet-line); border-radius:5px; }
+.wa-sheet-page .wa-compose h2 { display:flex; align-items:center; gap:7px; margin:-10px -10px 10px; padding:8px 10px; border-bottom:1px solid var(--wa-sheet-line); background:var(--wa-sheet-head); font-size:.8rem; }
+.wa-sheet-page .wa-selection-toolbar { margin-bottom:9px; }
+.wa-sheet-page .wa-selection-toolbar>strong { font-size:.76rem; }
+.panel-page .wa-sheet-page .wa-selection-toolbar button { min-height:36px; padding:6px 9px; border-radius:4px; font-size:.71rem; }
+.wa-sheet-page .wa-selection-toolbar p { font-size:.71rem; }
+.panel-page .wa-sheet-page .table-scroll { border:1px solid var(--wa-sheet-line); border-radius:4px; max-height:min(340px,55vh); overflow:auto; scrollbar-width:thin; scrollbar-gutter:stable; }
+.wa-sheet-page table { width:100%; border-collapse:collapse; margin:0; }
+.panel-page .wa-sheet-page :is(th,td) { border-right:1px solid var(--wa-sheet-line); border-bottom:1px solid var(--wa-sheet-line); padding:8px; font-size:.73rem; }
+.panel-page .wa-sheet-page th { background:var(--wa-sheet-head); position:sticky; top:0; z-index:1; }
+.panel-page .wa-sheet-page :is(th,td):last-child { border-right:0; }
+.panel-page .wa-sheet-page tr:last-child td { border-bottom:0; }
+.panel-page .wa-sheet-page .wa-compose>.editor-form { gap:8px; }
+.panel-page .wa-sheet-page .editor-form label { font-size:.75rem; margin:0; }
+.panel-page .wa-sheet-page .editor-form :is(input,textarea) { min-height:38px; padding:7px 9px; font-size:14px; border-radius:4px; }
+.panel-page .wa-sheet-page .editor-form textarea { height:120px; min-height:100px; resize:vertical; }
+.wa-sheet-page .wa-live-preview { padding:8px 10px; border-color:var(--wa-sheet-line); border-radius:4px; }
+.wa-sheet-page .wa-live-preview p { font-size:.75rem; max-height:120px; margin-top:5px; }
+.wa-sheet-page .wa-history { border:1px solid var(--wa-sheet-line); border-radius:5px; margin-top:12px; padding:0 10px 10px; }
+.wa-sheet-page .wa-history>summary { padding:9px 0; font-size:.76rem; }
+.wa-sheet-page :is(a,button,input,select,textarea,summary):focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] .wa-sheet-page { --wa-sheet-line:#44566d; --wa-sheet-head:#223246; }
+html[data-theme=dark] .panel-page .wa-sheet-page>.page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+@media(max-width:600px) { .wa-sheet-page .wa-steps { grid-template-columns:minmax(0,1fr); }.wa-sheet-page .wa-steps li { border-right:0; border-bottom:1px solid var(--wa-sheet-line); }.wa-sheet-page .wa-steps li:last-child { border-bottom:0; }.panel-page .wa-sheet-page .wa-filters :is(input,select),.panel-page .wa-sheet-page .editor-form :is(input,textarea) { font-size:16px; min-height:44px; }.panel-page .wa-sheet-page .wa-filters :is(a,button),.panel-page .wa-sheet-page .wa-selection-toolbar button { min-height:44px; }.panel-page .wa-sheet-page .wa-compose .table-scroll td { border-right:0; border-bottom:0; }.wa-sheet-page .wa-compose .table-scroll tr { border-color:var(--wa-sheet-line); } }

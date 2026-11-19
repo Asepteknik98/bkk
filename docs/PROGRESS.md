@@ -690,3 +690,26 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Daftar tautan bertitik diganti tabel Excel: Nama, Jurusan, Tahun lulus dan tombol Kelola lamaran berikon. Header batik mengikuti lebar panel, pencarian dengan label/placeholder/reset, informasi jumlah/halaman, empty state. Kotak scroll internal maksimal min(340px,55vh), header sticky, fokus keyboard, tema gelap dan tombol sentuh HP.
 - Query daftar kini memakai COUNT serta LIMIT/OFFSET prepared untuk 10 alumni per halaman (bukan berhenti 50 hasil). Navigasi maksimal 10 nomor bergeser mempertahankan pencarian, total halaman tidak dibatasi. Data NISN sama tetap catatan terpisah; jalur formulir pencatatan/hasil alumni tidak diubah.
 - File panel/hasil-alumni/lamaran.php dan assets/css/panel-theme.css. Lint PHP dan diff check lulus; struktur tabel, parameter prepared dan tautan tindakan diperiksa. Tanpa SQL/data operasional. Browser dan query database langsung belum diuji.
+
+## Data Alumni bergaris seperti Excel (20 November 2026)
+
+- Header Data Alumni memakai batik lembut mengikuti lebar panel. Tombol toolbar/filter dipadatkan, tab angkatan menjadi satu strip sel berbatas (pilihan aktif tetap jelas). Tabel memakai garis vertikal/horizontal, header biru lembut sticky, padding ringkas, tombol Lihat biru dan kotak scroll maksimal min(360px,55vh). Tema gelap/fokus keyboard serta ukuran input/tombol HP dipertahankan.
+- Hanya assets/css/panel-theme.css dan progres; query, filter, pagination 25, ekspor dan izin akses tidak berubah. Diff check lulus; template/helper filter dan selector terkait diperiksa. Browser belum diuji ulang.
+
+## Pesan WhatsApp bergaris dan ringkas (20 November 2026)
+
+- Halaman penyusunan pesan memiliki header batik, tiga langkah dalam strip sel bergaris, filter flex yang tidak membesarkan tombol pencarian. Panel penerima/pesan memakai header biru lembut dan jarak ringkas; tabel penerima/riwayat bergaris, scroll internal maksimal min(340px,55vh), header sticky. Textarea 120px dapat diperbesar dan preview pesan dibatasi tinggi. Tema gelap dan susunan HP/ukuran sentuh tetap.
+- File panel/whatsapp/index.php hanya menambah class wa-sheet-page; CSS scoped di assets/css/panel-theme.css. Field, seleksi keranjang, JS, persetujuan, tautan, CSRF dan alur kirim manual tidak berubah. Tidak ada SQL/data atau pesan WhatsApp dikirim saat pengerjaan.
+- Lint PHP dan diff check lulus; template/selector dan breakpoint diperiksa. Browser belum diuji ulang.
+
+## Daftar BMW SAKTI bergaris dan ikon ringkas (20 November 2026)
+
+- Judul kini di kiri header batik; Deskripsi/Minat/Tambah dikelompokkan setelah judul. Filter dirapatkan, tabel bergaris Excel dengan header sticky dan kotak scroll maksimal min(360px,55vh). Ikon tindakan seragam: Edit biru, Lihat publik hijau (published), Hapus merah, dengan title/aria-label. Tema gelap dan ukuran sentuh HP minimal 44px dipertahankan.
+- File panel/program/index.php dan assets/css/bmw.css. Pagination backend 10, filter/query, tujuan link, POST+CSRF/konfirmasi hapus tidak berubah. Tanpa SQL/data.
+- Lint PHP dan diff check lulus; selector dan markup tindakan diperiksa. Browser belum diuji ulang.
+
+## Deskripsi BMW Sakti bergaris dan ringkas (20 November 2026)
+
+- Header batik dengan satu ikon judul, tombol Halaman publik/Daftar program ringkas. Wrapper mengikuti lebar panel tanpa batas 980px/margin tengah. Judul/Status menjadi sel berdampingan dengan garis pemisah; Deskripsi berheader biru lembut, textarea awal 130px bisa diperbesar, petunjuk/footer simpan dipadatkan. HP satu kolom dengan input 16px/tombol minimal 44px; warna gelap disesuaikan.
+- File panel/program/deskripsi.php (ikon judul saja) dan assets/css/bmw.css. Field, version, CSRF, status, escape dan proses penyimpanan tidak berubah. Tanpa SQL/data.
+- Lint PHP dan diff check lulus, aturan desktop/HP serta selector diperiksa. Browser belum diuji ulang.

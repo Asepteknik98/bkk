@@ -12,7 +12,7 @@ panel_start($user,'Deskripsi BMW Sakti','program');
 ?>
 <div class="bmw-description-editor">
     <header class="bmw-description-heading">
-        <div class="bmw-description-title"><span class="bmw-description-symbol" aria-hidden="true"><?= panel_icon('program') ?></span><div><h1>Deskripsi BMW Sakti</h1><p>Kelola pengantar program yang tampil pada halaman publik.</p></div></div>
+        <div class="bmw-description-title"><div><h1><?= panel_icon('program') ?> Deskripsi BMW Sakti</h1><p>Kelola pengantar program yang tampil pada halaman publik.</p></div></div>
         <nav class="bmw-description-links" aria-label="Tautan program">
             <a href="<?= e(base_url('bmw-sakti.php')) ?>"><?= panel_icon('view') ?> Halaman publik</a>
             <a href="<?= e(base_url('panel/program/')) ?>"><?= panel_icon('back') ?> Daftar program</a>
