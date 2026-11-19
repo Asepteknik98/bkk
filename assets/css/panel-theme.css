@@ -1967,3 +1967,18 @@ html[data-theme=dark] .panel-page .applications-inbox .application-actions>a.app
 .panel-page .settings-separated .settings-single-form .settings-field>textarea { height:auto; min-height:84px; font-size:16px; }
 .panel-page .settings-separated .settings-single-form textarea[id^=participant_] { min-height:148px; }
 .panel-page .settings-separated .settings-single-form textarea#profile_description { min-height:220px; }
+
+/* Spreadsheet paper for choice lists; the original textarea remains the field. */
+.settings-choice-sheet { --sheet-row-height:30px; --sheet-line:#cdd9e4; min-width:0; overflow:hidden; border:1px solid var(--sheet-line); border-radius:6px; background:var(--panel-surface); }
+.settings-sheet-header { display:grid; grid-template-columns:38px minmax(0,1fr); background:#edf4ef; color:#35604a; font-size:.75rem; font-weight:600; border-bottom:1px solid var(--sheet-line); }
+.settings-sheet-header>span { display:grid; place-items:center; min-height:28px; }
+.settings-sheet-header>span:first-child { border-right:1px solid var(--sheet-line); color:var(--panel-muted); }
+.settings-sheet-body { display:grid; grid-template-columns:38px minmax(0,1fr); min-width:0; }
+.settings-sheet-gutter { position:relative; min-height:0; overflow:hidden; border-right:1px solid var(--sheet-line); background:var(--panel-soft); }
+.settings-sheet-numbers { position:absolute; inset:6px 0 auto; color:var(--panel-muted); font-size:.72rem; font-variant-numeric:tabular-nums; text-align:center; pointer-events:none; }
+.settings-sheet-numbers>span { display:block; height:var(--sheet-row-height); line-height:var(--sheet-row-height); border-bottom:1px solid var(--sheet-line); }
+.panel-page .settings-separated .settings-single-form .settings-choice-sheet textarea { display:block; width:100%; min-width:0; height:192px; min-height:192px; margin:0; padding:6px 12px; border:0; border-radius:0; font-size:16px; line-height:var(--sheet-row-height); white-space:pre; overflow-wrap:normal; resize:vertical; background-color:var(--panel-surface); background-image:linear-gradient(to bottom,transparent calc(100% - 1px),var(--sheet-line) 1px); background-size:100% var(--sheet-row-height); background-position:0 6px; background-repeat:repeat-y; background-attachment:local; }
+.settings-choice-sheet:focus-within { outline:2px solid #448060; outline-offset:2px; }
+.settings-choice-sheet textarea:focus-visible { outline:none; }
+html[data-theme=dark] .settings-choice-sheet { --sheet-line:#405366; }
+html[data-theme=dark] .settings-sheet-header { background:#253c34; color:#b6ddc7; }

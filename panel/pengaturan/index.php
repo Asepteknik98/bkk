@@ -32,7 +32,12 @@ panel_start($user,'Pengaturan - '.$section['label'],'pengaturan');
                         <?php foreach($section['fields'] as $key): [$label,$max,$required]=$fields[$key];$multiline=in_array($key,['contact_address','profile_description','manager_address','privacy_retention','participant_classes','participant_departments','participant_years'],true); ?>
                         <div class="settings-field <?= $multiline?'settings-wide':'' ?>">
                             <label for="<?= $key ?>"><?= str_starts_with($key,'social_')?social_icon($key):panel_icon(['site_name'=>'identity','school_name'=>'program','contact_phone'=>'phone','contact_email'=>'mail','contact_address'=>'location','profile_description'=>'message','participant_classes'=>'peserta','participant_departments'=>'program','participant_years'=>'calendar'][$key]??$section['icon']) ?> <?= e(str_starts_with($key,'social_')?social_networks()[$key]:$label) ?></label>
-                            <?php if($multiline): ?><textarea id="<?= $key ?>" name="<?= $key ?>" rows="<?= $key==='profile_description'?8:(str_starts_with($key,'participant_')?6:3) ?>" maxlength="<?= $max ?>"><?= e($data[$key]) ?></textarea>
+                            <?php if(str_starts_with($key,'participant_')): ?>
+                            <div class="settings-choice-sheet">
+                                <div class="settings-sheet-header" aria-hidden="true"><span>#</span><span>A</span></div>
+                                <div class="settings-sheet-body"><div class="settings-sheet-gutter" aria-hidden="true"><div class="settings-sheet-numbers"><?php for($line=1;$line<=8;$line++): ?><span><?= $line ?></span><?php endfor; ?></div></div><textarea id="<?= $key ?>" name="<?= $key ?>" rows="6" wrap="off" maxlength="<?= $max ?>"><?= e($data[$key]) ?></textarea></div>
+                            </div>
+                            <?php elseif($multiline): ?><textarea id="<?= $key ?>" name="<?= $key ?>" rows="<?= $key==='profile_description'?8:3 ?>" maxlength="<?= $max ?>"><?= e($data[$key]) ?></textarea>
                             <?php else: ?><input id="<?= $key ?>" name="<?= $key ?>" type="<?= str_starts_with($key,'social_')?'url':(in_array($key,['contact_email','manager_email'],true)?'email':'text') ?>" maxlength="<?= $max ?>" value="<?= e($data[$key]) ?>" <?= str_starts_with($key,'social_')?'placeholder="https://"':'' ?> <?= $required?'required':'' ?>><?php endif; ?>
                         </div><?php endforeach; ?>
                     </div><?php endif; ?>

@@ -336,3 +336,27 @@ if (dashboardGraphs.length && !window.matchMedia('(prefers-reduced-motion: reduc
         dashboardGraphs.forEach(animateGraph);
     }
 }
+
+// Decorative row numbers follow native textarea scrolling without changing data.
+document.querySelectorAll('.settings-choice-sheet').forEach(sheet => {
+    const textarea = sheet.querySelector('textarea');
+    const numbers = sheet.querySelector('.settings-sheet-numbers');
+    if (!textarea || !numbers) return;
+    const renderRows = () => {
+        const rowHeight = parseFloat(getComputedStyle(sheet).getPropertyValue('--sheet-row-height')) || 30;
+        const first = Math.floor(textarea.scrollTop / rowHeight);
+        const count = Math.ceil(textarea.clientHeight / rowHeight) + 2;
+        const fragment = document.createDocumentFragment();
+        for (let index = 0; index < count; index++) {
+            const row = document.createElement('span');
+            row.textContent = String(first + index + 1);
+            fragment.append(row);
+        }
+        numbers.replaceChildren(fragment);
+        numbers.style.transform = `translateY(-${textarea.scrollTop % rowHeight}px)`;
+    };
+    textarea.addEventListener('scroll', renderRows, { passive:true });
+    textarea.addEventListener('input', renderRows);
+    if (window.ResizeObserver) new ResizeObserver(renderRows).observe(textarea);
+    renderRows();
+});
