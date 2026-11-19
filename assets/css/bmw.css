@@ -497,3 +497,40 @@ html[data-theme=dark] .inquiry-status-selesai { background:#2a4035; color:#c6e2d
     .bmw-admin .interest-list .filter-form>button[type=submit],
     .bmw-admin .interest-list .table-scroll td:last-child>a { min-height:44px; }
 }
+
+/* Compact program introduction editor, isolated from the program CRUD form. */
+.bmw-description-editor { max-width:980px; margin:0 auto; }
+.bmw-description-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px 20px; margin-bottom:18px; }
+.bmw-description-title { display:flex; align-items:center; gap:12px; min-width:0; }
+.bmw-description-symbol { display:grid; place-items:center; flex:none; width:42px; height:42px; border-radius:12px; background:#e9f1fc; color:#285b98; }
+.bmw-description-editor .panel-icon { display:inline-block; flex:none; width:18px; height:18px; margin:0; vertical-align:middle; }
+.bmw-description-symbol .panel-icon { width:23px; height:23px; }
+.bmw-description-title h1 { margin:0 0 4px; font-size:1.18rem; line-height:1.4; }
+.bmw-description-title p { margin:0; font-size:.78rem; line-height:1.6; color:var(--panel-muted); }
+.bmw-description-links { display:flex; flex-wrap:wrap; gap:8px; }
+.bmw-description-links a { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:44px; padding:8px 11px; border:1px solid var(--panel-line); border-radius:8px; background:var(--panel-surface); color:var(--panel-text); font-size:.76rem; text-decoration:none; }
+.bmw-description-links a:hover { background:var(--panel-soft); }
+.bmw-description-editor .bmw-description-form { display:grid; grid-template-columns:minmax(0,1fr) minmax(180px,240px); gap:16px; padding:20px; border-radius:12px; box-shadow:none; }
+.bmw-description-editor .bmw-description-form>label { display:flex; flex-direction:column; gap:8px; min-width:0; margin:0; font-size:.8rem; }
+.bmw-description-form>label>span { display:flex; align-items:center; gap:7px; }
+.bmw-description-form>label>span .panel-icon { color:#416e9d; }
+.bmw-description-editor .bmw-description-form input:not([type=hidden]),
+.bmw-description-editor .bmw-description-form select,
+.bmw-description-editor .bmw-description-form textarea { width:100%; min-width:0; min-height:44px; margin:0; padding:10px 12px; border:1px solid var(--panel-line); border-radius:8px; background:var(--panel-bg); color:var(--panel-text); font-size:16px; }
+.bmw-description-editor .bmw-description-content { grid-column:1/-1; }
+.bmw-description-editor .bmw-description-form textarea { min-height:190px; line-height:1.7; resize:vertical; }
+.bmw-description-editor .bmw-description-help { grid-column:1/-1; margin:-6px 0 0; font-size:.74rem; line-height:1.6; color:var(--panel-muted); }
+.bmw-description-footer { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:16px; border-top:1px solid var(--panel-line); padding-top:14px; }
+.bmw-description-footer p { display:flex; align-items:flex-start; gap:7px; margin:0; font-size:.75rem; line-height:1.6; color:var(--panel-muted); max-width:430px; }
+.bmw-description-editor .bmw-description-footer button { display:inline-flex; align-items:center; justify-content:center; gap:8px; flex:none; min-height:44px; margin:0; padding:10px 14px; font-size:.8rem; line-height:1.5; border-radius:8px; }
+html[data-theme=dark] .bmw-description-symbol { background:#243b54; color:#a8c9ef; }
+html[data-theme=dark] .bmw-description-form>label>span .panel-icon { color:#a8c9ef; }
+@media(max-width:600px) {
+    .bmw-description-title { align-items:flex-start; }
+    .bmw-description-title h1 { font-size:1.08rem; }
+    .bmw-description-links { width:100%; }
+    .bmw-description-links a { flex:1; }
+    .bmw-description-editor .bmw-description-form { grid-template-columns:minmax(0,1fr); padding:16px; gap:14px; }
+    .bmw-description-footer { flex-direction:column; align-items:stretch; gap:12px; }
+    .bmw-description-editor .bmw-description-footer button { width:100%; }
+}
