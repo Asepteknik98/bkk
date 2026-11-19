@@ -924,3 +924,25 @@ html[data-theme=dark] .bmw-admin .program-management .row-actions .program-delet
 html[data-theme=dark] .bmw-admin .bmw-description-editor { --description-line:#44566d; --description-head:#223246; }
 html[data-theme=dark] .bmw-admin .bmw-description-heading { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
 @media(max-width:600px) { .bmw-admin .bmw-description-editor .bmw-description-form { grid-template-columns:minmax(0,1fr); }.bmw-description-form>label[for=judul] { border-right:0; }.bmw-admin .bmw-description-editor .bmw-description-form :is(input:not([type=hidden]),select,textarea) { font-size:16px; min-height:44px; }.bmw-admin .bmw-description-links a,.bmw-admin .bmw-description-editor .bmw-description-footer button { min-height:44px; } }
+
+/* Minat dan pertanyaan program: lembar daftar bergaris. */
+.bmw-admin .interest-list { width:100%; max-width:none; margin:0; --interest-line:#bdcfe2; --interest-head:#e8f0fa; }
+.bmw-admin .interest-list .page-actions { padding:10px 12px; border:1px solid var(--interest-line); border-radius:5px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
+.bmw-admin .interest-list .page-actions h1 { font-size:1.1rem; }
+.bmw-admin .interest-list .page-actions>.program-interest-back { border-radius:4px; }
+.bmw-admin .interest-list .filter-form.card { padding:9px 10px; gap:8px; border-color:var(--interest-line); border-radius:5px; margin-bottom:10px; }
+.bmw-admin .interest-list .filter-form select,.bmw-admin .interest-list .filter-form>button[type=submit] { border-radius:4px; }
+.bmw-admin .interest-list .table-scroll { border:1px solid var(--interest-line); border-radius:5px; max-height:min(360px,55vh); scrollbar-width:thin; scrollbar-gutter:stable; }
+.bmw-admin .interest-list table { border-collapse:collapse; table-layout:fixed; margin:0; }
+.bmw-admin .interest-list :is(th,td) { padding:8px 10px; border-right:1px solid var(--interest-line); border-bottom:1px solid var(--interest-line); font-size:.74rem; vertical-align:middle; overflow-wrap:anywhere; }
+.bmw-admin .interest-list th { background:var(--interest-head); color:var(--panel-text); }
+.bmw-admin .interest-list :is(th,td):last-child { border-right:0; }
+.bmw-admin .interest-list tr:last-child td { border-bottom:0; }
+.bmw-admin .interest-list th:nth-child(2) { width:28%; }
+.bmw-admin .interest-list th:nth-child(3) { width:14%; }
+.bmw-admin .interest-list .table-scroll td:last-child>a { display:inline-flex; align-items:center; gap:6px; min-height:36px; border-radius:4px; background:#edf7f1; border-color:#bfdccc; color:#356658; }
+.bmw-admin .interest-list .table-scroll:focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] .bmw-admin .interest-list { --interest-line:#44566d; --interest-head:#223246; }
+html[data-theme=dark] .bmw-admin .interest-list .page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+html[data-theme=dark] .bmw-admin .interest-list .table-scroll td:last-child>a { background:#203e33; color:#b8e2cc; border-color:#416653; }
+@media(max-width:600px) { .bmw-admin .interest-list table { min-width:730px; }.bmw-admin .interest-list .table-scroll td:last-child>a { min-height:44px; } }

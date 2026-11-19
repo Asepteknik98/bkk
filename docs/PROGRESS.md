@@ -713,3 +713,8 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Header batik dengan satu ikon judul, tombol Halaman publik/Daftar program ringkas. Wrapper mengikuti lebar panel tanpa batas 980px/margin tengah. Judul/Status menjadi sel berdampingan dengan garis pemisah; Deskripsi berheader biru lembut, textarea awal 130px bisa diperbesar, petunjuk/footer simpan dipadatkan. HP satu kolom dengan input 16px/tombol minimal 44px; warna gelap disesuaikan.
 - File panel/program/deskripsi.php (ikon judul saja) dan assets/css/bmw.css. Field, version, CSRF, status, escape dan proses penyimpanan tidak berubah. Tanpa SQL/data.
 - Lint PHP dan diff check lulus, aturan desktop/HP serta selector diperiksa. Browser belum diuji ulang.
+
+## Minat dan pertanyaan program bergaris (20 November 2026)
+
+- Header batik mengikuti lebar panel, filter ringkas, tabel bergaris Excel dengan header biru lembut dan label Tindakan yang jelas. Tombol Buka/balas berikon hijau; kotak daftar scroll maksimal min(360px,55vh) dengan header tetap dan fokus keyboard. Warna gelap/ukuran sentuh HP dipertahankan.
+- File panel/program-minat/index.php dan assets/css/bmw.css. Filter/query, pagination 25, hak akses dan alur balas tidak diubah. Lint PHP dan diff check lulus; browser belum diuji ulang. Tanpa SQL/data.
