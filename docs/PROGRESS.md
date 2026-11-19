@@ -593,3 +593,25 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 
 - Berita & Kegiatan memiliki header ringkas berbingkai, ikon eksplisit pada judul/filter/tombol dan tabel panel-sheet bergaris vertikal/horizontal dengan header sticky/area gulir maksimal 430px. Label published ditampilkan sebagai Dipublikasikan tanpa mengubah nilai database/filter. Tindakan Edit (biru lembut), Lihat publik, dan Hapus (merah lembut) sejajar, sama tinggi dan tetap memakai handler/CSRF/konfirmasi lama. CSS scoped news-list-page mendukung tema gelap serta target 44px HP.
 - File: panel/berita/index.php, assets/css/panel-theme.css. Query, pagination sepuluh baris, aturan is_public, popup/unggulan dan akses tidak berubah. Lint PHP dan diff check lulus. Chrome dengan template PHP/CSS asli serta fixture terbit/draft/terbit belum publik, viewport 504/1182px, dua tema: tiga baris/form konfirmasi, tautan publik hanya satu sesuai kondisi, garis solid, tombol sama tinggi/muat dan tanpa overflow. Screenshot desktop diperiksa. Tidak menguji CRUD/database ulang untuk perubahan presentasi; artefak QA dibersihkan.
+
+## Jarak vertikal daftar Berita dirapatkan (20 November 2026)
+
+- Padding atas/bawah header menjadi 8px, filter 10px, dan sel tabel 7px. Margin antarblok, nama/slug dan badge dirapatkan. Padding kiri/kanan, lebar kolom, isi, URL dan tinggi target tindakan HP tetap. Hanya assets/css/panel-theme.css berubah.
+- Diff check dan spesifisitas aturan scoped news-list-page diperiksa; tidak mengubah SQL/handler/data atau menjalankan ulang browser/database untuk perubahan spasi ini.
+
+## Navigasi dan gulir daftar Berita (20 November 2026)
+
+- Daftar Berita tetap memakai sepuluh data per halaman server; data-list-size=10 menyelaraskan slider generik sehingga tidak menyembunyikan separuh data. Pagination kini menampilkan maksimal sepuluh nomor halaman sekaligus dan Sebelumnya/Berikutnya; rentang bergeser mengikuti halaman aktif sehingga halaman di atas sepuluh tetap dapat diakses. Query/status dipertahankan dan aria-current menandai halaman aktif.
+- Kotak tabel dibatasi 400px atau 55vh, scrollbar ramping, header sticky tetap, sehingga bergulir ke bawah tanpa memperpanjang halaman. File panel/berita/index.php dan assets/css/panel-theme.css. Tidak mengubah query/handler/SQL/data.
+- Lint PHP dan diff check lulus. Render PHP asli menguji satu/dua/25 halaman, awal/tengah/akhir, jumlah nomor maksimal sepuluh, satu aktif dan parameter filter/URL. Chrome dengan sepuluh berita sintetis, CSS dan kode slider asli pada viewport 504/1182px membuktikan sepuluh baris tersedia, kotak di bawah 400px, scroll 90px bekerja, header tetap, sepuluh nomor/satu aktif dan tanpa overflow. Screenshot desktop diperiksa. Tidak menguji database/perangkat fisik ulang; artefak QA dibersihkan.
+
+## Form Berita terstruktur seperti Excel (20 November 2026)
+
+- Tambah/Edit Berita kini memiliki header berbingkai dan tiga bagian bernomor: Isi berita, Publikasi, Gambar utama opsional. Judul/slug/ringkasan/isi menjadi sel bergaris; panel samping dipisahkan garis vertikal dan header biru lembut, menjadi satu kolom pada layar kecil. Petunjuk popup panjang berada dalam disclosure, dengan keterangan singkat tetap terlihat. Preview gambar dibatasi 130px dan footer Simpan/Batal terpisah. CSS scoped news-form-page tidak memengaruhi editor modul lain.
+- File panel/berita/form.php dan assets/css/panel-theme.css. Fieldname, IDs, required/maxlength, CSRF, unggulan/popup, status value draft/published, upload/katalog, hapus gambar, draft error dan handler simpan tidak berubah. Status published ditulis Dipublikasikan pada label. Tanpa SQL atau data asli.
+- Lint PHP dan diff check lulus. Chrome memakai template PHP/CSS asli dan fixture tambah/edit (gambar placeholder lokal) pada viewport 504/1182px, tema terang/gelap: satu formulir/tiga judul bagian, semua 11/12 field tetap, centang popup/unggulan tetap, petunjuk awal tertutup, label terhubung, garis solid, tujuan simpan sama dan tanpa overflow. Escape teks HTML di textarea dipastikan. Screenshot desktop diperiksa. Tidak menguji upload/CRUD database ulang karena perubahan presentasi; artefak QA dibersihkan.
+
+## Form Berita diperkecil dan header batik (20 November 2026)
+
+- Lebar form Tambah/Edit Berita diperkecil dari 1150 ke 960px, panel samping desktop 300px. Padding sel/header dan ukuran judul dirapatkan, textarea ringkasan 60px/isi 180px tetap bisa diperbesar, serta preview gambar maksimal 100px. Breakpoint satu kolom dan input 16px/44px HP tetap. Header halaman memakai batik sekolah lokal dengan lapisan terang/gelap; isi form tetap bergaris Excel. Hanya assets/css/panel-theme.css berubah.
+- Diff check, keberadaan aset dan aturan breakpoint diperiksa. Tidak ada perubahan field, handler, SQL/data atau pengujian database ulang.
