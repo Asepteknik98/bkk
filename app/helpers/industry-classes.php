@@ -126,16 +126,23 @@ function industry_meeting_save(int $classId,int $id,int $version,array $data,int
     }catch(Throwable $exception){if(db()->inTransaction()){db()->rollBack();}throw $exception;}
 }
 
-/** Keep selected references visible even when search results are limited. */
-function industry_participant_options(string $search,array $selected): array
+/** Bounded result pages keep the student picker small even with thousands of students. */
+function industry_participant_page(string $search,int $page=1): array
 {
     if(!valid_text($search,100,false)){throw new InvalidArgumentException('Pencarian peserta maksimal 100 karakter.');}
     $pattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$search).'%';
-    $rows=panel_query("SELECT id,nis,nama,kelas FROM siswa WHERE nama LIKE :nama ESCAPE '!' OR nis LIKE :nis ESCAPE '!' OR kelas LIKE :kelas ESCAPE '!' ORDER BY nama,id LIMIT 50",['nama'=>$pattern,'nis'=>$pattern,'kelas'=>$pattern])->fetchAll();
-    $options=[];foreach($rows as $row){$options[$row['id']]=$row;}
-    if($selected){
-        $params=[];foreach($selected as $index=>$id){$params['ref'.$index]=$id;}
-        foreach(panel_query('SELECT id,nis,nama,kelas FROM siswa WHERE id IN (:'.implode(',:',array_keys($params)).') ORDER BY nama,id',$params)->fetchAll() as $row){$options[$row['id']]=$row;}
-    }
-    return array_values($options);
+    $where="nama LIKE :nama ESCAPE '!' OR kelas LIKE :kelas ESCAPE '!'";
+    $params=['nama'=>$pattern,'kelas'=>$pattern];
+    $total=(int)panel_query('SELECT COUNT(*) FROM siswa WHERE '.$where,$params)->fetchColumn();
+    $pages=max(1,(int)ceil($total/10));$page=max(1,min($pages,$page));
+    $rows=panel_query('SELECT id,nama,kelas FROM siswa WHERE '.$where.' ORDER BY nama,id LIMIT :limit OFFSET :offset',$params+['limit'=>10,'offset'=>($page-1)*10])->fetchAll();
+    return ['rows'=>$rows,'total'=>$total,'pages'=>$pages,'page'=>$page];
+}
+
+function industry_selected_participants(array $selected): array
+{
+    if(!$selected){return [];}
+    $selected=industry_ids(array_map(static fn($id)=>is_int($id)?(string)$id:$id,$selected));$params=[];
+    foreach($selected as $index=>$id){$params['ref'.$index]=$id;}
+    return panel_query('SELECT id,nama,kelas FROM siswa WHERE id IN (:'.implode(',:',array_keys($params)).') ORDER BY nama,id',$params)->fetchAll();
 }
