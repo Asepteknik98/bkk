@@ -16,10 +16,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 }
 panel_start($user,'Akun Pribadi','akun');
 ?>
-<h1><?= panel_icon('akun') ?> Akun Pribadi</h1><p>Role: <?= e($user['role']) ?></p>
+<div class="personal-account-sheet"><header class="personal-account-heading"><h1><?= panel_icon('akun') ?> Akun Pribadi</h1><span><?= panel_icon('lock') ?> <?= e($user['role']==='admin'?'Admin':'Staf BKK') ?></span></header>
 <form class="editor-form card personal-profile-form" method="post" enctype="multipart/form-data"><?= csrf_field() ?>
-<div class="personal-photo-column"><?php account_photo_field($user); ?></div><div class="personal-fields">
+<section class="personal-photo-column" aria-labelledby="personal-photo-title"><h2 id="personal-photo-title"><?= panel_icon('media') ?> Foto profil <small>Opsional</small></h2><?php account_photo_field($user); ?></section><section class="personal-identity-section" aria-labelledby="personal-identity-title"><h2 id="personal-identity-title"><?= panel_icon('identity') ?> Identitas akun</h2><div class="personal-fields">
 <?php foreach(['nama'=>'Nama lengkap','username'=>'Username','email'=>'Email'] as $key=>$label): ?><div class="personal-field"><label for="<?= $key ?>"><?= panel_icon(['nama'=>'akun','username'=>'identity','email'=>'mail'][$key]) ?> <?= e($label) ?></label><input id="<?= $key ?>" name="<?= $key ?>" type="<?= $key==='email'?'email':'text' ?>" maxlength="<?= $key==='username'?50:($key==='nama'?150:191) ?>" value="<?= e($user[$key]) ?>" required></div><?php endforeach; ?>
-<small class="personal-hint">Username 3–50 huruf kecil/angka/titik/garis, diawali huruf atau angka.</small></div><div class="form-actions"><button type="submit"><?= panel_icon('save') ?> Simpan profil</button><a href="<?= e(base_url('panel/akun/ubah-password.php')) ?>"><?= panel_icon('lock') ?> Ubah password</a></div></form>
+<small class="personal-hint">Username 3–50 huruf kecil/angka/titik/garis, diawali huruf atau angka.</small></div></section><div class="form-actions"><button type="submit"><?= panel_icon('save') ?> Simpan profil</button><a href="<?= e(base_url('panel/akun/ubah-password.php')) ?>"><?= panel_icon('lock') ?> Ubah password</a></div></form></div>
 
 <?php panel_end($user); ?>

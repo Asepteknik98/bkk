@@ -40,46 +40,42 @@ panel_start($user,'Dashboard','dashboard');
 </div>
 <section class="dashboard-insights" aria-label="Grafik PKL dan Tracer Study">
 <div class="dashboard-chart-actions"><button type="button" class="chart-replay" hidden><?= panel_icon('reset') ?> Putar ulang animasi</button></div>
-<div class="dashboard-charts"><section class="card section-space tracer-summary" aria-labelledby="tracer-chart-title">
+<div class="dashboard-charts"><section class="card section-space tracer-summary tracer-sheet-summary" aria-labelledby="tracer-chart-title">
     <div class="tracer-summary-heading"><h2 id="tracer-chart-title"><?= panel_icon('tracer') ?> Ringkasan Tracer Study</h2><span class="badge"><?= (int) array_sum($tracer) ?> respons</span></div>
-    <p class="muted">Jumlah respons berdasarkan kegiatan alumni, bukan jumlah alumni unik.</p>
-    <?php
-    $labels = tracer_statuses();
-    if (isset($tracer['lainnya'])) { $labels['lainnya'] = 'Lainnya (data lama)'; }
-    $chartMax = max(1, ...array_map(static fn($status): int => (int) ($tracer[$status] ?? 0), array_keys($labels)));
-    ?>
-    <dl class="tracer-chart dashboard-column-chart" aria-label="Grafik jumlah respons per kegiatan; tinggi batang dibandingkan kategori terbanyak">
-        <?php foreach ($labels as $status => $label): $value = (int) ($tracer[$status] ?? 0); ?>
-        <div class="tracer-chart-row">
-            <dt><?= e($label) ?></dt>
-            <dd><span class="tracer-chart-track" aria-hidden="true"><span class="tracer-chart-bar" style="height:<?= (int) round($value / $chartMax * 100) ?>%"></span></span><strong><?= $value ?><span class="sr-only"> respons</span></strong></dd>
-        </div>
-        <?php endforeach; ?>
-    </dl>
-    <?php if (array_sum($tracer) === 0): ?><p class="muted">Belum ada respons. Grafik akan terisi setelah alumni mengirim formulir.</p><?php endif; ?>
-    <a href="<?= e(base_url('panel/tracer-study/rekap.php')) ?>">Lihat rekap dan filter &rarr;</a>
+    <p class="tracer-sheet-note">Jumlah respons menurut kegiatan alumni, bukan jumlah alumni unik.</p>
+    <?php $labels=tracer_statuses();if(isset($tracer['lainnya'])){$labels['lainnya']='Lainnya (data lama)';} ?>
+    <div class="tracer-sheet-table"><table><caption class="sr-only">Jumlah respons tracer study per kegiatan alumni</caption><thead><tr><th scope="col">Kegiatan alumni</th><th scope="col">Jumlah respons</th></tr></thead><tbody><?php foreach($labels as $status=>$label): ?><tr><th scope="row"><span class="tracer-category-marker category-<?= e($status) ?>" aria-hidden="true"></span><?= e($label) ?></th><td><?= (int)($tracer[$status]??0) ?></td></tr><?php endforeach; ?></tbody></table></div>
+    <?php if(array_sum($tracer)===0): ?><p class="tracer-sheet-note">Belum ada respons tracer study yang masuk.</p><?php endif; ?>
+    <a class="tracer-sheet-link" href="<?= e(base_url('panel/tracer-study/rekap.php')) ?>"><?= panel_icon('view') ?> Lihat rekap dan filter <?= panel_icon('next') ?></a>
 </section>
-<section class="card tracer-visual" aria-labelledby="tracer-visual-title">
+<section class="card tracer-visual tracer-fan-card" aria-labelledby="tracer-visual-title">
     <h2 id="tracer-visual-title"><?= panel_icon('tracer') ?> Komposisi kegiatan alumni</h2>
-    <p class="muted">Arahkan atau pilih kategori untuk melihat jumlah respons.</p>
-    <?php $tracerTotal = (int) array_sum($tracer); $offset = 0; $categoryIndex = 0; ?>
-    <div class="tracer-donut-layout">
-        <div class="tracer-donut" data-total="<?= $tracerTotal ?>">
-            <svg viewBox="0 0 120 120" role="img" aria-label="Komposisi respons Tracer Study: <?= $tracerTotal ?> respons">
-                <circle class="donut-track" cx="60" cy="60" r="46" fill="none" stroke-width="12"/>
-                <?php foreach ($labels as $status => $label): $value = (int)($tracer[$status] ?? 0); $share = $tracerTotal ? $value / $tracerTotal * 100 : 0; ?>
-                <circle class="donut-segment category-<?= $categoryIndex ?>" data-category="<?= $categoryIndex ?>" cx="60" cy="60" r="46" pathLength="100" fill="none" stroke-width="12" stroke-dasharray="<?= $share ?> <?= 100-$share ?>" stroke-dashoffset="<?= -$offset ?>" transform="rotate(-90 60 60)"><title><?= e($label) ?>: <?= $value ?> respons</title></circle>
-                <?php $offset += $share; $categoryIndex++; endforeach; ?>
+    <p class="muted">Pilih kategori untuk melihat jumlah respons. Luas bidang menunjukkan proporsinya.</p>
+    <?php
+    $tracerTotal=(int)array_sum($tracer);$offset=0;$categoryIndex=0;
+    $fanColors=['#ed8c0a','#70a51b','#246e98','#d83383','#13a0ac'];
+    $fanDark=['#a85b05','#456c0b','#174e70','#a32261','#086d78'];
+    $fanPoint=static fn(float $radius,float $angle):string=>number_format(60+$radius*cos(deg2rad($angle)),3,'.','').','.number_format(180+$radius*sin(deg2rad($angle)),3,'.','');
+    ?>
+    <div class="tracer-fan-layout">
+        <div class="tracer-fan" data-total="<?= $tracerTotal ?>">
+            <svg viewBox="0 0 245 360" role="img" aria-label="Grafik kipas komposisi kegiatan alumni, <?= $tracerTotal ?> respons">
+                <defs><?php foreach($labels as $status=>$label):$i=array_search($status,array_keys($labels),true); ?><linearGradient id="tracer-fan-fill-<?= $i ?>" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="<?= $fanColors[$i] ?>"/><stop offset="1" stop-color="<?= $fanDark[$i] ?>"/></linearGradient><?php endforeach; ?></defs>
+                <path class="fan-track" d="M60,20 A160,160 0 0 1 60,340 L60,230 A50,50 0 0 0 60,130 Z"/>
+                <?php foreach($labels as $status=>$label):$value=(int)($tracer[$status]??0);$angle=$tracerTotal?$value/$tracerTotal*180:0;$start=-90+$offset;$end=$start+$angle; ?>
+                <?php if($value>0): ?><path class="fan-segment fan-category-<?= $categoryIndex ?>" data-category="<?= $categoryIndex ?>" fill="url(#tracer-fan-fill-<?= $categoryIndex ?>)" d="M<?= $fanPoint(160,$start) ?> A160,160 0 0 1 <?= $fanPoint(160,$end) ?> L<?= $fanPoint(50,$end) ?> A50,50 0 0 0 <?= $fanPoint(50,$start) ?> Z"><title><?= e($label) ?>: <?= $value ?> respons (<?= number_format($angle/180*100,1,',','.') ?>%)</title></path><?php if($angle>=18): [$tx,$ty]=explode(',',$fanPoint(108,($start+$end)/2)); ?><text class="fan-sector-number" x="<?= $tx ?>" y="<?= $ty ?>" text-anchor="middle" dominant-baseline="middle" aria-hidden="true"><?= str_pad((string)($categoryIndex+1),2,'0',STR_PAD_LEFT) ?></text><?php endif; ?><?php endif; ?>
+                <?php $offset+=$angle;$categoryIndex++;endforeach; ?>
+                <circle class="fan-center-disc" cx="60" cy="180" r="48"/>
             </svg>
-            <div class="donut-center" aria-live="polite"><strong><?= $tracerTotal ?></strong><span>Total respons</span></div>
+            <div class="fan-total" aria-live="polite"><strong><?= $tracerTotal ?></strong><span>Total respons</span></div>
         </div>
-        <div class="donut-legend" aria-label="Kategori kegiatan">
-            <?php $categoryIndex = 0; foreach ($labels as $status => $label): $value = (int)($tracer[$status] ?? 0); ?>
-            <button type="button" class="category-<?= $categoryIndex ?>" data-category="<?= $categoryIndex ?>" data-label="<?= e($label) ?>" data-value="<?= $value ?>"><span class="legend-dot" aria-hidden="true"></span><span><?= e($label) ?></span><strong><?= $value ?></strong></button>
-            <?php $categoryIndex++; endforeach; ?>
+        <div class="fan-legend" aria-label="Kategori kegiatan alumni">
+            <?php $categoryIndex=0;foreach($labels as $status=>$label):$value=(int)($tracer[$status]??0);$percent=$tracerTotal?$value/$tracerTotal*100:0; ?>
+            <button type="button" class="fan-category-<?= $categoryIndex ?>" data-category="<?= $categoryIndex ?>" data-label="<?= e($label) ?>" data-value="<?= $value ?>"><span class="fan-legend-number" aria-hidden="true"><?= str_pad((string)($categoryIndex+1),2,'0',STR_PAD_LEFT) ?></span><span class="fan-legend-text"><?= e($label) ?><small><?= number_format($percent,1,',','.') ?>% dari respons</small></span><strong><?= $value ?><span class="sr-only"> respons</span></strong></button>
+            <?php $categoryIndex++;endforeach; ?>
         </div>
     </div>
-    <?php if (!$tracerTotal): ?><p class="muted">Grafik akan terisi setelah ada respons alumni.</p><?php endif; ?>
+    <?php if(!$tracerTotal): ?><p class="muted">Belum ada respons. Bidang warna akan muncul setelah data tersedia.</p><?php endif; ?>
 </section>
 <section class="card tracer-summary pkl-summary" aria-labelledby="pkl-chart-title">
     <div class="tracer-summary-heading"><h2 id="pkl-chart-title"><?= panel_icon('peserta') ?> Kelengkapan Data PKL</h2><span class="badge"><?= (int)$participantStats['total'] ?> peserta</span></div>

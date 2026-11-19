@@ -131,19 +131,20 @@ document.querySelectorAll('form[data-confirm]').forEach((form) => {
 });
 
 document.querySelectorAll('.tracer-visual').forEach(chart => {
-    const donut = chart.querySelector('.tracer-donut');
-    const count = chart.querySelector('.donut-center strong');
-    const label = chart.querySelector('.donut-center span');
+    const donut = chart.querySelector('.tracer-fan, .tracer-donut');
+    const count = chart.querySelector('.fan-total strong, .donut-center strong');
+    const label = chart.querySelector('.fan-total span, .donut-center span');
+    if (!donut || !count || !label) return;
     const reset = () => {
         count.textContent = donut.dataset.total;
         label.textContent = 'Total respons';
-        chart.querySelectorAll('.donut-segment').forEach(segment => segment.classList.remove('is-active', 'is-muted'));
+        chart.querySelectorAll('.fan-segment, .donut-segment').forEach(segment => segment.classList.remove('is-active', 'is-muted'));
     };
-    chart.querySelectorAll('.donut-legend button').forEach(button => {
+    chart.querySelectorAll('.fan-legend button, .donut-legend button').forEach(button => {
         const highlight = () => {
             count.textContent = button.dataset.value;
             label.textContent = button.dataset.label;
-            chart.querySelectorAll('.donut-segment').forEach(segment => {
+            chart.querySelectorAll('.fan-segment, .donut-segment').forEach(segment => {
                 const active = segment.dataset.category === button.dataset.category;
                 segment.classList.toggle('is-active', active);
                 segment.classList.toggle('is-muted', !active);
@@ -266,7 +267,7 @@ if (document.querySelector('.panel-page')) {
         path.setAttribute('d',paths[name]); svg.append(path); element.prepend(svg);
     };
     document.querySelectorAll('.panel-content h1, .panel-content h2, .panel-content label, .panel-content th, .panel-content button, .panel-content .button, .panel-content .row-actions a, .panel-content .page-actions a, .panel-content .form-actions a, .panel-content .pagination a, .panel-content .filter-form > a, .bmw-admin .table-scroll td:last-child > a').forEach(element => {
-        if (element.querySelector('svg') || element.matches('.wa-selection label') || element.closest('.donut-legend') || element.classList.contains('sr-only')) return;
+        if (element.querySelector('svg') || element.matches('.wa-selection label') || element.closest('.donut-legend, .fan-legend') || element.classList.contains('sr-only')) return;
         if (element.closest('.bmw-admin') && element.matches('label,th')) return;
         const text = element.cloneNode(true);
         text.querySelectorAll('input,select,textarea,small,.badge').forEach(child => child.remove());
