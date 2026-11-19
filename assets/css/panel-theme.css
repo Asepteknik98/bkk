@@ -1875,22 +1875,56 @@ html[data-theme=dark] #career-results .career-status-working { background:#203c3
 
 .panel-page .sidebar nav { flex-wrap:nowrap; overflow-x:hidden; }
 
-/* Vacancy list: spreadsheet-style cell boundaries. */
-.panel-page .vacancy-sheet { --sheet-line:#becddd; border:1px solid var(--sheet-line); border-radius:4px; }
-.panel-page .vacancy-sheet table { width:100%; border-collapse:collapse; border-spacing:0; }
-.panel-page .vacancy-sheet th,
-.panel-page .vacancy-sheet td { border:1px solid var(--sheet-line); padding:12px 14px; vertical-align:middle; }
-.panel-page .vacancy-sheet thead th { background:#e9f0f8; color:#284969; font-weight:650; }
-.panel-page .vacancy-sheet th:first-child,
-.panel-page .vacancy-sheet td:first-child { border-left:0; }
-.panel-page .vacancy-sheet th:last-child,
-.panel-page .vacancy-sheet td:last-child { border-right:0; }
-.panel-page .vacancy-sheet thead tr:first-child th { border-top:0; }
-.panel-page .vacancy-sheet tbody tr:last-child td { border-bottom:0; }
-.panel-page .vacancy-sheet tbody tr:hover,
-.panel-page .vacancy-sheet tbody tr:focus-within { background:var(--panel-soft); }
-html[data-theme=dark] .panel-page .vacancy-sheet { --sheet-line:#4b6075; }
-html[data-theme=dark] .panel-page .vacancy-sheet thead th { background:#263b50; color:#dae7f5; }
+/* Shared spreadsheet-style cell boundaries for selected panel lists. */
+.panel-page .panel-sheet { --sheet-line:#becddd; border:1px solid var(--sheet-line); border-radius:4px; }
+.panel-page .panel-sheet table { width:100%; border-collapse:collapse; border-spacing:0; }
+.panel-page .panel-sheet th,
+.panel-page .panel-sheet td { border:1px solid var(--sheet-line); padding:12px 14px; vertical-align:middle; }
+.panel-page .panel-sheet thead th { background:#e9f0f8; color:#284969; font-weight:650; }
+.panel-page .panel-sheet th:first-child,
+.panel-page .panel-sheet td:first-child { border-left:0; }
+.panel-page .panel-sheet th:last-child,
+.panel-page .panel-sheet td:last-child { border-right:0; }
+.panel-page .panel-sheet thead tr:first-child th { border-top:0; }
+.panel-page .panel-sheet tbody tr:last-child td { border-bottom:0; }
+.panel-page .panel-sheet tbody tr:hover,
+.panel-page .panel-sheet tbody tr:focus-within { background:var(--panel-soft); }
+html[data-theme=dark] .panel-page .panel-sheet { --sheet-line:#4b6075; }
+html[data-theme=dark] .panel-page .panel-sheet thead th { background:#263b50; color:#dae7f5; }
 @media(max-width:900px) {
-    .panel-page .vacancy-sheet table { min-width:800px; }
+    .panel-page .panel-sheet table { min-width:800px; }
 }
+
+.applicant-notification-page { max-width:720px; }
+.applicant-notification-page .page-actions { align-items:center; margin-bottom:16px; gap:12px; }
+.applicant-notification-page .page-actions h1 { display:flex; align-items:center; gap:9px; font-size:1.2rem; margin:0; }
+.applicant-notification-page .page-actions>a { display:inline-flex; align-items:center; gap:6px; min-height:44px; font-size:.8rem; text-decoration:none; }
+.panel-page .applicant-notification-page>.card { padding:20px; border-radius:12px; box-shadow:none; }
+.applicant-notification-page .panel-icon { display:inline-block; flex:none; width:18px; height:18px; margin:0; vertical-align:middle; }
+.notification-recipient { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px; }
+.notification-recipient>h2 { display:flex; align-items:center; gap:8px; font-size:.95rem; line-height:1.5; margin:0; overflow-wrap:anywhere; }
+.notification-recipient>span { display:inline-flex; align-items:center; gap:6px; padding:6px 9px; border-radius:7px; background:var(--panel-soft); color:var(--panel-muted); font-size:.78rem; overflow-wrap:anywhere; }
+.applicant-notification-page .notification-context { margin:10px 0 18px; padding-bottom:16px; border-bottom:1px solid var(--panel-line); font-size:.8rem; line-height:1.6; color:var(--panel-muted); }
+.application-notification-form { display:grid; gap:10px; }
+.application-notification-form label { display:flex; align-items:center; gap:7px; font-weight:600; font-size:.8rem; margin:0; }
+.application-notification-form textarea { display:block; width:100%; min-width:0; min-height:220px; padding:14px; border:1px solid var(--panel-line); border-radius:8px; font:inherit; font-size:16px; line-height:1.75; background:var(--panel-bg); color:var(--panel-text); resize:vertical; }
+.notification-footer { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:6px; }
+.notification-footer .muted { max-width:360px; margin:0; font-size:.75rem; line-height:1.7; }
+.application-notification-form .notification-footer button { display:inline-flex; flex:none; align-items:center; justify-content:center; gap:8px; min-height:44px; margin:0; padding:10px 14px; font-size:.8rem; line-height:1.5; white-space:nowrap; border-radius:8px; }
+@media(max-width:600px) {
+    .panel-page .applicant-notification-page>.card { padding:16px; }
+    .notification-footer { flex-direction:column; align-items:stretch; gap:12px; }
+    .notification-footer .muted { max-width:none; }
+    .application-notification-form .notification-footer button { width:100%; }
+}
+
+/* Aligned inbox actions: one compact row with equal touch heights. */
+.application-actions { display:flex; flex-wrap:nowrap; align-items:center; gap:6px; width:max-content; }
+.panel-page .applications-inbox .application-actions>a { display:inline-flex; align-items:center; justify-content:center; gap:0; width:44px; min-width:44px; height:44px; min-height:44px; margin:0; padding:0; border:1px solid var(--panel-line); border-radius:7px; background:var(--panel-surface); color:var(--panel-text); font-size:.76rem; font-weight:550; line-height:1.4; white-space:nowrap; text-decoration:none; box-shadow:none; }
+.panel-page .applications-inbox .application-actions>a.application-notify { background:var(--panel-surface); border-color:var(--panel-line); color:var(--panel-text); }
+.panel-page .applications-inbox .application-actions>a:hover { filter:brightness(.95); }
+.application-actions .panel-icon { flex:none; width:17px; height:17px; margin:0; }
+
+.panel-page .applications-inbox th:last-child { width:128px; }
+.panel-page .applications-inbox .application-actions>a.application-notify { color:#216d53; }
+html[data-theme=dark] .panel-page .applications-inbox .application-actions>a.application-notify { color:#9ddabd; }

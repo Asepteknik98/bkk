@@ -63,7 +63,7 @@ require APP_ROOT . '/app/layouts/header.php';
 <div role="status"><h2>Lamaran berhasil dikirim</h2><p>Lamaran Anda sudah masuk ke panel pengelola BKK untuk ditinjau. Pengelola dapat menghubungi Anda melalui email atau nomor telepon yang dicantumkan.</p><p>Pengiriman lamaran belum berarti diterima bekerja.</p></div>
 <?php elseif (!job_is_open($job)): ?><p>Lowongan ini sudah tidak menerima lamaran.</p>
 <?php else: ?>
-<p>Formulir lama ini menyimpan data/berkas ke BKK, bukan mengirim pendaftaran ke perusahaan. Ikuti tautan rekrutmen resmi pada detail lowongan untuk mendaftar ke perusahaan. Alumni mencatat hasil seleksi dan pekerjaan melalui tautan pribadi dari BKK.</p>
+<p>Isi data dan unggah berkas untuk mengajukan lamaran melalui BKK. Data akan ditinjau pengelola BKK dan tidak otomatis dikirim ke perusahaan. Untuk mendaftar langsung ke perusahaan, gunakan tautan rekrutmen pada detail lowongan.</p>
 <?php if ($errors): ?><div class="alert" role="alert"><strong>Lamaran belum terkirim.</strong><ul><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
 <form method="post" action="<?= e(base_url('lowongan-kerja/lamar.php?slug='.rawurlencode($slug))) ?>" class="application-form" enctype="multipart/form-data">
 <?= csrf_field() ?><input type="hidden" name="submission_key" value="<?= e($_SESSION[$keyName]) ?>">

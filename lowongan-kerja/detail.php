@@ -15,7 +15,23 @@ require APP_ROOT.'/app/layouts/header.php';
 <main id="konten" class="container portal-container page-main detail-page job-public-page"><nav class="breadcrumb-trail" aria-label="Jejak navigasi"><a href="<?= e(base_url()) ?>">Beranda</a><span>/</span><a href="<?= e(base_url('lowongan-kerja/')) ?>">Lowongan Kerja</a><span>/</span><span>Detail</span></nav><div><div class="content-column">
 <?php if($job):$open=job_is_open($job);?><article class="surface job-detail"><header class="job-heading"><div><p class="eyebrow"><?= e($job['perusahaan']) ?></p><?php demo_label($job);?><h1><?= e($job['posisi']) ?></h1></div><span class="job-status <?= $open?'is-open':'is-closed' ?>"><?= e(job_status_label($job)) ?></span></header><dl class="contact-list job-facts"><dt>Lokasi</dt><dd><?= e($job['lokasi']) ?></dd><dt>Jenis hubungan kerja</dt><dd><?= e($employment['nama']??$job['jenis_pekerjaan']) ?></dd><dt>Pendidikan</dt><dd><?= e($job['pendidikan']) ?></dd><dt>Batas lamaran</dt><dd><strong><?= e(indo_date($job['batas_lamaran'])) ?><?= $job['batas_lamaran']?' · 23:59 WIB':'' ?></strong></dd></dl><div class="job-detail-layout"><div class="job-description"><h2>Deskripsi pekerjaan</h2><div class="article-body"><?= plain_text_paragraphs($job['deskripsi']) ?></div><h2>Persyaratan</h2><div class="article-body"><?= plain_text_paragraphs($job['persyaratan']) ?></div>
 <?php if($job['gambar']):?><details class="job-poster-details"><summary>Lihat poster lowongan</summary><img class="job-poster" src="<?= e(content_image($job['gambar'])) ?>" alt="Poster <?= e($job['posisi'].' — '.$job['perusahaan']) ?>" width="960" height="600" loading="lazy"></details><?php endif;?>
-</div><section class="application-box" aria-label="Pendaftaran lowongan"><h2>Pendaftaran</h2><?php if($open&&$employment&&http_url((string)$job['tautan_pendaftaran'])): ?><p>Daftar pada halaman rekrutmen resmi yang telah diperiksa pengelola BKK.</p><a class="button button-navy" href="<?= e($job['tautan_pendaftaran']) ?>" target="_blank" rel="noopener noreferrer">Buka rekrutmen perusahaan</a><p>Alumni mencatat lamaran dan hasil seleksi melalui tautan pribadi yang diberikan BKK. Pencatatan BKK tidak otomatis mengirim lamaran ke perusahaan.</p><?php elseif($open): ?><p>Tautan rekrutmen resmi dan jenis hubungan kerja lowongan lama belum dilengkapi pengelola. Hubungi BKK.</p><?php else: ?><p>Lowongan ini sudah tidak menerima lamaran.</p><?php endif; ?>
+</div><section class="application-box" aria-label="Pendaftaran lowongan"><h2>Pendaftaran</h2>
+<?php if($open): ?>
+<div class="application-route">
+    <p>Kirim data dan berkas lamaran untuk ditinjau pengelola BKK.</p>
+    <a class="button button-navy" href="<?= e(base_url('lowongan-kerja/lamar.php?slug='.rawurlencode($job['slug']))) ?>">Lamar melalui BKK</a>
+    <p class="muted">Tidak perlu login. Lamaran masuk ke BKK dan tidak otomatis dikirim ke perusahaan.</p>
+</div>
+<div class="application-route">
+    <?php if($employment&&http_url((string)$job['tautan_pendaftaran'])): ?>
+    <p>Untuk pendaftaran langsung ke perusahaan, gunakan halaman rekrutmen berikut.</p>
+    <a class="button button-outline" href="<?= e($job['tautan_pendaftaran']) ?>" target="_blank" rel="noopener noreferrer">Daftar ke perusahaan <span aria-hidden="true">&#8599;</span></a>
+    <p class="muted">Dibuka di tab baru. Pendaftaran di perusahaan mengikuti ketentuan rekrutmen mereka.</p>
+    <?php else: ?>
+    <p class="muted">Tautan rekrutmen perusahaan belum dilengkapi atau diperiksa pengelola. Hubungi BKK untuk informasi lebih lanjut.</p>
+    <?php endif; ?>
+</div>
+<?php else: ?><p>Lowongan ini sudah tidak menerima lamaran.</p><?php endif; ?>
 <?php if($employment): ?><h2>Jenis hubungan kerja: <?= e($employment['nama']) ?></h2><?php if($employment['penjelasan']!==''): ?><p><?= nl2br(e($employment['penjelasan'])) ?></p><?php endif; ?><?php if($employment['rujukan_url']&&http_url($employment['rujukan_url'])): ?><a href="<?= e($employment['rujukan_url']) ?>" target="_blank" rel="noopener noreferrer">Rujukan aturan yang diisi pengelola</a><?php endif; ?><?php endif; ?></section></div></article>
 <section class="section-space"><div class="section-heading"><h2>Lowongan terkait</h2></div><div class="job-grid job-list-grid"><?php if($related):foreach($related as $item):job_card($item);endforeach;else:empty_state('Belum ada lowongan terkait');endif;?></div></section>
 <?php else:empty_state(!empty($GLOBALS['public_database_unavailable'])?'Lowongan belum dapat dimuat':'Lowongan tidak ditemukan','Lowongan mungkin belum diterbitkan atau tautan sudah tidak tersedia.');endif;?><p class="section-space"><a class="text-link" href="<?= e(base_url('lowongan-kerja/')) ?>">← Kembali ke daftar lowongan</a></p></div></div></main>

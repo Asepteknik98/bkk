@@ -8,9 +8,10 @@ $action=$_POST['action']??'';
 if($action==='open'){
     if(!wa_eligible($row)){http_response_code(409);exit('Penerima tidak lagi memenuhi status penerima atau telah meminta berhenti. Buat daftar baru setelah memeriksa data penerima.');}
     $phone=wa_phone($row['nomor']);if(!$phone){http_response_code(422);exit('Nomor tidak valid.');}
+    $chatUrl=wa_chat_url($phone,(string)$row['pesan'],(string)($_SERVER['HTTP_USER_AGENT']??''));
     panel_query('UPDATE wa_recipients SET opened_at=:at,opened_by=:user WHERE id=:id',['at'=>date('Y-m-d H:i:s'),'user'=>(int)$user['id'],'id'=>$id]);
     header('Referrer-Policy: no-referrer');
-    header('Location: https://wa.me/'.$phone.'?text='.rawurlencode($row['pesan']),true,303);exit;
+    header('Location: '.$chatUrl,true,303);exit;
 }
 if(!in_array($action,['mark','unmark'],true)){http_response_code(422);exit('Tindakan tidak valid.');}
 if($action==='mark'&&!$row['opened_at']){panel_message('Buka WhatsApp terlebih dahulu sebelum menandai pesan.','panel/whatsapp/detail.php?id='.$row['campaign_id']);}

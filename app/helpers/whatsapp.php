@@ -12,6 +12,17 @@ function wa_phone(string $raw): ?string
     return preg_match('/^[1-9][0-9]{7,14}$/D',$phone) ? $phone : null;
 }
 
+/** Desktop goes straight to Web; phones use the official app-aware chat link. */
+function wa_chat_url(string $number, string $message, string $userAgent): string
+{
+    $phone=wa_phone($number);
+    if($phone===null){throw new InvalidArgumentException('Nomor WhatsApp tidak valid.');}
+    if(preg_match('/Android|iPhone|iPad|iPod|Mobile/i',$userAgent)){
+        return 'https://wa.me/'.$phone.'?text='.rawurlencode($message);
+    }
+    return 'https://web.whatsapp.com/send?'.http_build_query(['phone'=>$phone,'text'=>$message], '', '&', PHP_QUERY_RFC3986);
+}
+
 function wa_filters(array $input): array
 {
     $group=input_text($input,'group');
@@ -79,4 +90,13 @@ function wa_selected_contacts(): array
         }
     }
     return array_values($result);
+}
+
+/** Pemberitahuan status internal BKK; tidak mengarang keputusan perusahaan. */
+function wa_application_notice(array $application): string
+{
+    $statuses=['baru'=>'Baru','diproses'=>'Diproses','diterima'=>'Diterima','ditolak'=>'Ditolak'];
+    $status=$statuses[$application['status']??'']??null;
+    if($status===null){throw new InvalidArgumentException('Status lamaran tidak valid.');}
+    return "Halo {nama},\n\nBerikut pembaruan lamaran Anda untuk posisi ".(string)$application['posisi']." di ".(string)$application['perusahaan'].".\n\nStatus yang tercatat di BKK: ".$status.".\n\nSilakan hubungi pengelola BKK untuk informasi dan tindak lanjut.\nTerima kasih.";
 }

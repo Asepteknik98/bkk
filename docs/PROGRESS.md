@@ -309,3 +309,47 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 
 - Atas permintaan pengguna, tabel daftar Lowongan diberi kelas vacancy-sheet dan garis vertikal/horizontal pada setiap sel, termasuk header. Garis lebih tegas, header biru abu-abu, sudut luar diperkecil, dan baris mendapat sorotan hover/fokus. Tema gelap memakai warna garis/header tersendiri. Pada layar kecil tabel tetap berbentuk kolom dan dapat digulir horizontal di kontainer.
 - Perubahan hanya kelas pembungkus tabel di panel/lowongan/index.php dan CSS terisolasi di panel-theme.css. Filter, pagination, data, tautan dan POST/CSRF hapus tidak diubah. Lint PHP dan git diff --check lulus; belum melakukan verifikasi visual browser ulang pada perubahan ini. Tidak mengubah database/SQL.
+
+## Garis spreadsheet pada Lamaran Masuk
+
+- Tabel Lamaran Masuk memakai garis setiap baris/kolom seperti Lowongan. Gaya bersama diberi nama panel-sheet dan dipakai kedua daftar, tanpa menggandakan CSS; header biru abu-abu dan tema gelap tetap tersedia.
+- Kelas kontainer gulir vertikal, atribut aksesibilitas, ID, kontrol naik/turun, filter/pagination, hak akses dan isi data Lamaran dipertahankan. Perubahan PHP hanya kelas pembungkus tabel. Lint kedua halaman dan git diff --check lulus; tampilan browser belum diuji ulang. Tidak mengubah database/SQL.
+
+## Pemberitahuan WhatsApp dari Lamaran Masuk
+
+- Menambahkan tombol WhatsApp per lamaran bagi Admin/Staf dengan izin whatsapp+lamaran+tracer-study. Halaman panel/whatsapp/pelamar.php membaca lamaran dan memeriksa career_application_guard sebelum menampilkan pesan. Empat template mengikuti status internal Baru/Diproses/Diterima/Ditolak, tanpa mengarang keputusan perusahaan; pesan dapat diedit sebelum disiapkan.
+- Memakai helper nomor, deduplikasi, opt-out, daftar pesan, submission key dan handler POST+CSRF WhatsApp yang sudah ada. Form manual hanya memilih satu sumber penerima yang sesuai lamaran/lowongan; nomor tidak valid, opt-out atau lamaran lama yang terwakili nomor lebih baru mendapat penjelasan dan tautan periksa penerima. Tidak menimpa keranjang/draft WhatsApp sesi yang lain.
+- Handler buat pesan kini memeriksa kembali hak akses lamaran pelamar melalui career_application_guard sebelum membuat daftar. Alur menyiapkan pesan, lalu Buka WhatsApp dan Kirim manual; tidak ada pengiriman otomatis atau klaim pesan telah diterima. CSS tombol WhatsApp dan form dibatasi pada komponen terkait. Tidak membuat SQL atau mengubah skema.
+- Lint empat PHP dan git diff --check lulus. CLI menguji empat template, penolakan status tidak sah, personalisasi nama, normalisasi nomor dan pemetaan izin endpoint; regresi access.php lulus. HTTP tanpa login ke endpoint baru mengarah ke login. Belum menguji alur authenticated simpan daftar pada database sementara atau tampilan browser; tidak mengirim pesan nyata dan tidak mengubah data pelamar saat pengujian.
+
+## Pemberitahuan WhatsApp lebih minimalis
+
+- Form pemberitahuan dipersempit menjadi maksimal 720px dengan kartu datar, identitas/nomor penerima satu area, konteks lowongan singkat, textarea delapan baris dan satu keterangan pengiriman manual. Label Pesan terhubung dengan bantuan melalui aria-describedby; tombol menjadi Siapkan pesan.
+- Tombol WhatsApp pada tabel Lamaran menjadi outline netral yang lebih ringan, dengan ikon dan target sentuh 44px tetap tersedia. CSS memakai variabel tema. Tidak mengubah penerima, template, handler, hak akses, CSRF atau database. Lint PHP dan git diff --check lulus; belum memeriksa ulang tampilan browser.
+
+## Merapikan tombol tindakan Lamaran
+
+- Tombol Lihat dan WhatsApp dibungkus application-actions dalam satu baris flex tanpa wrap, jarak 8px, margin nol, tinggi target 44px dan ukuran ikon konsisten. Lihat tetap hijau lembut, WhatsApp outline mengikuti tema. Menghapus aturan margin WhatsApp lama yang menyebabkan posisi tidak sejajar. Tabel tetap dapat digulir pada layar kecil.
+- Hanya markup pembungkus dan CSS tindakan berubah; URL/izin/notifikasi tetap sama. Lint PHP dan git diff --check lulus; belum memeriksa ulang tampilan browser.
+
+## Tindakan Lamaran menjadi ikon ringkas
+
+- Lihat dan WhatsApp kini berupa tombol ikon outline 44x44px dengan jarak 6px, title dan aria-label yang menyebut penerima. Kolom Tindakan ditetapkan 128px agar kedua ikon muat tanpa terpotong, tanpa tombol teks panjang atau warna blok besar. Warna WhatsApp menyesuaikan tema gelap.
+- Lint PHP dan diff check lulus. Chrome pada fixture tabel dengan CSS asli di lebar 800/1440 pada dua tema memastikan kedua tombol berada dalam batas sel serta ukuran 44px. Pengujian memakai fixture, bukan login/lamaran nyata. Tidak mengubah izin, URL, alur WhatsApp atau database; artefak QA dibersihkan.
+
+## Merapikan form Pesan WhatsApp
+
+- Halaman pemberitahuan memakai kelas applicant-notification-page agar tidak berbagi nama dengan tombol notifikasi navbar. Header dan tautan kembali sejajar, penerima berikon akun dan nomor dalam chip, konteks lowongan dipisah garis tipis, textarea 16px dan footer bantuan/tombol tersusun horizontal desktop serta vertikal pada area kecil. Ikon tombol dibuat inline-flex dan tinggi tetap 44px, tanpa menumpuk di atas teks.
+- Handler/POST/CSRF, isi template dan penerima tidak diubah. Lint PHP dan diff check lulus. Render PHP asli dengan data sintetis dan CSS panel diuji pada area komponen 320/720px dalam dua tema: komponen muat, ikon tombol sejajar, tinggi 44px, font textarea 16px, action/token formulir tetap tersedia. Ini uji komponen terisolasi, bukan alur kirim atau perangkat fisik. Tidak mengirim pesan atau mengubah database; artefak QA dibersihkan.
+
+## Membuka langsung chat WhatsApp di laptop
+
+- Tombol Buka WhatsApp kini mengarahkan browser desktop ke https://web.whatsapp.com/send dengan parameter phone dan text yang di-encode RFC3986. Android/iPhone/iPad memakai tautan resmi wa.me yang dapat membuka aplikasi. Nomor tetap dinormalisasi helper yang sama; tujuan URL hanya dua host tetap.
+- Handler POST+CSRF, pengecekan penerima/opt-out dan pencatatan dibuka tetap dipakai. Panduan halaman menjelaskan kebutuhan login WhatsApp pada browser yang sama, nomor aktif, serta Kirim manual; tidak mengklaim pesan terkirim hanya karena tautan dibuka. Tidak menambah API/dependency, SQL atau mengirim pesan otomatis.
+- Lint tiga PHP, diff check dan CLI URL builder lulus: Windows/Mac/kosong menuju Web, Android/iPhone/iPad menuju app-aware link, nomor nasional menjadi internasional, pesan multibaris dan karakter khusus utuh, nomor berbahaya ditolak. Pembukaan chat dalam sesi WhatsApp pengguna dan penerimaan pesan belum dapat diverifikasi dari lingkungan ini. Tidak membuka URL WhatsApp berisi data pelamar atau mengirim pesan nyata saat pengujian.
+
+## Mengaktifkan kembali pintu lamaran melalui BKK
+
+- Atas persetujuan pengguna, detail lowongan aktif menyediakan tombol Lamar melalui BKK menuju formulir publik lamar.php yang sudah ada. Tombol tidak bergantung pada metadata migrasi 024 sehingga jalur BKK tetap tersedia untuk lowongan lama yang masih dibuka. Tautan Daftar ke perusahaan tetap memerlukan metadata rekrutmen dan URL http/https valid seperti sebelumnya, dibuka di tab baru.
+- Kedua jalur diberi keterangan terpisah: formulir mengirim data/berkas ke BKK dan tidak otomatis ke perusahaan. Pengantar formulir diperbarui tanpa menyebut formulir lama. Lowongan tutup tidak menawarkan tombol; pemeriksaan published dan server deadline pada GET/POST serta validasi berkas/CSRF tetap sama. CSS hanya memberi jarak/pemisah antarrute. Tidak mengubah database, tanggal lowongan atau SQL.
+- Lint dua PHP, regresi CLI jobs.php dan diff check lulus. Render bagian pendaftaran dengan data sintetis memverifikasi aktif lengkap (dua rute), aktif tanpa metadata (BKK tersedia), URL berbahaya (tanpa rute perusahaan), kedaluwarsa/draft (tanpa tombol). HTTP daftar lowongan serta tautan detail yang tersedia merespons 200. Pengujian ini tidak mengirim formulir atau berkas nyata; alur simpan database dan visual browser belum diuji ulang.

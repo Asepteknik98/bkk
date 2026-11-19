@@ -21,6 +21,10 @@ try {
         $contacts=array_filter($contacts,static fn($c)=>in_array($c['key'],$selected,true));
     }elseif($mode!=='all'){throw new InvalidArgumentException('Pilih penerima terlebih dahulu.');}
     if(!$contacts){throw new InvalidArgumentException('Belum ada penerima dipilih, atau penerima sudah meminta berhenti.');}
+    require_once APP_ROOT.'/app/helpers/careers.php';
+    foreach($contacts as $contact){
+        if($contact['source_type']==='pelamar'){career_application_guard($user,(int)$contact['source_id']);}
+    }
     db()->beginTransaction();
     panel_query('INSERT INTO wa_campaigns(judul,pesan,tautan,created_by,created_at,submission_key) VALUES(:judul,:pesan,:tautan,:user,:at,:key)',['judul'=>$title,'pesan'=>$message,'tautan'=>$link,'user'=>(int)$user['id'],'at'=>date('Y-m-d H:i:s'),'key'=>$key]);
     $id=(int)db()->lastInsertId();

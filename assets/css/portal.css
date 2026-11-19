@@ -939,3 +939,7 @@
 .portal-page .public-tracer-page .tracer-form input:not([type=checkbox]),
 .portal-page .public-tracer-page .tracer-form select,
 .portal-page .public-tracer-page .tracer-form textarea { font-size:16px; min-height:44px; }
+
+.job-public-page .application-route p { margin:0 0 10px; }
+.job-public-page .application-route .button { margin-bottom:8px; }
+.job-public-page .application-route+.application-route { border-top:1px solid var(--line); margin-top:16px; padding-top:16px; }
