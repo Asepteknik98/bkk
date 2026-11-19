@@ -543,3 +543,90 @@ html[data-theme=dark] .bmw-description-form>label>span .panel-icon { color:#a8c9
 .pkl-student-empty strong { display:block; margin-bottom:6px; }
 .pkl-student-empty p { margin:0 0 14px; font-size:.82rem; color:var(--panel-muted); line-height:1.7; }
 @media(max-width:600px) { .pkl-student-actions { width:100%; } }
+.attendance-workspace .attendance-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; list-style:none; padding:0; margin:0 0 18px; }
+.attendance-steps li { display:grid; gap:5px; padding:14px 16px; border:1px solid var(--panel-line); border-radius:8px; background:var(--panel-surface); }
+.attendance-steps strong { font-size:.83rem; color:var(--panel-text); }
+.attendance-steps span { font-size:.76rem; color:var(--panel-muted); line-height:1.6; }
+.attendance-workspace .panel-icon { width:19px; height:19px; min-width:19px; vertical-align:middle; }
+.attendance-workspace .page-actions h1 { display:flex; align-items:center; gap:9px; }
+.attendance-setup { padding:20px; font-size:.85rem; }
+.attendance-setup strong { display:flex; align-items:center; gap:8px; }
+.attendance-setup p { color:var(--panel-muted); max-width:650px; line-height:1.7; }
+.bmw-admin .attendance-workspace .attendance-create { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.attendance-create label { min-width:0; }
+.attendance-create .attendance-group-label,.attendance-create label:has(textarea),.attendance-create-footer { grid-column:1/-1; }
+.attendance-group-label>span { display:flex; align-items:center; gap:7px; }
+.attendance-group-label small { font-size:.75rem; line-height:1.6; color:var(--panel-muted); }
+.attendance-create-footer { display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; padding-top:14px; border-top:1px solid var(--panel-line); }
+.attendance-create-footer p { margin:0; flex:1 1 280px; color:var(--panel-muted); font-size:.78rem; line-height:1.6; }
+.attendance-create-footer button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; }
+@media(max-width:700px) { .attendance-workspace .attendance-steps { grid-template-columns:1fr; gap:7px; }.attendance-steps li { padding:10px 12px; }.bmw-admin .attendance-workspace .attendance-create { grid-template-columns:minmax(0,1fr); }.attendance-create-footer button { width:100%; } }
+/* Speaker profile: bounded photo, readable facts and separate documents. */
+.speaker-profile-workspace { max-width:1150px; margin:auto; }
+.speaker-profile-workspace .panel-icon { width:18px; height:18px; min-width:18px; flex-shrink:0; vertical-align:middle; }
+.speaker-profile-workspace .page-actions h1 { display:flex; align-items:center; gap:9px; overflow-wrap:anywhere; min-width:0; }
+.bmw-admin .speaker-profile-card { display:grid; grid-template-columns:minmax(0,1fr) 230px; gap:20px; padding:20px; margin-bottom:16px; }
+.speaker-profile-overview { display:flex; gap:18px; min-width:0; align-items:flex-start; }
+.speaker-profile-photo { width:88px; height:88px; flex:0 0 88px; object-fit:contain; border:1px solid var(--panel-line); border-radius:9px; background:var(--panel-soft); }
+.speaker-profile-placeholder { display:grid; place-items:center; color:var(--panel-muted); }
+.speaker-profile-placeholder .panel-icon { width:32px; height:32px; }
+.speaker-profile-information { min-width:0; flex:1; }
+.speaker-profile-workspace h2 { font-size:.9rem; margin:0 0 14px; }
+.speaker-profile-facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:0; }
+.speaker-profile-facts>div { min-width:0; }
+.speaker-profile-facts dt { display:flex; align-items:center; gap:6px; color:var(--panel-muted); font-size:.74rem; font-weight:400; }
+.speaker-profile-facts dd { margin:5px 0 0; font-size:.85rem; overflow-wrap:anywhere; }
+.speaker-profile-file { min-width:0; border-left:1px solid var(--panel-line); padding-left:20px; }
+.speaker-profile-file h2 { display:flex; align-items:center; gap:7px; }
+.speaker-profile-file p { font-size:.8rem; color:var(--panel-muted); margin:0 0 5px; overflow-wrap:anywhere; }
+.speaker-cv-name { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.speaker-profile-file small { display:block; font-size:.72rem; color:var(--panel-muted); }
+.speaker-profile-file a { display:inline-flex; align-items:center; gap:7px; margin-top:12px; min-height:44px; font-size:.78rem; }
+.speaker-profile-bio { grid-column:1/-1; border-top:1px solid var(--panel-line); padding-top:14px; min-width:0; }
+.speaker-profile-bio summary { display:flex; align-items:center; gap:7px; cursor:pointer; font-size:.8rem; min-height:32px; }
+.speaker-profile-bio summary:after { content:'+'; margin-left:auto; }
+.speaker-profile-bio[open] summary:after { content:'−'; }
+.speaker-profile-bio p { max-height:240px; overflow:auto; overflow-wrap:anywhere; font-size:.83rem; line-height:1.8; margin:12px 0 0; }
+.speaker-section-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-bottom:14px; }
+.speaker-section-heading h2 { margin:0; }
+.speaker-section-heading>span,.speaker-profile-events .pagination>span { color:var(--panel-muted); font-size:.76rem; }
+.speaker-profile-events .table-scroll { max-height:430px; overflow:auto; }
+.speaker-profile-events th { position:sticky; top:0; background:var(--panel-soft); z-index:1; }
+.speaker-profile-events td { overflow-wrap:anywhere; }
+.speaker-profile-delete { display:flex; justify-content:flex-end; margin-top:16px; }
+.speaker-profile-delete button { display:inline-flex; align-items:center; gap:7px; font-size:.76rem; min-height:44px; }
+@media(max-width:800px) { .bmw-admin .speaker-profile-card { grid-template-columns:minmax(0,1fr); padding:16px; gap:16px; }.speaker-profile-file { border-left:0; padding-left:0; border-top:1px solid var(--panel-line); padding-top:16px; } }
+@media(max-width:480px) { .speaker-profile-overview { gap:12px; }.speaker-profile-photo { width:64px; height:64px; flex-basis:64px; }.speaker-profile-facts { grid-template-columns:minmax(0,1fr); gap:12px; } }
+/* Spreadsheet speaker list with compact, aligned row actions. */
+.bmw-admin .speaker-compact-list.panel-sheet table { min-width:780px; }
+.bmw-admin .speaker-compact-list.panel-sheet th:first-child { width:29%; }
+.bmw-admin .speaker-compact-list.panel-sheet th:nth-child(2) { width:20%; }
+.bmw-admin .speaker-compact-list.panel-sheet th:nth-child(3) { width:20%; }
+.bmw-admin .speaker-compact-list.panel-sheet th:nth-child(4) { width:9%; }
+.bmw-admin .speaker-compact-list.panel-sheet th:last-child { width:22%; }
+.bmw-admin .speaker-compact-list.panel-sheet .row-actions { align-items:center; gap:6px; }
+.speaker-compact-list .row-actions>form { display:inline-flex; margin:0; padding:0; border:0; background:transparent; }
+.bmw-admin .speaker-compact-list .row-actions .speaker-delete { display:inline-flex; align-items:center; justify-content:center; min-width:32px; min-height:32px; margin:0; padding:6px; border:1px solid #e4c6c6; border-radius:5px; background:#fff5f5; color:#a63232; cursor:pointer; }
+.speaker-compact-list .speaker-delete:hover { background:#ffe4e4; }
+.speaker-compact-list .speaker-delete .panel-icon { width:17px; height:17px; }
+html[data-theme=dark] .speaker-compact-list .row-actions .speaker-delete { background:#3b272c; border-color:#77434b; color:#ffb2b2; }
+@media(max-width:700px) { .bmw-admin .speaker-compact-list .row-actions .speaker-delete { min-width:44px; min-height:44px; }.bmw-admin .speaker-compact-list.panel-sheet table { min-width:940px; }.bmw-admin .speaker-compact-list.panel-sheet th:last-child { width:26%; }.bmw-admin .speaker-compact-list.panel-sheet th:first-child { width:25%; } }
+.bmw-admin .speaker-compact-list.panel-sheet th:first-child { width:23%; }
+.bmw-admin .speaker-compact-list.panel-sheet th:nth-child(2),.bmw-admin .speaker-compact-list.panel-sheet th:nth-child(3) { width:15%; }
+.bmw-admin .speaker-compact-list.panel-sheet th:nth-child(4) { width:25%; }
+.speaker-event-names { list-style:none; padding:0; margin:0; display:grid; gap:5px; }
+.speaker-event-names span { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; overflow-wrap:anywhere; line-height:1.5; }
+.speaker-event-names li+li { border-top:1px solid var(--panel-line); padding-top:5px; }
+.speaker-more-events { display:inline-block; font-size:.7rem; margin-top:6px; }
+.speaker-event-empty { color:var(--panel-muted); font-size:.74rem; }
+
+/* Uniform speaker action buttons; keep each control on the same baseline. */
+.bmw-admin .speaker-compact-list.panel-sheet .row-actions { display:flex; flex-wrap:nowrap; gap:6px; align-items:center; min-height:32px; }
+.bmw-admin .speaker-compact-list.panel-sheet .row-actions>a,
+.bmw-admin .speaker-compact-list.panel-sheet .row-actions .speaker-delete { display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; flex:0 0 auto; width:32px; height:32px; min-width:32px; min-height:32px; padding:0; margin:0; border:1px solid transparent; border-radius:6px; gap:4px; font-size:12px; line-height:1; text-decoration:none; box-shadow:none; }
+.bmw-admin .speaker-compact-list.panel-sheet .row-actions>a:first-child { width:64px; }
+.bmw-admin .speaker-compact-list.panel-sheet .row-actions>form { flex:0 0 auto; line-height:0; align-items:center; }
+.bmw-admin .speaker-compact-list.panel-sheet .row-actions .speaker-delete { border-color:#e4c6c6; }
+.bmw-admin .speaker-compact-list.panel-sheet .row-actions .panel-icon { display:block; width:16px; height:16px; min-width:16px; flex:0 0 16px; stroke-width:1.8; }
+.speaker-compact-list .row-actions :is(a,button):focus-visible { outline:2px solid #438dce; outline-offset:3px; }
+@media(max-width:700px) { .bmw-admin .speaker-compact-list.panel-sheet .row-actions>a,.bmw-admin .speaker-compact-list.panel-sheet .row-actions .speaker-delete { width:44px; height:44px; min-width:44px; min-height:44px; }.bmw-admin .speaker-compact-list.panel-sheet .row-actions>a:first-child { width:76px; } }

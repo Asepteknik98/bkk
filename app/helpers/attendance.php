@@ -40,6 +40,28 @@ function attendance_options(): array
     return [$years,$industries];
 }
 
+/** Only real, populated student groups can be selected for a new event. */
+function attendance_groups(): array
+{
+    return panel_query("SELECT angkatan,kelas_industri,COUNT(*) AS jumlah FROM siswa WHERE kelas_industri<>'' GROUP BY angkatan,kelas_industri ORDER BY angkatan DESC,kelas_industri")->fetchAll();
+}
+
+function attendance_group_key(array $group): string
+{
+    return hash('sha256',(string)$group['angkatan'].'|'.$group['kelas_industri']);
+}
+
+function attendance_select_group(array $input,array $groups): array
+{
+    $key=input_text($input,'kelompok');
+    foreach($groups as $group){
+        if(hash_equals(attendance_group_key($group),$key)){
+            return ['angkatan'=>(string)$group['angkatan'],'kelas_industri'=>$group['kelas_industri']];
+        }
+    }
+    throw new InvalidArgumentException('Pilih kelompok peserta yang tersedia. Jika belum ada, lengkapi angkatan dan kelas industri pada Data siswa terlebih dahulu.');
+}
+
 /** Snapshot the roster at creation so subsequent participant edits do not rewrite history. */
 function attendance_create(array $data,int $userId): int
 {
