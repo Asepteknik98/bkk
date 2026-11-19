@@ -99,6 +99,24 @@ function participant_errors(array $data): array
     return $errors;
 }
 
+function participant_delete(int $id): void
+{
+    db()->beginTransaction();
+    try{
+        if(!panel_query('SELECT id FROM siswa WHERE id=:id FOR UPDATE',['id'=>$id])->fetchColumn()){
+            throw new InvalidArgumentException('Siswa sudah tidak tersedia. Muat ulang daftar.');
+        }
+        panel_query('DELETE FROM siswa WHERE id=:id',['id'=>$id]);
+        db()->commit();
+    }catch(Throwable $exception){
+        if(db()->inTransaction()){db()->rollBack();}
+        if($exception instanceof PDOException&&(int)($exception->errorInfo[1]??0)===1451){
+            throw new InvalidArgumentException('Siswa tidak dapat dihapus karena sudah digunakan pada absensi, PKL, kelas industri, atau rapor. Riwayat tetap dipertahankan.');
+        }
+        throw $exception;
+    }
+}
+
 function participant_save(array $data, ?int $id=null): void
 {
     $columns=array_keys(participant_columns());

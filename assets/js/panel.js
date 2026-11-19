@@ -163,7 +163,7 @@ document.querySelectorAll('.panel-content .table-scroll, .panel-content .media-g
     const media = viewport.classList.contains('media-grid');
     const table = viewport.querySelector('table');
     const rows = table && !table.querySelector('tbody th') ? Array.from(table.querySelectorAll('tbody > tr')).filter(row => !row.querySelector('[colspan]')) : [];
-    const perSlide = 5;
+    const perSlide = viewport.dataset.listSize === '10' ? 10 : 5;
     let slide = 0;
     const totalSlides = Math.ceil(rows.length / perSlide);
     viewport.id ||= `admin-list-${index}`;
@@ -185,10 +185,10 @@ document.querySelectorAll('.panel-content .table-scroll, .panel-content .media-g
     const scroll = direction => viewport.scrollBy({ left: direction * viewport.clientWidth * .8, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
     const left = createButton('\u2190', 'Geser daftar ke kiri', () => scroll(-1));
     const right = createButton('\u2192', 'Geser daftar ke kanan', () => scroll(1));
-    const previous = createButton('Sebelumnya', 'Lima baris sebelumnya', () => { slide--; render(); });
+    const previous = createButton('Sebelumnya', `${perSlide} baris sebelumnya`, () => { slide--; render(); });
     const status = document.createElement('span');
     status.setAttribute('role', 'status'); controls.append(status);
-    const next = createButton('Berikutnya', 'Lima baris berikutnya', () => { slide++; render(); });
+    const next = createButton('Berikutnya', `${perSlide} baris berikutnya`, () => { slide++; render(); });
     const updateScroll = () => {
         const overflow = viewport.scrollWidth - viewport.clientWidth > 2;
         left.hidden = right.hidden = !overflow;

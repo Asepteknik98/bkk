@@ -441,3 +441,54 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 
 - CSS scoped pada assets/css/bmw.css menyamakan tinggi tombol Profil/Edit/Hapus, sudut 6px, jarak 6px dan ukuran ikon 16px. Desktop 32px, layar kecil 44px; form hapus tidak lagi memengaruhi baseline. Fokus keyboard tetap jelas. Tidak mengubah handler atau data.
 - Chrome memakai markup tindakan asli dengan data sintetis dan CSS proyek memverifikasi ketiga kontrol memiliki posisi atas/tinggi/radius yang sama pada ukuran jendela 500/1200; diff check lulus.
+
+## Data siswa lebih mudah dipahami (19 November 2026)
+
+- Header Data siswa kini menonjolkan dua tindakan Tambah siswa dan Ekspor Excel. Layanan PKL/Absensi/Rapor dipindah ke navigasi terpisah berikon dan mengikuti izin modul. Form manual berlabel Tambah siswa satu per satu; impor berlabel Tambah banyak siswa melalui Excel dengan langkah unduh template, unggah, serta peringatan impor menambah baris. Field, endpoint, CSRF dan proses penyimpanan/impor tidak berubah.
+- Daftar memakai garis Excel, heading/jumlah halaman, tindakan edit/rapor berikon dan empty state yang membedakan filter kosong dari belum ada siswa. CSS scoped participants-workspace mendukung layar kecil dan warna variabel tema. File utama panel/peserta/index.php dan assets/css/bmw.css; tidak ada SQL baru atau perubahan data operasional.
+- Lint PHP dan diff check lulus. Chrome menggunakan template PHP/CSS asli, handler data-open-details asli (snapshot tidak menyertakan sidebar), serta fixture sintetis pada viewport 504/1182px: dua tombol utama, tiga pintasan Admin, satu tautan template di impor, sembilan field data + CSRF utuh, tombol tambah membuka form, dan tanpa overflow halaman. Screenshot desktop diperiksa. Bukan pengujian perangkat fisik atau simpan/import database ulang.
+
+## Pengelolaan siswa dipisah menjadi halaman khusus (19 November 2026)
+
+- Mengikuti koreksi pengguna, daftar tidak lagi mencampur formulir manual, impor, atau pintasan PKL/Absensi/Rapor. Tiga menu lokal menunjuk halaman terpisah: panel/peserta/index.php (filter, tabel identitas, Edit, ekspor hasil filter), form.php (tambah/edit satu siswa), dan impor.php (template serta unggah Excel). PKL/Absensi/Rapor tetap melalui sidebar. Penanda aktif memperjelas lokasi, formulir tampil langsung tanpa accordion.
+- Logika simpan dan impor yang sudah ada dipindah tanpa duplikasi ke app/helpers/participant-editor.php; tampilan editor dan navigasi bersama di app/layouts/participant-editor.php serta participant-navigation.php. Halaman/handler memeriksa login dan izin peserta; mode handler dibatasi dan CSRF tetap wajib. ID edit invalid 404, validasi gagal 422, aksi lintas halaman 400. POST dan tautan GET lama tetap kompatibel; tautan tambah dari PKL diperbarui ke form.php dan alur lanjut PKL tetap memeriksa izinnya. Tidak mengubah tabel, data asli, template atau ketentuan impor. Tidak ada SQL baru/README.
+- Verifikasi: lint tujuh PHP, regresi access.php/learning-reports.php dan diff check lulus. HTTP/PDO/MariaDB pada salinan proyek/database sementara menguji tiga halaman, login Admin/Staf, guest redirect, staf tanpa izin 403 pada halaman/POST, CSRF salah 403, allowlist dropdown, tambah/edit, filter redirect, ID invalid, aksi lintas halaman, kompatibilitas URL/POST lama, PKL lanjut dan pembatasan izin PKL, impor invalid serta impor XLSX sah oleh Staf memakai template terbaru. Database operasional tidak disentuh.
+- Chrome memakai snapshot HTTP sintetis lengkap dengan layout/CSS/JS asli untuk daftar/tambah/edit/impor, viewport 504/1182px: tiga menu/satu aktif, daftar tanpa formulir POST, tambah/edit tanpa upload, impor tanpa input identitas, masing-masing editor tepat satu form dan tanpa overflow. Screenshot daftar/tambah diperiksa. Perangkat fisik belum diuji. Artefak QA workspace dibersihkan.
+
+## Hapus siswa dan batas sepuluh baris (19 November 2026)
+
+- Daftar siswa dibatasi sepuluh baris per halaman server; filter/urutan tetap dipertahankan pada pagination dan redirect hapus. data-list-size=10 mengatur slider generik agar tidak kembali menyembunyikan baris menjadi lima; modul lain tetap default lima. Tombol Edit dan Hapus berlabel/ikon, sejajar dan sama tinggi (36px desktop, 44px layar kecil), dalam tabel Excel.
+- POST hapus di index.php memeriksa login/izin peserta, CSRF dan ID, lalu memakai helper participant_delete dengan transaksi dan row lock. Siswa tanpa riwayat dapat dihapus; FK RESTRICT melindungi absensi/PKL/kelas industri/rapor dan diterjemahkan menjadi pesan jelas tanpa SQL. Siswa tidak ditemukan ditolak; tidak menghapus riwayat secara cascade. POST simpan/impor lama tetap diteruskan ke editor bersama. File: panel/peserta/index.php, app/helpers/participants.php, assets/js/panel.js, assets/css/bmw.css. Tidak ada perubahan SQL atau database operasional.
+- Lint PHP, access.php, attendance.php dan diff check lulus. HTTP/PDO/MariaDB sementara membuktikan pagination 12 siswa menjadi 10+2, hapus Admin/Staf berizin, CSRF salah 403, guest redirect, staf tanpa izin 403, ID invalid/tidak ada 422, siswa terkait absensi gagal dihapus dan riwayat tetap utuh, redirect mempertahankan filter serta halaman terakhir menyesuaikan setelah penghapusan.
+- Chrome pada snapshot HTTP sintetis lengkap/CSS/JS asli, viewport 504/1182px, membuktikan sepuluh baris benar-benar terlihat, sepuluh form konfirmasi, kedua tombol sama tinggi dan muat dalam sel serta tidak ada overflow halaman. Screenshot desktop diperiksa. Perangkat fisik belum diuji; data sekolah asli tidak disentuh. Artefak QA dibersihkan.
+
+## Gulir vertikal dalam kotak siswa (19 November 2026)
+
+- Tabel siswa dibatasi maksimum 420px atau 55vh, mengikuti nilai yang lebih kecil. Overflow vertikal/horizontal berada di dalam kotak, scrollbar ramping mengikuti tema, dan header kolom sticky. Kotak diberi tabindex/region/label untuk navigasi keyboard. Batas sepuluh siswa dan pagination tetap. File: assets/css/bmw.css dan panel/peserta/index.php.
+- Lint PHP dan diff check lulus. Chrome dengan sepuluh baris sintetis/CSS asli pada jendela 500/1200 membuktikan tinggi kotak di bawah 420px, scrollTop bergerak 120px, header tetap di tempat, dan tidak ada overflow halaman. Tidak mengubah database/SQL.
+
+## Warna menu pengelolaan siswa (19 November 2026)
+
+- Menu Daftar siswa memakai biru, Tambah/Edit siswa hijau, dan Impor Excel ungu. Menu tidak aktif memakai latar lembut; menu aktif berwarna solid, teks putih, font tebal dan garis bawah inset, tetap memakai aria-current sehingga status tidak hanya dibedakan warna. Ikon mengikuti warna teks; tema gelap memiliki palet tersendiri. Ukuran dan susunan responsif tetap. File: app/layouts/participant-navigation.php dan assets/css/bmw.css.
+- Lint PHP dan diff check lulus. Perhitungan kontras sembilan pasangan teks/latar (normal, aktif, gelap) seluruhnya di atas 4.5:1. Tidak mengubah data/handler/SQL; browser tidak diuji ulang untuk perubahan warna ini.
+
+## Desain daftar Kelas Industri (19 November 2026)
+
+- Header dirapikan: judul/penjelasan singkat di kiri, Tambah kelas hijau sebagai aksi utama dan Deskripsi BMW Sakti sekunder di kanan. Filter berlabel eksplisit dan ikon, tabel panel-sheet bergaris Excel dengan header sticky/area gulir, judul kelas tebal, progres pertemuan berwarna disertai angka/label, dan status Aktif/Arsip berbentuk badge berikon. Tindakan Jadwal dan Edit menjadi dua tombol sejajar. Empty state membedakan filter tidak cocok dan data kosong.
+- File utama panel/kelas-industri/index.php dan assets/css/bmw.css. CSS scoped industry-list-workspace karena halaman ini bukan bmw-admin; mendukung tema gelap/terang dan layar kecil. Tidak mengubah query, pagination, izin, SQL atau data.
+- Lint PHP, app/tests/industry-classes.php dan diff check lulus. Chrome dengan template PHP/CSS asli dan empat kelas sintetis pada viewport 504/1182px, dua tema: tidak ada overflow halaman, tombol muat dan sama tinggi, empat progress terlihat, label terhubung serta garis sel solid. Screenshot desktop diperiksa. Belum menguji perangkat fisik atau CRUD database ulang karena perubahan tampilan. Artefak QA dibersihkan.
+
+## Desain detail Kelas Industri (19 November 2026)
+
+- Detail kelas kini memiliki header tindakan sejajar, kartu ringkasan dua area (progres dan fakta kelas), serta Catatan kelas yang dapat dibuka. Jadwal dan Peserta berada pada kartu terpisah dengan tabel Excel, header sticky dan area gulir terbatas. Pertemuan memiliki badge teks berwarna untuk lima status, jam WIB, keterangan yang dapat digulir, dan tombol Atur jadwal. Empty state peserta menjelaskan pemilihan siswa melalui Edit kelas; pagination tetap mempertahankan ID dan mengarah ke bagian peserta.
+- File utama: panel/kelas-industri/detail.php, assets/css/bmw.css. Query, perhitungan progres, izin dan handler tidak diubah; tanpa SQL baru/data asli. Lint PHP, app/tests/industry-classes.php dan diff check lulus.
+- Chrome menggunakan template PHP/CSS asli dengan data sintetis (lima status pertemuan, catatan panjang, 15 peserta) pada viewport 504/1182px dan dua tema. Memastikan tiga aksi header, empat fakta, dua bagian data, lima badge, catatan awal tertutup, tombol muat dalam sel, gulir internal bekerja, header tabel tetap, dan tidak ada overflow halaman. Screenshot desktop diperiksa. Tidak menguji perangkat fisik/CRUD database ulang; artefak QA dibersihkan.
+
+## Detail kelas lebih minimalis (19 November 2026)
+
+- Area detail Kelas Industri dibatasi 980px dan tetap berada di tengah. Kolom progres diperkecil dari 230px menjadi 190px; padding, jarak fakta, angka progres, judul dan tombol header dirapatkan. Kartu jadwal/peserta mengikuti lebar area dan tabel tetap bergulir di dalam kotak. Breakpoint satu kolom pada layar kecil tetap dipertahankan. Perubahan hanya assets/css/bmw.css, tanpa data/SQL atau handler.
+- Diff check lulus; aturan responsif dan cakupan selector diperiksa. Tidak menjalankan ulang pengujian database untuk perubahan ukuran CSS.
+
+## Garis Excel pada ringkasan kelas (19 November 2026)
+
+- Kartu ringkasan detail kelas kini berupa grid tanpa celah, dengan bingkai dan garis vertikal/horizontal antara progres serta empat fakta kelas. Catatan memakai garis penuh di bawah. Warna garis disesuaikan tema gelap; pada layar kecil progres menjadi baris tersendiri dan fakta satu kolom tidak menyisakan garis vertikal. Lebar maksimal dan fungsi tetap. Hanya assets/css/bmw.css berubah; diff check dan cakupan breakpoint diperiksa. Tidak ada perubahan SQL/data atau pengujian database ulang.
