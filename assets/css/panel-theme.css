@@ -2009,3 +2009,44 @@ html[data-theme=dark] .settings-sheet-header { background:#253c34; color:#b6ddc7
 html[data-theme=dark] .users-list-page .user-role.is-admin { color:#b7d2ff; background:#1b2d49; border-color:#3c587e; }
 html[data-theme=dark] .users-list-page .user-role.is-staff { color:#e1c7fa; background:#30233f; border-color:#67507e; }
 @media(max-width:700px) { .panel-page .users-list-page .row-actions>a,.panel-page .users-list-page .row-actions button { min-height:44px; height:44px; }.users-list-page .page-actions>a { margin-left:auto; } }
+.panel-page .account-editor-structured { max-width:1000px; margin:auto; }
+.account-editor-structured .page-actions { align-items:center; gap:14px; }
+.account-editor-structured .account-editor-intro { margin:8px 0 0; color:var(--panel-muted); font-size:.8rem; line-height:1.6; }
+.panel-page .account-editor-structured .account-editor { display:block; padding:0; overflow:hidden; }
+.account-editor-structured .account-form-section { min-width:0; padding:18px; border-bottom:1px solid var(--panel-line); }
+.account-editor-structured .account-form-section>h2 { display:flex; align-items:center; gap:8px; margin:0 0 16px; font-size:.92rem; }
+.account-section-number { display:grid; place-items:center; width:25px; height:25px; background:var(--panel-soft); border:1px solid var(--panel-line); border-radius:5px; color:var(--panel-muted); font-size:.74rem; }
+.account-editor-structured .account-form-section>h2>small { margin-left:auto; color:var(--panel-muted); font-size:.73rem; font-weight:400; }
+.account-editor-structured .account-field-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; align-items:start; }
+.account-editor-structured .account-field { min-width:0; }
+.panel-page .account-editor-structured .account-editor label { margin:0 0 7px; font-size:.8rem; }
+.panel-page .account-editor-structured .account-editor :is(input:not([type=checkbox]):not([type=hidden]),select) { min-height:44px; height:auto; margin:0; padding:9px 11px; font-size:16px; width:100%; max-width:100%; box-sizing:border-box; }
+.account-section-help { font-size:.75rem; color:var(--panel-muted); line-height:1.7; margin:12px 0 0; }
+.account-editor-structured .profile-photo-field { display:flex; align-items:flex-start; gap:16px; max-width:600px; padding:12px; border:1px solid var(--panel-line); border-radius:6px; }
+.account-editor-structured .profile-photo-field>div { flex:1; min-width:0; }
+.account-editor-structured .profile-photo-preview { flex:0 0 64px; width:64px; height:64px; object-fit:cover; }
+.account-editor-structured .profile-photo-field .check-label { display:flex; align-items:center; gap:8px; margin:12px 0 0; }
+.account-permissions-note { margin:0 0 14px; font-size:.79rem; color:var(--panel-muted); line-height:1.7; }
+.account-permissions-note strong { color:var(--panel-text); }
+.account-permission-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); max-height:350px; overflow:auto; border:1px solid var(--panel-line); border-radius:6px; }
+.panel-page .account-editor-structured .account-permission-grid>.check-label { display:flex; align-items:flex-start; gap:9px; margin:0; padding:12px; min-width:0; border-bottom:1px solid var(--panel-line); border-right:1px solid var(--panel-line); font-size:.78rem; line-height:1.6; cursor:pointer; }
+.account-permission-grid .check-label>span { min-width:0; overflow-wrap:anywhere; }
+.account-permission-grid input[type=checkbox] { width:18px; height:18px; flex:0 0 18px; margin:2px 0 0; accent-color:#356658; }
+.account-permission-grid label:has(input:checked) { background:var(--panel-soft); }
+.account-permission-grid .panel-auto-icon { display:none; }
+.account-permission-help { margin-top:14px; }
+.account-permission-help summary { display:flex; align-items:center; gap:7px; min-height:44px; cursor:pointer; font-size:.78rem; }
+.account-permission-help ul { font-size:.77rem; color:var(--panel-muted); line-height:1.8; padding-left:22px; }
+.panel-page .account-editor-structured .form-actions { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:12px; padding:14px 18px; margin:0; border:0; background:var(--panel-soft); }
+.account-save-help { margin-right:auto; color:var(--panel-muted); font-size:.75rem; }
+.account-editor-structured .account-reset { border:1px solid var(--panel-line); border-radius:7px; overflow:hidden; }
+.account-editor-structured .account-reset>summary { display:flex; align-items:center; gap:8px; }
+.account-editor-structured .account-reset>summary small { margin-left:auto; font-size:.72rem; }
+.account-editor-structured .account-reset>p { padding:0 16px; line-height:1.7; }
+.panel-page .account-editor-structured .account-reset-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 16px; padding:16px; margin:0; }
+.account-editor-structured .account-reset-form>label { grid-column:1/-1; }
+.panel-page .account-editor-structured .account-reset-form>input { grid-column:1/-1; min-height:44px; font-size:16px; }
+.panel-page .account-editor-structured .account-reset-form>button { grid-column:1/-1; min-height:44px; justify-self:start; }
+.account-editor-structured :is(a,button,input,select):focus-visible { outline:2px solid #438dce; outline-offset:3px; }
+@media(max-width:700px) { .account-editor-structured .account-field-grid { grid-template-columns:minmax(0,1fr); }.account-permission-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.account-editor-structured .account-form-section { padding:14px; }.account-save-help { width:100%; }.account-editor-structured .profile-photo-field { flex-wrap:wrap; } }
+@media(max-width:400px) { .account-permission-grid { grid-template-columns:minmax(0,1fr); } }
