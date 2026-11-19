@@ -534,3 +534,12 @@ html[data-theme=dark] .bmw-description-form>label>span .panel-icon { color:#a8c9
     .bmw-description-footer { flex-direction:column; align-items:stretch; gap:12px; }
     .bmw-description-editor .bmw-description-footer button { width:100%; }
 }
+
+/* Entry points when the PKL student selector has no matching records. */
+.pkl-student-actions { display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
+.pkl-student-actions a,.pkl-student-empty a { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:44px; font-size:.8rem; }
+.pkl-student-actions .panel-icon,.pkl-student-empty .panel-icon { display:inline-block; flex:none; width:17px; height:17px; }
+.panel-page .table-scroll .pkl-student-empty { padding:24px 16px; text-align:center; }
+.pkl-student-empty strong { display:block; margin-bottom:6px; }
+.pkl-student-empty p { margin:0 0 14px; font-size:.82rem; color:var(--panel-muted); line-height:1.7; }
+@media(max-width:600px) { .pkl-student-actions { width:100%; } }

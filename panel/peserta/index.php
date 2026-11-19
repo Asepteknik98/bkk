@@ -6,7 +6,10 @@ try{[$filters,$where,$params,$order]=participant_filters($_GET);}
 catch(InvalidArgumentException $exception){http_response_code(400);exit(e($exception->getMessage()));}
 $listPath='panel/peserta/?'.http_build_query($filters);
 $ready=(bool)panel_query("SHOW TABLES LIKE 'siswa'")->fetchColumn();
+$participantChoices=participant_choice_lists($ready);
 $errors=[];$data=participant_input([]);$id=positive_id($_GET['id']??'');
+$continuePkl=$id===null&&(input_text($_GET,'lanjut')==='pkl'||input_text($_POST,'lanjut')==='pkl');
+if($continuePkl){require_permission($user,'pkl');}
 if($ready&&$id){$row=panel_query('SELECT * FROM siswa WHERE id=:id',['id'=>$id])->fetch();if(!$row){panel_not_found();}$data=participant_input($row);}
 if($_SERVER['REQUEST_METHOD']==='POST'){
     require_post_csrf();
@@ -40,8 +43,16 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         finally{if($temp&&is_file($temp)){unlink($temp);}}
     }else{
         $data=participant_input($_POST);$errors=participant_errors($data);
+        foreach(['kelas','jurusan','angkatan'] as $choiceField){
+            if(isset($_POST[$choiceField])&&!is_string($_POST[$choiceField])){$errors[]='Pilihan '.$choiceField.' tidak valid.';}
+            if($data[$choiceField]!==''&&!in_array($data[$choiceField],$participantChoices[$choiceField],true)){$errors[]='Pilih '.$choiceField.' dari daftar yang tersedia.';}
+        }
         if(!$errors){
-            try{participant_save($data,$id);panel_message('Data peserta berhasil disimpan.',$listPath);}
+            try{
+                participant_save($data,$id);
+                if($continuePkl){panel_message('Siswa berhasil ditambahkan. Lengkapi penempatan PKL berikut.','panel/pkl/form.php?siswa_id='.(int)db()->lastInsertId());}
+                panel_message('Data peserta berhasil disimpan.',$listPath);
+            }
             catch(PDOException $exception){if($exception->getCode()!=='23000'){throw $exception;}$errors[]='Nomor peserta sudah terdaftar. Gunakan Nomor peserta yang berbeda.';}
         }
     }
@@ -61,10 +72,20 @@ panel_start($user,'Data siswa / peserta','peserta');
 
 <?php if(!$ready):?><p class="alert">Fitur belum diaktifkan. Jalankan database/updates/009_participants.sql pada database aplikasi.</p><?php endif;?>
 <?php if($errors):?><div class="alert" role="alert"><strong>Data belum disimpan.</strong><ul><?php foreach(array_slice($errors,0,30) as $error):?><li><?= e($error) ?></li><?php endforeach;?></ul><?php if(count($errors)>30):?><p>Masih ada kesalahan lain. Perbaiki data dan unggah kembali.</p><?php endif;?></div><?php endif;?>
-<details class="bmw-disclosure" id="peserta-form" <?= $id||($errors&&($_POST['aksi']??'')!=='impor')?'open':'' ?>><summary><?= panel_icon('peserta') ?> <?= $id?'Edit peserta':'Tambah peserta' ?></summary>
-<form class="editor-form card" method="post"><?= csrf_field() ?><p>Isi identitas peserta dan riwayat PKL. Kolom bertanda * wajib diisi.</p>
-<?php foreach(participant_columns() as $key=>$label):?><label for="<?= $key ?>"><?= e($label) ?><?= in_array($key,['nis','nama','kelas','angkatan'],true)?' *':'' ?><input id="<?= $key ?>" name="<?= $key ?>" value="<?= e($data[$key]) ?>" <?= in_array($key,['nis','nama','kelas','angkatan'],true)?'required':'' ?> <?= $key==='email'?'type="email"':'type="text"' ?> maxlength="<?= ['nis'=>30,'nama'=>150,'kelas'=>80,'jurusan'=>150,'angkatan'=>4,'kelas_industri'=>150,'telepon'=>25,'email'=>190,'tempat_pkl'=>190,'tahun_pkl'=>9][$key] ?>"></label><?php endforeach;?>
-<div class="form-actions"><button type="submit" <?= !$ready?'disabled':'' ?>>Simpan peserta</button><?php if($id):?><a href="<?= e(base_url('panel/peserta/')) ?>">Batal edit</a><?php endif;?></div></form>
+<?php if($continuePkl): ?><p class="notice"><?= panel_icon('peserta') ?> Tambahkan identitas siswa. Setelah disimpan, Anda langsung menuju formulir penempatan PKL. <a href="<?= e(base_url('panel/pkl/form.php')) ?>">Kembali ke pemilihan siswa</a></p><?php endif; ?>
+<details class="bmw-disclosure" id="peserta-form" <?= $id||$continuePkl||($errors&&($_POST['aksi']??'')!=='impor')?'open':'' ?>><summary><?= panel_icon('peserta') ?> <?= $id?'Edit peserta':'Tambah peserta' ?></summary>
+<form class="editor-form card" method="post"><?= csrf_field() ?><?php if($continuePkl): ?><input type="hidden" name="lanjut" value="pkl"><?php endif; ?><p>Isi identitas peserta dan riwayat PKL. Kolom bertanda * wajib diisi.</p>
+<?php if(!$participantChoices['kelas']||!$participantChoices['jurusan']||!$participantChoices['angkatan']): ?><p class="full-width notice"><?php if($user['role']==='admin'): ?>Pilihan kelas, jurusan, atau angkatan belum lengkap. Isi daftar sekali melalui <a href="<?= e(base_url('panel/pengaturan/?bagian=kelas#settings-student-options')) ?>">Pengaturan - Pilihan Kelas / Jurusan / Angkatan</a>.<?php else: ?>Pilihan kelas, jurusan, atau angkatan belum lengkap. Hubungi Admin untuk mengisi daftar pilihan.<?php endif; ?></p><?php endif; ?>
+<?php foreach(participant_columns() as $key=>$label): ?><label for="<?= $key ?>"><?= e($label) ?><?= in_array($key,['nis','nama','kelas','angkatan'],true)?' *':'' ?>
+<?php if(in_array($key,['kelas','jurusan','angkatan'],true)): ?>
+<select id="<?= $key ?>" name="<?= $key ?>" <?= in_array($key,['kelas','angkatan'],true)?'required':'' ?>>
+    <option value=""><?= $participantChoices[$key]?'Pilih '.e($label):'Pilihan '.e($label).' belum diatur' ?></option>
+    <?php foreach($participantChoices[$key] as $option): ?><option value="<?= e($option) ?>" <?= $data[$key]===$option?'selected':'' ?>><?= e($option) ?></option><?php endforeach; ?>
+</select>
+<?php else: ?>
+<input id="<?= $key ?>" name="<?= $key ?>" value="<?= e($data[$key]) ?>" <?= in_array($key,['nis','nama','angkatan'],true)?'required':'' ?> <?= $key==='email'?'type="email"':'type="text"' ?> maxlength="<?= ['nis'=>30,'nama'=>150,'angkatan'=>4,'kelas_industri'=>150,'telepon'=>25,'email'=>190,'tempat_pkl'=>190,'tahun_pkl'=>9][$key] ?>">
+<?php endif; ?></label><?php endforeach; ?>
+<div class="form-actions"><button type="submit" <?= !$ready?'disabled':'' ?>><?= $continuePkl?'Simpan & lanjutkan ke PKL':'Simpan peserta' ?></button><?php if($id):?><a href="<?= e(base_url('panel/peserta/')) ?>">Batal edit</a><?php endif;?></div></form>
 </details>
 <details class="bmw-disclosure" id="impor-form" <?= $errors&&($_POST['aksi']??'')==='impor'?'open':'' ?>><summary><?= panel_icon('upload') ?> Impor Excel</summary>
 <form class="editor-form card" method="post" enctype="multipart/form-data"><?= csrf_field() ?><input type="hidden" name="aksi" value="impor"><p>Gunakan template .xlsx, maksimal 5 MB dan 1.000 peserta. Format Nomor peserta, dan telepon sebagai teks agar angka nol di awal tetap tersimpan. Nomor peserta yang sudah terdaftar akan menolak seluruh impor; data lama tetap tersimpan.</p><label for="excel">File Excel<input type="file" id="excel" name="excel" accept=".xlsx" required></label><button type="submit" <?= !$ready?'disabled':'' ?>>Impor peserta</button></form>

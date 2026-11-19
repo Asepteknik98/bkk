@@ -57,5 +57,23 @@ function settings_fields(): array
         'social_tiktok'=>['TikTok (URL)',2048,false],'social_x'=>['X (URL)',2048,false],
         'social_threads'=>['Threads (URL)',2048,false],'social_linkedin'=>['LinkedIn (URL)',2048,false],
         'social_telegram'=>['Telegram (URL)',2048,false],
-        'profile_description'=>['Isi profil BKK (teks biasa)',50000,false]];
+        'profile_description'=>['Isi profil BKK (teks biasa)',50000,false],
+        'participant_classes'=>['Pilihan kelas (satu per baris)',10000,false],
+        'participant_departments'=>['Pilihan jurusan (satu per baris)',10000,false],
+        'participant_years'=>['Pilihan angkatan (tahun, satu per baris)',10000,false]];
+}
+
+/** Shared section allowlist for the settings navigation and save handler. */
+function settings_sections(): array
+{
+    return [
+        'identitas'=>['label'=>'Identitas & Kontak','icon'=>'identity','description'=>'Nama sekolah, identitas BKK, dan kontak layanan.','fields'=>['site_name','school_name','contact_phone','contact_email','contact_address']],
+        'profil'=>['label'=>'Profil BKK','icon'=>'message','description'=>'Penjelasan BKK yang ditampilkan pada halaman profil publik.','fields'=>['profile_description']],
+        'logo'=>['label'=>'Logo Website','icon'=>'media','description'=>'Logo BKK dan sekolah yang digunakan pada website.','fields'=>[]],
+        'sosial'=>['label'=>'Media Sosial','icon'=>'home','description'=>'Tautan akun media sosial resmi. Kosongkan jika belum tersedia.','fields'=>array_keys(social_networks())],
+        'privasi'=>['label'=>'Hak Cipta & Privasi','icon'=>'lock','description'=>'Penanggung jawab, layanan privasi, dan keterangan pengelolaan data.','fields'=>['manager_name','manager_unit','manager_address','manager_email','manager_phone','copyright_owner','privacy_retention']],
+        'kelas'=>['label'=>'Pilihan Kelas','icon'=>'peserta','description'=>'Isi satu kelas per baris untuk pilihan pada formulir peserta. Nilai siswa lama tetap tersedia.','fields'=>['participant_classes']],
+        'jurusan'=>['label'=>'Pilihan Jurusan','icon'=>'program','description'=>'Isi satu jurusan per baris untuk pilihan pada formulir peserta. Nilai siswa lama tetap tersedia.','fields'=>['participant_departments']],
+        'angkatan'=>['label'=>'Pilihan Angkatan','icon'=>'calendar','description'=>'Isi satu tahun per baris, antara 1900 dan 2199. Tahun pada data lama tetap tersedia.','fields'=>['participant_years']],
+    ];
 }

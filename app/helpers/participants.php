@@ -40,8 +40,50 @@ function participant_filters(array $input): array
 function participant_input(array $input): array
 {
     $data=[];
-    foreach(participant_columns() as $key=>$label){$data[$key]=isset($input[$key])&&is_string($input[$key])?trim($input[$key]):'';}
+    foreach(participant_columns() as $key=>$label){
+        $value=$input[$key]??null;
+        $data[$key]=is_string($value)||($key==='angkatan'&&is_int($value))?trim((string)$value):'';
+    }
     return $data;
+}
+
+/** Readable choices entered once by Admin; no fabricated school categories. */
+function participant_option_lines(string $value, int $max, string $label): array
+{
+    if (!valid_text($value,10000,false)) { throw new InvalidArgumentException($label.' tidak valid atau terlalu panjang.'); }
+    $options=[];
+    foreach(preg_split('/\R/u',$value) as $line){
+        $line=trim($line);if($line===''){continue;}
+        if(!valid_text($line,$max)||preg_match('/[\x00-\x1f\x7f]/',$line)){throw new InvalidArgumentException('Setiap pilihan '.$label.' maksimal '.$max.' karakter tanpa karakter kontrol.');}
+        if(!in_array($line,$options,true)){$options[]=$line;}
+    }
+    if(count($options)>300){throw new InvalidArgumentException('Maksimal 300 pilihan '.$label.'.');}
+    return $options;
+}
+
+function participant_choice_lists(bool $studentsReady=true): array
+{
+    $settings=panel_query("SELECT setting_key,setting_value FROM settings WHERE setting_key IN ('participant_classes','participant_departments','participant_years')")->fetchAll(PDO::FETCH_KEY_PAIR);
+    $choices=[];
+    foreach(['kelas'=>['participant_classes',80],'jurusan'=>['participant_departments',150],'angkatan'=>['participant_years',4]] as $field=>[$key,$max]){
+        $choices[$field]=$field==='angkatan'?participant_year_options((string)($settings[$key]??'')):participant_option_lines((string)($settings[$key]??''),$max,$field);
+        if($studentsReady){
+            foreach(panel_query("SELECT DISTINCT $field FROM siswa WHERE TRIM($field)<>'' ORDER BY $field")->fetchAll(PDO::FETCH_COLUMN) as $value){
+                $value=trim((string)$value);
+                if(!in_array($value,$choices[$field],true)){$choices[$field][]=$value;}
+            }
+        }
+    }
+    return $choices;
+}
+
+function participant_year_options(string $value): array
+{
+    $years=participant_option_lines($value,4,'angkatan');
+    foreach($years as $year){
+        if(!preg_match('/^(19|20|21)[0-9]{2}$/D',$year)){throw new InvalidArgumentException('Pilihan angkatan harus tahun antara 1900 dan 2199.');}
+    }
+    return $years;
 }
 
 function participant_errors(array $data): array
