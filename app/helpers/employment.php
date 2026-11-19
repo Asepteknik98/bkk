@@ -49,3 +49,25 @@ function employment_type_save(array $data,?int $id,int $version,int $actor): voi
         db()->commit();
     }catch(Throwable $exception){if(db()->inTransaction()){db()->rollBack();}throw $exception;}
 }
+
+function employment_type_delete(int $id, int $version): void
+{
+    db()->beginTransaction();
+    try {
+        $current = panel_query('SELECT version FROM employment_types WHERE id=:id FOR UPDATE', ['id'=>$id])->fetchColumn();
+        if ($current === false || (int)$current !== $version) {
+            throw new InvalidArgumentException('Jenis sudah berubah atau tidak tersedia. Muat ulang daftar sebelum menghapus.');
+        }
+        foreach (['vacancy_details', 'alumni_work_profiles'] as $table) {
+            // Table names are a fixed server-side allowlist, never request input.
+            if ((int)panel_query('SELECT COUNT(*) FROM ' . $table . ' WHERE employment_type_id=:id', ['id'=>$id])->fetchColumn() > 0) {
+                throw new InvalidArgumentException('Jenis masih digunakan lowongan atau riwayat kerja alumni. Ubah status menjadi Nonaktif bila tidak dipakai lagi.');
+            }
+        }
+        panel_query('DELETE FROM employment_types WHERE id=:id', ['id'=>$id]);
+        db()->commit();
+    } catch (Throwable $exception) {
+        if (db()->inTransaction()) { db()->rollBack(); }
+        throw $exception;
+    }
+}

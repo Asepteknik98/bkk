@@ -633,3 +633,60 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Tambah/Edit Lowongan dibatasi 960px, header batik lokal lembut, ikon eksplisit pada judul/tindakan dan tiga bagian: Informasi pekerjaan, Publikasi & pendaftaran, Poster opsional. Sel isian bergaris dengan header biru lembut; padding ringkas, textarea 150px dapat diperbesar dan preview maksimal 100px. Desktop dua kolom, layar kecil satu kolom, input HP 16px/minimal 44px. Tema gelap memakai warna sel/header sesuai.
 - File panel/lowongan/form.php dan assets/css/panel-theme.css. Semua field/required, CSRF, handler, unggahan, pilihan katalog, konfirmasi tautan resmi, tanggal WIB, status dan pesan error tetap. Label published menjadi Dipublikasikan. Tidak ada SQL atau perubahan data operasional.
 - Lint PHP dan diff check lulus. Render sintetis template lama/baru memastikan nama seluruh field sama, tiga judul bagian, pembungkus section berpasangan, textarea di-escape, pilihan status/konfirmasi resmi dan tujuan simpan tetap. Browser/perangkat fisik dan CRUD database belum diuji ulang.
+
+## Form lowongan lebih minimalis (20 November 2026)
+
+- Lebar maksimal turun dari 960px ke 800px. Informasi pekerjaan, publikasi/pendaftaran, dan poster disusun berurutan agar panel samping yang panjang tidak menyisakan ruang kosong di bawah informasi pekerjaan. Jenis hubungan kerja memakai satu baris penuh; tanggal/status berdampingan desktop dan satu kolom HP. Padding dirapatkan, textarea awal 110px tetap bisa diperbesar. Batik header, garis Excel, fokus dan ukuran sentuh HP dipertahankan.
+- Hanya assets/css/panel-theme.css serta catatan progres berubah; field, handler dan data tetap. Diff check lulus dan cakupan selector/breakpoint diperiksa. Belum diuji ulang melalui browser.
+
+## Lebar form lowongan mengikuti panel (20 November 2026)
+
+- Batas 800px dan margin tengah pada vacancy-form-page dilepas. Form/header kini memakai 100% lebar area konten panel sehingga tidak ada lagi ruang samping tambahan akibat wrapper. Padding panel, susunan bagian, tinggi isian ringkas, batik dan breakpoint HP tetap.
+- File assets/css/panel-theme.css dan progres. Diff check lulus; selector dan perubahan satu aturan diperiksa. Tidak mengubah PHP/data; browser belum diuji ulang.
+
+## Jenis hubungan kerja: desain ringkas bergaris (20 November 2026)
+
+- Halaman mengikuti lebar panel tanpa batas tengah tambahan. Header batik dengan ikon dan tombol Tambah jenis; form Tambah/Edit memiliki header bagian, Nama/Status berdampingan, Penjelasan dan Rujukan berupa sel penuh dengan garis Excel. Textarea awal 80px dapat diperbesar, footer simpan terpisah, label terhubung ke ID. HP satu kolom dengan input 16px/44px.
+- Daftar diberi judul/jumlah, garis vertikal/horizontal, status berwarna dan tombol Edit; kotak scroll maksimal 380px dengan header tetap dan empty state. Tidak menambah fitur backend, SQL atau mengubah field, CSRF, version, validasi maupun proses simpan.
+- File panel/hubungan-kerja/index.php dan assets/css/panel-theme.css. Lint PHP dan diff check lulus. Struktur form, label dan scope CSS diperiksa; browser serta simpan database belum diuji ulang.
+
+## Jenis hubungan kerja: tindakan Lihat dan Edit (20 November 2026)
+
+- Tindakan daftar berisi tombol Lihat hijau dan Edit biru dengan ikon/ukuran konsisten. Lihat menuju panel/hubungan-kerja/detail.php: nama, status, penjelasan, rujukan dalam sel bergaris, header batik, kembali daftar dan edit. Detail membaca data saja, login/role serta izin modul tetap diperiksa, ID valid/404, SELECT prepared, output escape dan URL rujukan divalidasi http/https.
+- File panel/hubungan-kerja/index.php, detail.php dan assets/css/panel-theme.css. Tanpa SQL/perubahan data. Lint kedua PHP dan diff check lulus; tautan/ID dan struktur diperiksa. Browser serta database langsung belum diuji.
+
+## Hapus jenis hubungan kerja (20 November 2026)
+
+- Tombol Hapus merah dengan ikon/konfirmasi disandingkan Lihat/Edit. Handler hapus.php memeriksa login, role/izin modul, POST+CSRF, ID dan version. Helper employment_type_delete memakai transaksi, lock baris, pengecekan version dan referensi vacancy_details/alumni_work_profiles. Jenis terpakai ditolak dengan petunjuk Nonaktif; foreign key RESTRICT tetap menjadi proteksi database. Error teknis tidak ditampilkan.
+- File panel/hubungan-kerja/index.php, hapus.php, app/helpers/employment.php, assets/css/panel-theme.css. Tidak ada SQL atau penghapusan data operasional saat pengembangan.
+- Lint tiga PHP dan diff check lulus. Uji helper dengan adapter database sintetis: jenis bebas commit/delete; referensi lowongan, referensi alumni, version berubah, dan data hilang rollback tanpa delete. Browser dan database nyata belum diuji.
+
+## Hapus pada Lamaran Masuk (20 November 2026)
+
+- Kolom tindakan memiliki tombol ikon Hapus merah 44px sejajar Lihat/WhatsApp, label aksesibel dan konfirmasi penghapusan permanen. Handler panel/lamaran/hapus.php memeriksa role/izin modul, POST+CSRF dan ID; transaksi serta lock baris melindungi penghapusan. Lamaran terkait alumni_application_results ditolak untuk mempertahankan riwayat. Berkas metadata mengikuti FK CASCADE; lampiran fisik privat hanya dibersihkan setelah commit dengan allowlist nama/path dan pengecekan pemakaian bersama. Kesalahan teknis dicatat tanpa SQL ditampilkan.
+- File panel/lamaran/index.php, hapus.php dan assets/css/panel-theme.css. Tidak ada SQL baru atau penghapusan data operasional saat pengembangan.
+- Lint kedua PHP dan diff check lulus. Adapter sintetis menguji hapus mandiri commit, riwayat alumni/missing rollback tanpa delete, dan pemanggilan penjagaan CSRF. Browser/database nyata serta penghapusan lampiran fisik belum diuji.
+
+## Ikon tindakan daftar lowongan (20 November 2026)
+
+- Tombol tindakan dibuat ikon saja agar ringkas: Edit biru, Lihat publik hijau, Hapus merah. SVG lokal 18px, tombol desktop 38px/HP 44px, bentuk/spacing konsisten, hover dan fokus keyboard, warna tema gelap. Setiap tombol memiliki title dan aria-label termasuk posisi lowongan.
+- File panel/lowongan/index.php dan assets/css/panel-theme.css; selector scoped vacancy-list-page. Tujuan link, kondisi published, POST hapus, CSRF dan konfirmasi tetap. Tanpa SQL/data.
+- Lint PHP, diff check serta pengecekan tiga ikon dan penjagaan hapus lulus. Browser belum diuji ulang.
+
+## Rekap hasil alumni lebih ringkas (20 November 2026)
+
+- Header memakai batik lembut mengikuti lebar area panel. Filter dipadatkan; tiga statistik menjadi satu lembar bergaris dengan ikon, judul dan angka sejajar serta keterangan di baris berikutnya. Padding/border radius diperkecil agar kartu tidak tinggi. Warna kategori dan penjelasan tentang alumni unik/lolos seleksi tetap.
+- Rincian alumni memiliki batas sel, judul tabel ringkas, header sticky dan scroll internal maksimal 450px. Susunan kartu data HP sebelumnya tetap dengan garis pemisah; statistik satu kolom dan input/tombol HP minimal 44px. Tema gelap disesuaikan.
+- Hanya assets/css/panel-theme.css dan progres berubah; perhitungan/filter/akses/data tidak diubah. Diff check lulus dan selector, breakpoint serta struktur template terkait diperiksa. Browser belum diuji ulang.
+
+## Rincian alumni: 10 baris dan kotak scroll (20 November 2026)
+
+- Maksimal 10 alumni per halaman (sebelumnya 20), nomor halaman bergeser maksimal 10 dengan Sebelumnya/Berikutnya, status aktif dan parameter tahun tetap; total halaman tidak dibatasi. Kotak rincian bisa difokuskan keyboard, scroll internal maksimal min(340px,55vh), header desktop sticky. Padding/baris dipadatkan; tombol HP tetap minimal 44px.
+- File app/layouts/career-dashboard.php dan assets/css/panel-theme.css. Lint/diff check lulus; render dengan 1005 alumni sintetis menguji awal/tengah/akhir/nomor melampaui batas, maksimal 10 baris (akhir 5), 10 nomor/satu aktif, filter tahun dan escape. Tidak ada SQL/perubahan data. Browser belum diuji ulang.
+- Batas saat ini: helper career_dashboard masih membaca/mengelompokkan seluruh data sebelum array_slice agar aturan alumni unik dan ringkasan tetap sama. Perubahan ini membatasi tampilan/DOM; bukan klaim optimasi SQL atau uji beban database untuk ribuan data.
+
+## Daftar pemilihan alumni untuk lamaran (20 November 2026)
+
+- Daftar tautan bertitik diganti tabel Excel: Nama, Jurusan, Tahun lulus dan tombol Kelola lamaran berikon. Header batik mengikuti lebar panel, pencarian dengan label/placeholder/reset, informasi jumlah/halaman, empty state. Kotak scroll internal maksimal min(340px,55vh), header sticky, fokus keyboard, tema gelap dan tombol sentuh HP.
+- Query daftar kini memakai COUNT serta LIMIT/OFFSET prepared untuk 10 alumni per halaman (bukan berhenti 50 hasil). Navigasi maksimal 10 nomor bergeser mempertahankan pencarian, total halaman tidak dibatasi. Data NISN sama tetap catatan terpisah; jalur formulir pencatatan/hasil alumni tidak diubah.
+- File panel/hasil-alumni/lamaran.php dan assets/css/panel-theme.css. Lint PHP dan diff check lulus; struktur tabel, parameter prepared dan tautan tindakan diperiksa. Tanpa SQL/data operasional. Browser dan query database langsung belum diuji.

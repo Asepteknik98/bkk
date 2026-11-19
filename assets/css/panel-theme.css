@@ -2341,24 +2341,25 @@ html[data-theme=dark] .panel-page .media-catalog .page-actions { background-imag
 @media(max-width:700px) { .media-sheet table { min-width:740px; }.media-pagination a { min-width:40px; min-height:44px; }.media-edit-page input:not([type=hidden]) { font-size:16px; min-height:44px; } }
 
 /* Form lowongan: sel terstruktur, kompak, dan header batik. */
-.vacancy-form-page { max-width:960px; margin-inline:auto; --vacancy-line:#bdcfe2; --vacancy-head:#e8f0fa; }
+.vacancy-form-page { width:100%; max-width:none; min-width:0; margin-inline:0; --vacancy-line:#bdcfe2; --vacancy-head:#e8f0fa; }
 .panel-page .vacancy-form-page .page-actions { padding:10px 12px; margin-bottom:12px; border:1px solid var(--vacancy-line); border-radius:5px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
 .vacancy-form-page .page-actions h1 { display:flex; align-items:center; gap:8px; font-size:1.1rem; margin:0; }
-.panel-page .vacancy-form-page .vacancy-editor { display:grid; grid-template-columns:minmax(0,1fr) 320px; padding:0; gap:0; align-items:stretch; border:1px solid var(--vacancy-line); border-radius:5px; overflow:hidden; }
+.panel-page .vacancy-form-page .vacancy-editor { display:grid; grid-template-columns:minmax(0,1fr); padding:0; gap:0; align-items:stretch; border:1px solid var(--vacancy-line); border-radius:5px; overflow:hidden; }
 .panel-page .vacancy-form-page .vacancy-main { display:block; }
-.panel-page .vacancy-form-page .vacancy-settings { display:block; padding:0; border-left:1px solid var(--vacancy-line); }
+.panel-page .vacancy-form-page .vacancy-settings { display:block; padding:0; border-left:0; border-top:1px solid var(--vacancy-line); }
 .vacancy-form-page .vacancy-editor h2 { display:flex; align-items:center; gap:7px; font-size:.8rem; padding:8px 10px; margin:0; background:var(--vacancy-head); border-bottom:1px solid var(--vacancy-line); }
 .vacancy-form-page .vacancy-editor h2 small { margin-left:auto; }
 .vacancy-form-page .vacancy-fields,.vacancy-form-page .vacancy-texts { gap:0; margin:0; }
-.vacancy-form-page .vacancy-field { padding:9px 10px; border-bottom:1px solid var(--vacancy-line); gap:6px; align-content:start; }
+.vacancy-form-page .vacancy-field { padding:7px 9px; border-bottom:1px solid var(--vacancy-line); gap:6px; align-content:start; }
 .vacancy-form-page .vacancy-field:nth-child(odd) { border-right:1px solid var(--vacancy-line); }
+.vacancy-form-page .vacancy-fields>.vacancy-field:last-child { grid-column:1/-1; border-right:0; }
 .vacancy-form-page .vacancy-main>small { display:block; padding:8px 10px; }
 .vacancy-form-page .vacancy-section+.vacancy-section { border-top:1px solid var(--vacancy-line); }
-.vacancy-section-body { display:grid; gap:8px; padding:9px 10px; }
-.panel-page .vacancy-form-page .form-columns { gap:10px; margin:0; }
+.vacancy-section-body { display:grid; gap:6px; padding:8px 9px; }
+.panel-page .vacancy-form-page .form-columns { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:0; }
 .panel-page .vacancy-form-page .vacancy-editor label { display:flex; gap:6px; align-items:center; font-size:.76rem; margin:0 0 5px; }
 .panel-page .vacancy-form-page .vacancy-editor :is(input:not([type=checkbox]):not([type=hidden]),select,textarea) { min-width:0; width:100%; max-width:100%; min-height:38px; padding:7px 9px; font-size:14px; border-radius:4px; box-sizing:border-box; }
-.panel-page .vacancy-form-page .vacancy-editor textarea { height:150px; min-height:100px; resize:vertical; }
+.panel-page .vacancy-form-page .vacancy-editor textarea { height:110px; min-height:100px; resize:vertical; }
 .panel-page .vacancy-form-page .vacancy-editor small,.vacancy-section-body>p { font-size:.71rem; line-height:1.6; color:var(--panel-muted); margin:0; }
 .panel-page .vacancy-form-page .vacancy-editor .check-label { align-items:flex-start; font-size:.72rem; line-height:1.65; }
 .vacancy-form-page .check-label input { flex:0 0 18px; width:18px; height:18px; margin:3px 0 0; accent-color:#356658; }
@@ -2372,4 +2373,163 @@ html[data-theme=dark] .panel-page .media-catalog .page-actions { background-imag
 html[data-theme=dark] .vacancy-form-page { --vacancy-line:#44566d; --vacancy-head:#223246; }
 html[data-theme=dark] .panel-page .vacancy-form-page .page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
 @media(max-width:900px) { .panel-page .vacancy-form-page .vacancy-editor { grid-template-columns:minmax(0,1fr); }.panel-page .vacancy-form-page .vacancy-settings { border-left:0; border-top:1px solid var(--vacancy-line); } }
-@media(max-width:600px) { .vacancy-form-page .vacancy-fields,.vacancy-form-page .vacancy-texts { grid-template-columns:minmax(0,1fr); }.vacancy-form-page .vacancy-field:nth-child(odd) { border-right:0; }.panel-page .vacancy-form-page .vacancy-editor :is(input:not([type=checkbox]):not([type=hidden]),select,textarea) { min-height:44px; font-size:16px; }.vacancy-form-page .form-actions>span { width:100%; }.vacancy-form-page .form-actions :is(a,button) { min-height:44px; } }
+@media(max-width:600px) { .panel-page .vacancy-form-page .form-columns { grid-template-columns:minmax(0,1fr); }.vacancy-form-page .vacancy-fields,.vacancy-form-page .vacancy-texts { grid-template-columns:minmax(0,1fr); }.vacancy-form-page .vacancy-field:nth-child(odd) { border-right:0; }.panel-page .vacancy-form-page .vacancy-editor :is(input:not([type=checkbox]):not([type=hidden]),select,textarea) { min-height:44px; font-size:16px; }.vacancy-form-page .form-actions>span { width:100%; }.vacancy-form-page .form-actions :is(a,button) { min-height:44px; } }
+
+/* Jenis hubungan kerja: form dan daftar bergaris. */
+.employment-type-page { width:100%; min-width:0; --employment-line:#bdcfe2; --employment-head:#e8f0fa; }
+.panel-page .employment-type-page .page-actions { padding:10px 12px; border:1px solid var(--employment-line); border-radius:5px; margin-bottom:12px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
+.employment-type-page .page-actions h1 { display:flex; align-items:center; gap:8px; font-size:1.1rem; margin:0; }
+.employment-type-page .page-actions p { font-size:.74rem; color:var(--panel-muted); margin:5px 0 0; }
+.panel-page .employment-type-page .page-actions>a,.employment-type-editor button { background:#356658; color:#fff; border:1px solid #356658; }
+.panel-page .employment-type-page .employment-type-editor { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); padding:0; gap:0; border:1px solid var(--employment-line); border-radius:5px; overflow:hidden; }
+.employment-type-editor h2 { grid-column:1/-1; display:flex; gap:7px; align-items:center; font-size:.8rem; padding:8px 10px; margin:0; background:var(--employment-head); border-bottom:1px solid var(--employment-line); }
+.employment-type-cell { display:grid; align-content:start; gap:6px; padding:8px 10px; border-bottom:1px solid var(--employment-line); min-width:0; }
+.employment-type-cell:nth-of-type(1) { border-right:1px solid var(--employment-line); }
+.employment-type-wide { grid-column:1/-1; }
+.panel-page .employment-type-editor label { display:flex; align-items:center; gap:6px; margin:0; font-size:.76rem; }
+.employment-type-editor label small { margin-left:auto; }
+.panel-page .employment-type-editor :is(input:not([type=hidden]),select,textarea) { width:100%; min-width:0; box-sizing:border-box; margin:0; min-height:38px; padding:7px 9px; border-radius:4px; font-size:14px; }
+.panel-page .employment-type-editor textarea { height:80px; min-height:65px; resize:vertical; }
+.employment-type-editor small { color:var(--panel-muted); font-size:.71rem; line-height:1.6; }
+.panel-page .employment-type-editor .form-actions { grid-column:1/-1; display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:9px 10px; margin:0; border:0; background:var(--panel-soft); }
+.employment-type-editor .form-actions>small { margin-right:auto; }
+.employment-type-page :is(button,.page-actions>a,.employment-edit) { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:7px 10px; min-height:36px; border-radius:4px; font-size:.74rem; text-decoration:none; }
+.employment-list-heading { display:flex; align-items:center; justify-content:space-between; margin:14px 0 8px; }
+.employment-list-heading h2 { font-size:.85rem; margin:0; display:flex; gap:7px; align-items:center; }
+.employment-list-heading small { font-size:.71rem; color:var(--panel-muted); }
+.panel-page .employment-type-sheet { max-height:380px; overflow:auto; border:1px solid var(--employment-line); border-radius:5px; }
+.employment-type-sheet table { width:100%; border-collapse:collapse; table-layout:fixed; }
+.panel-page .employment-type-sheet :is(th,td) { padding:8px 10px; border-right:1px solid var(--employment-line); border-bottom:1px solid var(--employment-line); font-size:.74rem; overflow-wrap:anywhere; vertical-align:middle; }
+.panel-page .employment-type-sheet th { background:var(--employment-head); position:sticky; top:0; z-index:1; text-align:left; }
+.employment-type-sheet th:nth-child(2) { width:35%; }
+.employment-type-sheet th:nth-child(4),.employment-type-sheet th:nth-child(5) { width:12%; }
+.panel-page .employment-type-sheet :is(th,td):last-child { border-right:0; }
+.panel-page .employment-type-sheet tr:last-child td { border-bottom:0; }
+.employment-type-sheet .is-active { background:#edf8f1; color:#26664b; border:1px solid #bde2cd; }
+.employment-type-sheet .employment-edit { background:#edf3ff; color:#355c9e; border:1px solid #c4d2f2; }
+.employment-type-page :is(a,input,textarea,select,button):focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] .employment-type-page { --employment-line:#44566d; --employment-head:#223246; }
+html[data-theme=dark] .panel-page .employment-type-page .page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+@media(max-width:600px) { .panel-page .employment-type-page .employment-type-editor { grid-template-columns:minmax(0,1fr); }.employment-type-cell:nth-of-type(1) { border-right:0; }.panel-page .employment-type-editor :is(input:not([type=hidden]),textarea,select) { font-size:16px; min-height:44px; }.employment-type-page :is(button,.page-actions>a,.employment-edit) { min-height:44px; }.employment-type-sheet table { min-width:650px; } }
+
+/* Tindakan dan detail jenis hubungan kerja. */
+.employment-type-actions { display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+.employment-type-page .employment-type-actions a { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:6px 9px; min-height:36px; border-radius:4px; font-size:.74rem; text-decoration:none; white-space:nowrap; border:1px solid #c4d2f2; background:#edf3ff; color:#355c9e; }
+.employment-type-page .employment-type-actions .employment-view { background:#edf7f1; color:#356658; border-color:#c1dccd; }
+.employment-type-sheet th:nth-child(2) { width:30%; }
+.employment-type-sheet th:nth-child(5) { width:20%; }
+.employment-detail { margin:0 0 12px; border:1px solid var(--employment-line); border-radius:5px; overflow:hidden; background:var(--panel-surface); }
+.employment-detail>div { display:grid; grid-template-columns:180px minmax(0,1fr); border-bottom:1px solid var(--employment-line); }
+.employment-detail>div:last-child { border-bottom:0; }
+.employment-detail dt { background:var(--employment-head); border-right:1px solid var(--employment-line); font-weight:600; }
+.employment-detail :is(dt,dd) { margin:0; padding:10px 12px; font-size:.8rem; overflow-wrap:anywhere; }
+html[data-theme=dark] .employment-type-page .employment-type-actions a { background:#253a53; border-color:#445b78; color:#d7e6ff; }
+html[data-theme=dark] .employment-type-page .employment-type-actions .employment-view { background:#203e33; border-color:#416653; color:#d7eee1; }
+@media(max-width:600px) { .employment-type-page .employment-type-actions a { min-height:44px; }.employment-detail>div { grid-template-columns:minmax(0,1fr); }.employment-detail dt { border-right:0; border-bottom:1px solid var(--employment-line); } }
+
+.employment-type-actions form { display:flex; margin:0; }
+.panel-page .employment-type-page .employment-type-actions .employment-delete { background:#fff3f3; color:#a13e3e; border:1px solid #ecc3c3; min-height:36px; padding:6px 9px; }
+.employment-type-sheet th:nth-child(2) { width:25%; }
+.employment-type-sheet th:nth-child(5) { width:27%; }
+html[data-theme=dark] .panel-page .employment-type-page .employment-type-actions .employment-delete { background:#493036; color:#ffd8dc; border-color:#80535c; }
+@media(max-width:600px) { .panel-page .employment-type-page .employment-type-actions .employment-delete { min-height:44px; }.employment-type-sheet table { min-width:760px; } }
+
+.application-actions>form { display:flex; margin:0; }
+.panel-page .applications-inbox .application-actions .application-delete { display:inline-flex; align-items:center; justify-content:center; width:44px; min-width:44px; height:44px; min-height:44px; padding:0; gap:0; border:1px solid #ecc3c3; border-radius:7px; background:#fff3f3; color:#a13e3e; box-shadow:none; }
+.panel-page .applications-inbox .application-actions .application-delete:hover { background:#fbe4e4; }
+html[data-theme=dark] .panel-page .applications-inbox .application-actions .application-delete { background:#493036; border-color:#80535c; color:#ffd8dc; }
+
+/* Ikon tindakan lowongan: kompak, seragam, dan berbeda warna. */
+.panel-page .vacancy-list-page .row-actions { display:flex; align-items:center; flex-wrap:nowrap; gap:7px; }
+.vacancy-list-page .row-actions form { display:flex; margin:0; }
+.panel-page .vacancy-list-page .row-actions :is(a,button) { display:inline-flex; align-items:center; justify-content:center; width:38px; min-width:38px; height:38px; min-height:38px; padding:0; margin:0; gap:0; border:1px solid; border-radius:7px; box-shadow:0 1px 2px #183b5e0a; transition:background-color .15s,border-color .15s; }
+.panel-page .vacancy-list-page .row-actions .panel-icon { width:18px; height:18px; margin:0; flex:none; }
+.panel-page .vacancy-list-page .row-actions .vacancy-action-edit { background:#edf3ff; border-color:#c5d5f5; color:#345fa5; }
+.panel-page .vacancy-list-page .row-actions .vacancy-action-view { background:#edf8f2; border-color:#bfdfce; color:#287154; }
+.panel-page .vacancy-list-page .row-actions .vacancy-action-delete { background:#fff2f2; border-color:#efc6c6; color:#b13e45; }
+.panel-page .vacancy-list-page .row-actions .vacancy-action-edit:hover { background:#dce8ff; border-color:#8caee8; }
+.panel-page .vacancy-list-page .row-actions .vacancy-action-view:hover { background:#daf0e3; border-color:#82b79c; }
+.panel-page .vacancy-list-page .row-actions .vacancy-action-delete:hover { background:#ffe0e0; border-color:#dd9298; }
+.vacancy-list-page .row-actions :is(a,button):focus-visible { outline:2px solid #438dce; outline-offset:3px; }
+html[data-theme=dark] .panel-page .vacancy-list-page .row-actions .vacancy-action-edit { background:#253a53; border-color:#445b78; color:#c0d7ff; }
+html[data-theme=dark] .panel-page .vacancy-list-page .row-actions .vacancy-action-view { background:#203e33; border-color:#416653; color:#b8e2cc; }
+html[data-theme=dark] .panel-page .vacancy-list-page .row-actions .vacancy-action-delete { background:#493036; border-color:#80535c; color:#ffc1c9; }
+@media(max-width:600px) { .panel-page .vacancy-list-page .row-actions :is(a,button) { width:44px; min-width:44px; height:44px; min-height:44px; } }
+
+/* Rekap hasil alumni: lembar ringkas dengan statistik sejajar. */
+#career-results { --career-line:#bdcfe2; --career-head:#e8f0fa; }
+#career-results .career-heading { gap:12px; padding:10px 12px; margin-bottom:12px; border:1px solid var(--career-line); border-radius:5px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
+#career-results .career-eyebrow { font-size:.63rem; margin-bottom:3px; }
+#career-results h2 { font-size:1.1rem; gap:7px; margin-bottom:4px; line-height:1.4; }
+#career-results .career-heading p:last-child { font-size:.73rem; }
+#career-results .career-primary { min-height:38px; padding:7px 11px; border-radius:5px; font-size:.75rem; gap:6px; }
+#career-results .career-filter { padding:9px 10px; gap:10px; margin-bottom:12px; border-color:var(--career-line); border-radius:5px; }
+#career-results .career-filter label { gap:5px; font-size:.75rem; }
+#career-results .career-filter select { min-height:38px; padding:7px 9px; font-size:14px; border-radius:4px; background:var(--panel-surface); }
+#career-results .career-stats { gap:0; margin-bottom:12px; border:1px solid var(--career-line); border-radius:5px; overflow:hidden; }
+#career-results .career-stat { display:grid; grid-template-columns:28px minmax(0,1fr) auto; grid-template-rows:auto 1fr; gap:0 8px; padding:0; border:0; border-right:1px solid var(--career-line); border-radius:0; background:var(--panel-surface); }
+#career-results .career-stat:last-child { border-right:0; }
+#career-results .career-stat-icon { position:static; width:28px; height:34px; margin:0; border-radius:0; background:var(--stat-fill); box-shadow:none; border-bottom:1px solid var(--career-line); }
+#career-results .career-stat-icon .panel-icon { width:18px; height:18px; }
+#career-results .career-stat h3 { display:flex; align-items:center; margin:0; min-height:34px; font-size:.76rem; line-height:1.4; }
+#career-results .career-stat>strong { align-self:center; margin:0 10px 0 0; font-size:1.4rem; line-height:1.2; }
+#career-results .career-stat p { grid-column:1/-1; border-top:1px solid var(--career-line); margin:0; padding:8px 10px; font-size:.71rem; line-height:1.6; }
+#career-results .career-note { margin-bottom:12px; border-color:var(--career-line); border-radius:5px; }
+#career-results .career-note summary { min-height:38px; padding:8px 10px; font-size:.75rem; }
+#career-results .career-note p { padding:0 12px 10px; font-size:.74rem; }
+#career-results .career-roster { border-color:var(--career-line); border-radius:5px; }
+#career-results .career-roster>h3 { padding:9px 10px; font-size:.82rem; background:var(--career-head); border-color:var(--career-line); }
+#career-results .career-table-wrap { max-height:450px; overflow:auto; }
+#career-results .career-table :is(th,td) { padding:9px 10px; border-right:1px solid var(--career-line); border-top-color:var(--career-line); font-size:.75rem; }
+#career-results .career-table :is(th,td):last-child { border-right:0; }
+#career-results .career-table th { position:sticky; top:0; z-index:1; background:var(--career-head); }
+#career-results .career-row-action { border-radius:4px; padding:6px 9px; font-size:.73rem; }
+#career-results :is(a,button,select,summary):focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] #career-results { --career-line:#44566d; --career-head:#223246; }
+html[data-theme=dark] #career-results .career-heading { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+@media(max-width:1000px) { #career-results .career-table td { border-right:0; border-bottom:1px solid var(--career-line); }#career-results .career-table td:last-child { border-bottom:0; }#career-results .career-table tr { border-color:var(--career-line); } }
+@media(max-width:600px) { #career-results .career-stats { gap:0; }#career-results .career-stat { border-right:0; border-bottom:1px solid var(--career-line); }#career-results .career-stat:last-child { border-bottom:0; }#career-results .career-stat-icon { position:static; }#career-results .career-filter { padding:9px 10px; }#career-results .career-filter select { font-size:16px; min-height:44px; }#career-results .career-primary,#career-results .career-note summary { min-height:44px; } }
+
+/* Rincian alumni: sepuluh per halaman dalam kotak bergulir. */
+#career-results .career-table-wrap { max-height:340px; max-height:min(340px,55vh); overflow:auto; scrollbar-width:thin; scrollbar-color:#8fa7be var(--panel-soft); scrollbar-gutter:stable; overscroll-behavior:contain; }
+#career-results .career-table :is(th,td) { padding:7px 9px; line-height:1.5; }
+#career-results .career-table .career-muted { font-size:.72rem; }
+#career-results .career-table td p { margin-top:4px; }
+#career-results .career-year { margin-top:4px; padding:1px 6px; border-radius:3px; }
+#career-results .career-table .career-row-action { min-height:36px; padding:5px 8px; font-size:.71rem; }
+#career-results .career-pagination { justify-content:flex-start; gap:5px; margin-top:10px; }
+#career-results .career-pagination>span { width:100%; font-size:.72rem; color:var(--panel-muted); }
+#career-results .career-pagination .career-row-action { min-height:36px; padding:6px 9px; }
+#career-results .career-pagination .career-page-number { min-width:36px; }
+#career-results .career-pagination a[aria-current=page] { background:#24548b; border-color:#24548b; color:#fff; font-weight:700; }
+#career-results .career-table-wrap:focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+@media(max-width:600px) { #career-results .career-pagination .career-row-action,#career-results .career-table .career-row-action { min-height:44px; }#career-results .career-pagination .career-page-number { min-width:40px; } }
+
+/* Pemilihan alumni untuk lamaran: tabel ringkas, tanpa daftar tautan bertumpuk. */
+.alumni-applications-page { --alumni-picker-line:#bdcfe2; --alumni-picker-head:#e8f0fa; width:100%; min-width:0; }
+.panel-page .alumni-applications-page>.page-actions { border:1px solid var(--alumni-picker-line); border-radius:5px; padding:10px 12px; margin-bottom:12px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
+.alumni-applications-page>.page-actions h1 { font-size:1.1rem; margin:0; display:flex; gap:7px; align-items:center; }
+.alumni-applications-page>.page-actions>a { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; background:var(--panel-surface); border:1px solid var(--alumni-picker-line); border-radius:4px; text-decoration:none; font-size:.75rem; }
+.panel-page .alumni-applications-page .alumni-search { padding:9px 10px; gap:8px; border-radius:5px; border-color:var(--alumni-picker-line); margin-bottom:8px; }
+.alumni-search label>span { display:flex; gap:6px; align-items:center; }
+.alumni-list-note { font-size:.73rem; color:var(--panel-muted); margin:8px 0 12px; }
+.alumni-list-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 0 8px; }
+.alumni-list-heading h2 { display:flex; align-items:center; gap:7px; font-size:.83rem; margin:0; }
+.alumni-list-heading>span { font-size:.71rem; color:var(--panel-muted); }
+.panel-page .alumni-picker-sheet { border:1px solid var(--alumni-picker-line); border-radius:5px; max-height:min(340px,55vh); overflow:auto; scrollbar-width:thin; scrollbar-gutter:stable; }
+.alumni-picker-sheet table { width:100%; table-layout:fixed; border-collapse:collapse; margin:0; }
+.panel-page .alumni-picker-sheet :is(th,td) { border-right:1px solid var(--alumni-picker-line); border-bottom:1px solid var(--alumni-picker-line); padding:8px 10px; font-size:.75rem; vertical-align:middle; overflow-wrap:anywhere; }
+.panel-page .alumni-picker-sheet th { background:var(--alumni-picker-head); position:sticky; top:0; z-index:1; text-align:left; }
+.alumni-picker-sheet th:nth-child(1),.alumni-picker-sheet th:nth-child(2) { width:30%; }
+.alumni-picker-sheet th:nth-child(3) { width:15%; }
+.panel-page .alumni-picker-sheet :is(th,td):last-child { border-right:0; }
+.panel-page .alumni-picker-sheet tr:last-child td { border-bottom:0; }
+.alumni-manage { display:inline-flex; align-items:center; gap:6px; min-height:36px; padding:6px 9px; background:#edf7f1; border:1px solid #bfdccc; border-radius:4px; color:#356658!important; font-size:.73rem; text-decoration:none; }
+.alumni-picker-pagination { display:flex; flex-wrap:wrap; gap:5px; margin-top:10px; }
+.alumni-picker-pagination a { display:inline-flex; align-items:center; justify-content:center; min-width:36px; min-height:36px; padding:6px 9px; border:1px solid var(--alumni-picker-line); border-radius:4px; background:var(--panel-surface); text-decoration:none; font-size:.73rem; }
+.alumni-picker-pagination a[aria-current=page] { background:#24548b; color:#fff; border-color:#24548b; }
+.alumni-applications-page :is(a,button,input,.alumni-picker-sheet):focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] .alumni-applications-page { --alumni-picker-line:#44566d; --alumni-picker-head:#223246; }
+html[data-theme=dark] .panel-page .alumni-applications-page>.page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+html[data-theme=dark] .alumni-manage { background:#203e33; border-color:#416653; color:#b8e2cc!important; }
+@media(max-width:600px) { .alumni-picker-sheet table { min-width:640px; }.alumni-list-heading { flex-wrap:wrap; }.alumni-manage,.alumni-picker-pagination a { min-height:44px; }.panel-page .alumni-search input { font-size:16px; min-height:44px; } }
