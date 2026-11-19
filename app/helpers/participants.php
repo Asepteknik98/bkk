@@ -5,7 +5,7 @@ require_once __DIR__.'/validation.php';
 
 function participant_columns(): array
 {
-    return ['nis'=>'Nomor peserta','nama'=>'Nama peserta','kelas'=>'Kelas','jurusan'=>'Jurusan','angkatan'=>'Angkatan','kelas_industri'=>'Kelas industri','telepon'=>'Telepon','email'=>'Email','tempat_pkl'=>'Tempat PKL','tahun_pkl'=>'Tahun PKL'];
+    return ['nama'=>'Nama peserta','kelas'=>'Kelas','jurusan'=>'Jurusan','angkatan'=>'Angkatan','kelas_industri'=>'Kelas industri','telepon'=>'Telepon','email'=>'Email','tempat_pkl'=>'Tempat PKL','tahun_pkl'=>'Tahun PKL'];
 }
 
 function participant_sort_options(): array
@@ -89,10 +89,10 @@ function participant_year_options(string $value): array
 function participant_errors(array $data): array
 {
     $errors=[];
-    foreach(['nis'=>30,'nama'=>150,'kelas'=>80,'jurusan'=>150,'kelas_industri'=>150,'telepon'=>25,'email'=>190,'tempat_pkl'=>190,'tahun_pkl'=>9] as $key=>$max){
+    foreach(['nama'=>150,'kelas'=>80,'jurusan'=>150,'kelas_industri'=>150,'telepon'=>25,'email'=>190,'tempat_pkl'=>190,'tahun_pkl'=>9] as $key=>$max){
         if(!mb_check_encoding($data[$key],'UTF-8')||mb_strlen($data[$key])>$max||preg_match('/[\x00-\x1F\x7F]/',$data[$key])){$errors[]=participant_columns()[$key].' tidak valid atau terlalu panjang.';}
     }
-    foreach(['nis','nama','kelas'] as $key){if($data[$key]===''){$errors[]=participant_columns()[$key].' wajib diisi.';}}
+    foreach(['nama','kelas'] as $key){if($data[$key]===''){$errors[]=participant_columns()[$key].' wajib diisi.';}}
     if(!preg_match('/^(19|20|21)[0-9]{2}$/D',$data['angkatan'])){$errors[]='Angkatan harus berupa tahun (1900–2199).';}
     if($data['email']!==''&&!filter_var($data['email'],FILTER_VALIDATE_EMAIL)){$errors[]='Email tidak valid.';}
     if($data['tahun_pkl']!==''&&!preg_match('~^(?:19|20|21)[0-9]{2}(?:/(?:19|20|21)[0-9]{2})?$~D',$data['tahun_pkl'])){$errors[]='Tahun PKL harus seperti 2025 atau 2025/2026.';}
@@ -105,7 +105,8 @@ function participant_save(array $data, ?int $id=null): void
     if($id!==null){
         panel_query('UPDATE siswa SET '.implode(',',array_map(static fn($key)=>"$key=:$key",$columns)).' WHERE id=:id',$data+['id'=>$id]);
     }else{
-        panel_query('INSERT INTO siswa ('.implode(',',$columns).') VALUES (:'.implode(',:',$columns).')',$data);
+        $columns=array_merge(['nis'],$columns);
+        panel_query('INSERT INTO siswa ('.implode(',',$columns).') VALUES (:'.implode(',:',$columns).')',['nis'=>'P-'.bin2hex(random_bytes(12))]+$data);
     }
 }
 

@@ -1,0 +1,8 @@
+<?php if(!defined('APP_ROOT')||!isset($report,$reportRows)){http_response_code(403);exit;} ?>
+<article class="student-report">
+    <header class="student-report-heading"><h2><?= e(setting('school_name','SMK JAYA BUANA')) ?></h2><p><?= e(setting('site_name','BKK SMK JAYA BUANA')) ?></p><h1>Rapor Capaian Pembelajaran</h1><span class="report-state"><?= $report['status']==='final'?'Final':'Draft - penilaian belum final' ?></span></header>
+    <dl class="report-identity"><dt>Nama siswa</dt><dd><?= e($report['nama']) ?></dd><dt>Kelas / Jurusan</dt><dd><?= e($report['kelas'].' / '.$report['jurusan']) ?></dd><dt>Angkatan</dt><dd><?= (int)$report['angkatan'] ?></dd><dt>Periode / semester</dt><dd><?= e($report['periode']) ?></dd><dt>Tanggal penilaian</dt><dd><?= e(indo_date($report['tanggal'])) ?></dd></dl>
+    <div class="report-table-viewport"><table class="report-card-table"><thead><tr><th scope="col">No.</th><th scope="col">Kompetensi</th><th scope="col">Nilai</th><th scope="col">Predikat</th><th scope="col">Deskripsi capaian</th></tr></thead><tbody><?php foreach($reportRows as $index=>$item): ?><tr><td><?= $index+1 ?></td><td><?= e($item['kompetensi']) ?></td><td><?= $item['nilai']!==null?e(str_replace('.',',',(string)$item['nilai'])):'-' ?></td><td><?= e(report_predicates()[$item['predikat']??'']??'Belum dinilai') ?></td><td><?= nl2br(e($item['deskripsi'])) ?></td></tr><?php endforeach; ?></tbody></table></div>
+    <section class="report-teacher-note"><h2>Catatan pembimbing</h2><p><?= nl2br(e($report['catatan']!==''?$report['catatan']:'Belum ada catatan.')) ?></p></section>
+    <footer class="report-signoff"><p>Pembimbing / penilai</p><strong><?= e($report['pembimbing']) ?></strong></footer>
+</article>

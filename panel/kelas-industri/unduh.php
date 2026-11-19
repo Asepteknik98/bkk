@@ -19,5 +19,5 @@ header('Cache-Control: no-store');header('X-Content-Type-Options: nosniff');
 excel_download('kelas-industri-'.$id.'.xlsx',[
     ['name'=>'Kelas Industri','columns'=>['nama'=>'Kelas industri','mitra_nama'=>'Mitra industri','pemateri'=>'Pemateri kelas','kelas_sasaran'=>'Sasaran','rencana_pertemuan'=>'Rencana pertemuan','terlaksana'=>'Terlaksana','status'=>'Status kelas','catatan'=>'Catatan'],'rows'=>[$class]],
     ['name'=>'Pertemuan','columns'=>['urutan'=>'Pertemuan ke','tanggal'=>'Tanggal','jam'=>'Jam WIB','lokasi'=>'Lokasi','pemateri'=>'Pemateri','materi'=>'Materi','status'=>'Status','catatan'=>'Catatan'],'rows'=>$meetings],
-    ['name'=>'Peserta','columns'=>['nis'=>'NIS','nama'=>'Nama','kelas'=>'Kelas','jurusan'=>'Jurusan'],'rows'=>$participants],
+    ['name'=>'Peserta','columns'=>['nama'=>'Nama','kelas'=>'Kelas','jurusan'=>'Jurusan'],'rows'=>$participants],
 ]);

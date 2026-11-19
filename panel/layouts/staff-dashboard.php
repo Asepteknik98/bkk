@@ -9,7 +9,7 @@ panel_start($user,'Dashboard','dashboard');
     if($module==='mou'&&!user_can($user,'mitra')){continue;}
     if($module==='hasil-alumni'&&!user_can($user,'tracer-study')){continue;}
     if(in_array($module,['sarasehan','ide-industri'],true)&&!user_can($user,'mitra')){continue;}
-    if($module==='absensi'&&!user_can($user,'peserta')){continue;}
+    if(in_array($module,['absensi','capaian-pembelajaran'],true)&&!user_can($user,'peserta')){continue;}
     if($module==='pkl'&&!user_can($user,'peserta')){continue;}
     if($module==='kelas-industri'&&!user_can($user,'peserta')){continue;}
     if($module==='biaya-perjalanan'&&(!user_can($user,'pkl')||!user_can($user,'peserta'))){continue;}

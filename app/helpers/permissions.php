@@ -28,7 +28,7 @@ function user_can(array $user, string $module): bool
 
 function require_permission(array $user, string $module): void
 {
-    $dependencies = ['whatsapp'=>['lamaran','tracer-study'], 'absensi'=>['peserta'], 'pkl'=>['peserta'], 'kelas-industri'=>['peserta'], 'mou'=>['mitra'], 'sarasehan'=>['mitra'], 'ide-industri'=>['mitra'], 'hasil-alumni'=>['tracer-study'], 'biaya-perjalanan'=>['pkl','peserta']];
+    $dependencies = ['whatsapp'=>['lamaran','tracer-study'], 'absensi'=>['peserta'], 'capaian-pembelajaran'=>['peserta'], 'pkl'=>['peserta'], 'kelas-industri'=>['peserta'], 'mou'=>['mitra'], 'sarasehan'=>['mitra'], 'ide-industri'=>['mitra'], 'hasil-alumni'=>['tracer-study'], 'biaya-perjalanan'=>['pkl','peserta']];
     $allowed=user_can($user, $module);
     foreach ($dependencies[$module] ?? [] as $required) { $allowed=$allowed && user_can($user,$required); }
     if (!$allowed) {

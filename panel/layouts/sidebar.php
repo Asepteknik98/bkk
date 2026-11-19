@@ -31,7 +31,7 @@ $sidebarGroups=[
     'pembelajaran'=>['label'=>'Siswa & Pembelajaran','icon'=>'peserta','items'=>[
         $sidebarItem('peserta','panel/peserta/','Data siswa / peserta','peserta',['peserta']),
         $sidebarItem('kelas-industri','panel/kelas-industri/','Kelas Industri / Pertemuan','program',['kelas-industri','peserta']),
-        $sidebarItem('capaian','panel/capaian-pembelajaran/','Capaian Pembelajaran','capaian',['capaian-pembelajaran']),
+        $sidebarItem('capaian','panel/capaian-pembelajaran/','Rapor Pembelajaran','capaian',['capaian-pembelajaran','peserta']),
         $sidebarItem('absensi','panel/absensi/','Absensi Kegiatan','absensi',['absensi','peserta']),
         $sidebarItem('pemateri','panel/pemateri/','Pemateri Kelas','pemateri',['pemateri']),
     ]],

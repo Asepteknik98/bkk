@@ -14,6 +14,7 @@ require_once __DIR__.'/icons.php';
     <script>try{document.documentElement.dataset.theme=localStorage.getItem('bkk.panel.theme')==='dark'?'dark':'light';document.documentElement.dataset.sidebar=localStorage.getItem('bkk.panel.sidebar')==='collapsed'?'collapsed':'expanded';}catch(e){}</script>
     <link rel="stylesheet" href="<?= e(asset_url('css/panel-theme.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/panel-theme.css') ?>">
     <link rel="stylesheet" href="<?= e(asset_url('css/bmw.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/bmw.css') ?>">
+    <?php if(($activePanel??'')==='capaian'): ?><link rel="stylesheet" href="<?= e(asset_url('css/learning-reports.css')) ?>?v=<?= (int)filemtime(APP_ROOT.'/assets/css/learning-reports.css') ?>"><?php endif; ?>
     <script src="<?= e(asset_url('js/panel.js')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/js/panel.js') ?>" defer></script>
 </head>
 <body class="panel-page<?= in_array($activePanel??'',['program','program-minat','peserta','capaian','absensi','pemateri'],true)?' bmw-admin':'' ?>">

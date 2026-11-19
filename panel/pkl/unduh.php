@@ -16,7 +16,7 @@ header('Cache-Control: no-store');header('X-Content-Type-Options: nosniff');
 if($type==='rekap'){
     $summary=[];foreach($weeks as $week){$week['kegiatan']=implode("\n",$week['kegiatan']);$week['catatan']=implode("\n",$week['catatan']);$summary[]=$week;}
     excel_download('rekap-pkl-'.$id.'.xlsx',[
-        ['name'=>'Penempatan','columns'=>['nama'=>'Siswa','nis'=>'NIS']+array_map(static fn($meta)=>$meta[0],pkl_fields()),'rows'=>[$placement]],
+        ['name'=>'Penempatan','columns'=>['nama'=>'Siswa']+array_map(static fn($meta)=>$meta[0],pkl_fields()),'rows'=>[$placement]],
         ['name'=>'Rekap mingguan','columns'=>['minggu'=>'Minggu ISO','mulai'=>'Senin','selesai'=>'Minggu','hari'=>'Hari dengan jurnal','kegiatan'=>'Kegiatan','catatan'=>'Catatan'],'rows'=>$summary],
         ['name'=>'Jurnal harian','columns'=>['tanggal'=>'Tanggal','kegiatan'=>'Kegiatan','catatan'=>'Catatan'],'rows'=>$journals],
     ]);exit;

@@ -1,82 +1,34 @@
 <?php
 declare(strict_types=1);
-require_once dirname(__DIR__,2).'/app/helpers/learning-documents.php';
-$user=require_role('admin','staf_bkk');
-try{[$filters,$where,$params]=learning_filters($_GET);}
-catch(InvalidArgumentException $exception){http_response_code(400);exit(e($exception->getMessage()));}
-$listPath='panel/capaian-pembelajaran/?'.http_build_query($filters);
-$ready=(bool)panel_query("SHOW TABLES LIKE 'learning_documents'")->fetchColumn();
-$errors=[];$data=learning_input([]);$id=positive_id($_GET['id']??'');$document=null;
-if($ready&&$id){$document=panel_query('SELECT * FROM learning_documents WHERE id=:id',['id'=>$id])->fetch();if(!$document){panel_not_found();}$data=learning_input($document);}
+require_once dirname(__DIR__,2).'/app/helpers/learning-reports.php';
+$user=require_role('admin','staf_bkk');$ready=report_ready();$errors=[];
 if(($_SERVER['REQUEST_METHOD']??'GET')==='POST'){
-    require_post_csrf();$file=null;$saved=false;
-    try{
-        if(!$ready){throw new InvalidArgumentException('Pembaruan database capaian pembelajaran belum dijalankan.');}
-        $action=input_text($_POST,'aksi');
-        if($action==='hapus'){
-            $deleteId=positive_id($_POST['id']??'');
-            if(!$deleteId){throw new InvalidArgumentException('Dokumen tidak valid.');}
-            learning_delete($deleteId);panel_message('Dokumen capaian pembelajaran dihapus.',$listPath);
-        }
-        if($action!=='simpan'){throw new InvalidArgumentException('Tindakan tidak valid.');}
-        $data=learning_input($_POST);$errors=learning_errors($data);
-        if(!$errors){
-            $file=learning_upload(isset($_FILES['dokumen'])&&is_array($_FILES['dokumen'])?$_FILES['dokumen']:null);
-            learning_save($data,$id,(int)$user['id'],$file);$saved=true;
-            panel_message('Capaian pembelajaran berhasil disimpan.',$listPath);
-        }
-    }catch(InvalidArgumentException $exception){$errors[]=$exception->getMessage();}
-    catch(Throwable $exception){error_log('Penyimpanan capaian pembelajaran gagal: '.get_class($exception));$errors[]='Dokumen gagal diproses. Silakan coba kembali.';}
-    finally{if($file&&!$saved){learning_remove_file($file['nama_simpan']);}}
+    require_post_csrf();
+    if(!$ready||input_text($_POST,'aksi')!=='hapus_rapor'){http_response_code(422);exit('Tindakan rapor tidak valid.');}
+    $id=positive_id($_POST['id']??'');$version=positive_id($_POST['version']??'');
+    try{if(!$id||!$version){throw new InvalidArgumentException('Rapor tidak valid.');}report_delete($id,$version);panel_message('Rapor dihapus.','panel/capaian-pembelajaran/');}catch(InvalidArgumentException $e){$errors[]=$e->getMessage();}
 }
-$years=$ready?panel_query('SELECT DISTINCT angkatan FROM learning_documents ORDER BY angkatan DESC')->fetchAll(PDO::FETCH_COLUMN):[];
-$industries=$ready?panel_query('SELECT DISTINCT kelas_industri FROM learning_documents ORDER BY kelas_industri')->fetchAll(PDO::FETCH_COLUMN):[];
-if(panel_query("SHOW TABLES LIKE 'siswa'")->fetchColumn()){
-    $years=array_merge($years,panel_query('SELECT DISTINCT angkatan FROM siswa')->fetchAll(PDO::FETCH_COLUMN));
-    $industries=array_merge($industries,panel_query("SELECT DISTINCT kelas_industri FROM siswa WHERE kelas_industri<>''")->fetchAll(PDO::FETCH_COLUMN));
-}
-if($filters['angkatan']!==''){$years[]=$filters['angkatan'];}
-if($filters['kelas_industri']!==''){$industries[]=$filters['kelas_industri'];}
-$years=array_unique(array_map('strval',$years));rsort($years,SORT_NUMERIC);
-$industries=array_unique($industries);sort($industries,SORT_NATURAL|SORT_FLAG_CASE);
-$total=$ready?(int)panel_query('SELECT COUNT(*) FROM learning_documents WHERE '.$where,$params)->fetchColumn():0;
+$q=input_text($_GET,'q');$status=input_text($_GET,'status');
+if(!valid_text($q,100,false)||!in_array($status,['','draft','final'],true)){http_response_code(400);exit('Filter rapor tidak valid.');}
+$where='1=1';$params=[];
+if($q!==''){$pattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$q).'%';$where.=" AND (nama LIKE :nama ESCAPE '!' OR periode LIKE :periode ESCAPE '!')";$params=['nama'=>$pattern,'periode'=>$pattern];}
+if($status!==''){$where.=' AND status=:status';$params['status']=$status;}
+$total=$ready?(int)panel_query('SELECT COUNT(*) FROM student_learning_reports WHERE '.$where,$params)->fetchColumn():0;
 $pages=max(1,(int)ceil($total/20));$page=min($pages,positive_id($_GET['page']??'1')??1);
-$rows=$ready?panel_query('SELECT * FROM learning_documents WHERE '.$where.' ORDER BY updated_at DESC,id DESC LIMIT :limit OFFSET :offset',$params+['limit'=>20,'offset'=>($page-1)*20])->fetchAll():[];
-panel_start($user,'Capaian pembelajaran','capaian');
+$rows=$ready?panel_query('SELECT * FROM student_learning_reports WHERE '.$where.' ORDER BY updated_at DESC,id DESC LIMIT :limit OFFSET :offset',$params+['limit'=>20,'offset'=>($page-1)*20])->fetchAll():[];
+panel_start($user,'Rapor capaian pembelajaran','capaian');
 ?>
-<div class="learning-workspace">
-<div class="page-actions"><h1>Capaian pembelajaran</h1><a href="#materi-form" data-open-details="materi-form">Upload dokumen</a><a href="<?= e(base_url('panel/peserta/')) ?>"><?= panel_icon('back') ?> Kembali ke Data PKL</a><a class="button" href="<?= e(base_url('panel/ekspor.php?'.http_build_query(['jenis'=>'capaian']+$filters))) ?>" title="Download Excel capaian pembelajaran"><?= panel_icon('download') ?> Excel</a></div>
-
-<p>Dokumen pembelajaran per angkatan dan kelas industri.</p>
-<?php if(!$ready):?><p class="alert">Fitur belum aktif. Jalankan pembaruan database 010_learning_documents.sql.</p><?php endif;?>
-<?php if($errors):?><div class="alert" role="alert"><strong>Perubahan belum disimpan.</strong><ul><?php foreach($errors as $error):?><li><?= e($error) ?></li><?php endforeach;?></ul><p>Pilih kembali berkas jika diperlukan.</p></div><?php endif;?>
-<details class="bmw-disclosure" id="materi-form" <?= $id||$errors?'open':'' ?>><summary><?= panel_icon('capaian') ?> <?= $id?'Edit dokumen':'Upload dokumen' ?></summary>
-<form class="editor-form card" method="post" enctype="multipart/form-data">
-<?= csrf_field() ?><input type="hidden" name="aksi" value="simpan">
-
-<label for="judul">Judul<input id="judul" name="judul" maxlength="190" value="<?= e($data['judul']) ?>" required></label>
-<label for="angkatan">Angkatan<input id="angkatan" name="angkatan" maxlength="4" pattern="(?:19|20|21)[0-9]{2}" inputmode="numeric" list="learning-years" value="<?= e($data['angkatan']) ?>" required></label>
-<datalist id="learning-years"><?php foreach($years as $year):?><option value="<?= e($year) ?>"><?php endforeach;?></datalist>
-<label for="kelas_industri">Kelas industri<input id="kelas_industri" name="kelas_industri" maxlength="150" list="learning-industries" value="<?= e($data['kelas_industri']) ?>" required></label>
-<datalist id="learning-industries"><?php foreach($industries as $industry):?><option value="<?= e($industry) ?>"><?php endforeach;?></datalist>
-<?php if($document):?><p>Dokumen saat ini: <a href="<?= e(base_url('panel/capaian-pembelajaran/download.php?id='.$document['id'])) ?>"><?= e($document['nama_asli']) ?></a>. Kosongkan unggahan untuk mempertahankan dokumen.</p><?php endif;?>
-<label for="dokumen"><?= $id?'Ganti dokumen PDF (opsional)':'Dokumen PDF' ?><input id="dokumen" name="dokumen" type="file" accept=".pdf,application/pdf" <?= !$id?'required':'' ?>></label>
-<label for="deskripsi">Deskripsi (opsional)<textarea id="deskripsi" name="deskripsi" maxlength="5000" rows="2"><?= e($data['deskripsi']) ?></textarea></label>
-<p>PDF maksimal 5 MB. Satu dokumen dapat memuat beberapa capaian pembelajaran.</p>
-<div class="form-actions"><button type="submit" <?= !$ready?'disabled':'' ?>>Simpan dokumen</button><?php if($id):?><a href="<?= e(base_url($listPath)) ?>">Batal edit</a><?php endif;?></div>
-</form>
-</details>
-<details class="bmw-filter" open><summary><?= panel_icon('filter') ?> Cari &amp; filter</summary><form class="filter-form card" method="get">
-<label>Cari judul / deskripsi<input name="q" maxlength="100" value="<?= e($filters['q']) ?>"></label>
-<label>Angkatan<select name="angkatan"><option value="">Semua angkatan</option><?php foreach($years as $year):?><option value="<?= e($year) ?>" <?= $filters['angkatan']===$year?'selected':'' ?>><?= e($year) ?></option><?php endforeach;?></select></label>
-<label>Kelas industri<select name="kelas_industri"><option value="">Semua kelas industri</option><?php foreach($industries as $industry):?><option value="<?= e($industry) ?>" <?= $filters['kelas_industri']===$industry?'selected':'' ?>><?= e($industry) ?></option><?php endforeach;?></select></label>
-<button type="submit">Terapkan</button><a href="<?= e(base_url('panel/capaian-pembelajaran/')) ?>">Reset filter</a>
-</form></details>
-<p><?= $total ?> dokumen · Halaman <?= $page ?> dari <?= $pages ?></p>
-<div class="table-scroll"><table><thead><tr><th>Dokumen</th><th>Angkatan</th><th>Kelas industri</th><th>Ukuran</th><th>Diperbarui</th><th>Tindakan</th></tr></thead><tbody>
-<?php foreach($rows as $row):?><tr><td><strong><?= e($row['judul']) ?></strong><p><?= nl2br(e($row['deskripsi'])) ?></p><small><?= e($row['nama_asli']) ?></small></td><td><?= e((string)$row['angkatan']) ?></td><td><?= e($row['kelas_industri']) ?></td><td><?= number_format($row['ukuran']/1024,1) ?> KB</td><td><?= e($row['updated_at']) ?></td><td><div class="row-actions"><a href="<?= e(base_url('panel/capaian-pembelajaran/download.php?id='.$row['id'])) ?>">Download PDF</a><a href="<?= e(base_url('panel/capaian-pembelajaran/?'.http_build_query($filters+['id'=>$row['id']]))) ?>">Edit / ganti PDF</a><form method="post" action="<?= e(base_url($listPath)) ?>" data-confirm="Hapus dokumen capaian pembelajaran ini?"><?= csrf_field() ?><input type="hidden" name="aksi" value="hapus"><input type="hidden" name="id" value="<?= $row['id'] ?>"><button type="submit" class="danger small-button">Hapus</button></form></div></td></tr><?php endforeach;?>
-<?php if(!$rows):?><tr><td colspan="6" class="empty-panel">Belum ada dokumen yang sesuai.</td></tr><?php endif;?>
+<div class="learning-report-page">
+<div class="page-actions"><h1><?= panel_icon('certificate') ?> Rapor Capaian Pembelajaran</h1><div class="report-actions"><?php if($ready): ?><a class="button" href="<?= e(base_url('panel/capaian-pembelajaran/form.php')) ?>"><?= panel_icon('add') ?> Buat rapor</a><?php endif; ?><a href="<?= e(base_url('panel/capaian-pembelajaran/dokumen.php')) ?>"><?= panel_icon('lamaran') ?> Dokumen pendukung</a><a href="<?= e(base_url('panel/peserta/')) ?>"><?= panel_icon('peserta') ?> Data siswa</a></div></div>
+<p>Penilaian per siswa dan periode, dilengkapi kompetensi, nilai, predikat, serta catatan pembimbing.</p>
+<?php if(!$ready): ?><p class="notice">Rapor belum aktif. Impor <strong>database/updates/025_student_learning_reports.sql</strong>. Dokumen pembelajaran sebelumnya tetap tersedia melalui Dokumen pendukung.</p><?php endif; ?>
+<?php foreach($errors as $error): ?><p class="notice" role="alert"><?= e($error) ?></p><?php endforeach; ?>
+<form class="filter-form card" method="get"><label for="report-search">Cari siswa / periode<input id="report-search" name="q" maxlength="100" value="<?= e($q) ?>"></label><label for="report-status-filter">Status<select id="report-status-filter" name="status"><option value="">Semua status</option><?php foreach(['draft'=>'Draft','final'=>'Final'] as $key=>$label): ?><option value="<?= $key ?>" <?= $status===$key?'selected':'' ?>><?= $label ?></option><?php endforeach; ?></select></label><button type="submit">Cari</button><a href="<?= e(base_url('panel/capaian-pembelajaran/')) ?>">Reset</a></form>
+<p><?= $total ?> rapor - Halaman <?= $page ?> dari <?= $pages ?></p>
+<div class="table-scroll panel-sheet"><table><thead><tr><th>Siswa</th><th>Kelas / Jurusan</th><th>Periode</th><th>Pembimbing</th><th>Status</th><th>Tindakan</th></tr></thead><tbody>
+<?php foreach($rows as $row): ?><tr><td><strong><?= e($row['nama']) ?></strong><small>Angkatan <?= (int)$row['angkatan'] ?></small></td><td><?= e($row['kelas']) ?><small><?= e($row['jurusan']) ?></small></td><td><?= e($row['periode']) ?><small><?= e($row['tanggal']) ?></small></td><td><?= e($row['pembimbing']) ?></td><td><span class="badge"><?= $row['status']==='final'?'Final':'Draft' ?></span></td><td><div class="row-actions"><a href="<?= e(base_url('panel/capaian-pembelajaran/detail.php?id='.$row['id'])) ?>">Lihat rapor</a><a href="<?= e(base_url('panel/capaian-pembelajaran/form.php?id='.$row['id'])) ?>">Edit</a><form method="post" data-confirm="Hapus rapor ini?"><?= csrf_field() ?><input type="hidden" name="aksi" value="hapus_rapor"><input type="hidden" name="id" value="<?= $row['id'] ?>"><input type="hidden" name="version" value="<?= $row['version'] ?>"><button type="submit" class="danger small-button">Hapus</button></form></div></td></tr><?php endforeach; ?>
+<?php if(!$rows): ?><tr><td colspan="6">Belum ada rapor yang sesuai. Pilih Buat rapor untuk memulai penilaian siswa.</td></tr><?php endif; ?>
 </tbody></table></div>
-<nav class="pagination" aria-label="Halaman capaian pembelajaran"><?php foreach(['Sebelumnya'=>$page-1,'Berikutnya'=>$page+1] as $label=>$target):if($target<1||$target>$pages){continue;}?><a href="<?= e(base_url('panel/capaian-pembelajaran/?'.http_build_query($filters+['page'=>$target]))) ?>"><?= e($label) ?></a><?php endforeach;?></nav>
+<?php if($pages>1): ?><nav class="pagination" aria-label="Halaman rapor"><?php foreach(['Sebelumnya'=>$page-1,'Berikutnya'=>$page+1] as $label=>$target): if($target<1||$target>$pages){continue;} ?><a href="<?= e(base_url('panel/capaian-pembelajaran/?'.http_build_query(['q'=>$q,'status'=>$status,'page'=>$target]))) ?>"><?= $label ?></a><?php endforeach; ?></nav><?php endif; ?>
 </div>
 <?php panel_end($user); ?>

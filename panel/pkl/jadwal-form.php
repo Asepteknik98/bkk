@@ -21,7 +21,7 @@ panel_start($user,($id?'Edit ':'Tambah ').pkl_schedule_types()[$kind],'pkl');
 ?>
 <div class="page-actions"><h1><?= $id?'Edit':'Tambah' ?> <?= e(pkl_schedule_types()[$kind]) ?></h1><a href="<?= e(base_url('panel/pkl/jadwal.php')) ?>">Daftar jadwal</a></div>
 <?php if(!$placement):$pickerAction='panel/pkl/jadwal-form.php';$pickerParams=['jenis'=>$kind];require APP_ROOT.'/app/layouts/pkl-placement-picker.php';else: ?>
-<p><strong><?= e($placement['nama']) ?></strong> · NIS <?= e($placement['nis']) ?> · Periode <?= e($placement['tanggal_mulai'].' – '.$placement['tanggal_selesai']) ?></p>
+<p><strong><?= e($placement['nama']) ?></strong> · Periode <?= e($placement['tanggal_mulai'].' – '.$placement['tanggal_selesai']) ?></p>
 <?php if($errors): ?><div class="notice" role="alert"><?php foreach($errors as $error): ?><p><?= e($error) ?></p><?php endforeach; ?></div><?php endif; ?>
 <form class="editor-form card" method="post"><?= csrf_field() ?><input type="hidden" name="jenis" value="<?= e($kind) ?>"><input type="hidden" name="version" value="<?= $version ?>">
 <p>Guru dicatat sebagai penugasan. Untuk beberapa pembimbing/penguji, tulis nama-namanya pada kolom petugas. Gunakan status Dibatalkan untuk mempertahankan riwayat jadwal.</p>
