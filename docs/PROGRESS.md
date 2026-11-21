@@ -1143,3 +1143,11 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Grafik kipas komposisi alumni diberi animasi masuk tiap segmen bergiliran saat terlihat, otomatis aktif lagi setiap refresh (tanpa penyimpanan status animasi). Proporsi dan interaksi legenda tetap; reduced-motion/cetak statis. node --check/struktur CSS/diff lulus; browser belum diuji.
 
 - Ruang kosong bawah dashboard laptop dikurangi: khusus dashboard admin >=1100x700, halaman mengikuti tinggi viewport dengan navbar/konten/footer, sidebar dibatasi tinggi tersedia dan grafik mengisi sisa ruang. Konten tetap bisa digulir bila diperlukan, tanpa dipotong. HP/modul lain tetap. Struktur CSS dan diff check lulus; browser belum diuji.
+
+- Daftar Berita & Kegiatan memakai seluruh lebar panel tanpa batas tengah. Header/filter/tabel/tindakan dipadatkan, ikon sejajar dan proporsi kolom disesuaikan. Pagination/scroll/10 berita per halaman serta CSRF/handler tidak diubah. Target HP 44px dipertahankan. PHP lint/struktur CSS/diff lulus; browser belum diuji.
+
+- Tambah/edit Berita memakai seluruh lebar panel, kolom isi/pengaturan lebih seimbang, header batik ringkas tanpa subjudul/nomor bagian. Field, textarea, petunjuk dan tombol dipadatkan; HP satu kolom dan target 44px. Tidak mengubah data/CSRF/unggah/popup/handler. PHP lint, struktur CSS/kontrak field/diff lulus; browser belum diuji.
+
+- Daftar berita tetap LIMIT 10 per halaman; navigasi kini selalu terlihat dengan rentang data, panah hijau, nomor biru dan halaman aktif tegas. Maksimal 10 nomor, nomor bisa digeser horizontal pada HP; Prev/Next dinonaktifkan di batas. Data-vertical-list mencegah pagination client ganda; filter tetap di URL. Lint PHP, simulasi batas pagination 0-1000 data, struktur CSS/diff lulus; browser/database belum diuji.
+
+- Katalog Media diperlebar ke seluruh konten panel. Header batik dipadatkan, unggah/pencarian dua kolom seimbang, judul tabel berikon sejajar, thumbnail/baris/tombol diperkecil dan petunjuk unggah diringkas. HP satu kolom/target 44px tetap. Query 10 berkas/pagination, unggah/unduh/edit/hapus dan CSRF tidak berubah. Lint PHP/struktur CSS/kontrak field/diff lulus; browser belum diuji.
