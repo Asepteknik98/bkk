@@ -1122,3 +1122,6 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Angka persentase kelengkapan PKL memakai badge hijau menyatu, angka tebal tabular, simbol persen proporsional dan count-up satu kali 1,1 detik saat terlihat. Nilai server dan label aksesibel tetap, tanpa data menampilkan strip; reduced-motion/print menampilkan nilai akhir. Lint PHP/node/struktur CSS/diff lulus; browser belum diuji.
 
 - Akun Pribadi memakai seluruh lebar konten, panel foto lebih lapang agar file input tidak terpotong berlebihan, identitas ringkas bergaris, padding/header/tombol dipadatkan. Mobile satu kolom dan tombol/input 44px. Hanya CSS bmw.css, proses simpan/CSRF/unggah tidak diubah. Lint PHP/struktur CSS/diff lulus; browser belum diuji.
+
+- Footer publik ditata ulang dengan kelas footer-neat: desktop brand/menu sejajar, HP menu 3 kolom (2 untuk layar sangat sempit), sosial wrap terpusat, copyright rapi; batik dan tinggi minimalis tetap. Ikon sosial tanpa URL valid tidak lagi ditampilkan sebagai link palsu. Footer panel teks terpusat dan membungkus.
+- Enam halaman tujuan footer HTTP 200; hasil render tidak mengandung href kosong/#. Lint PHP, struktur CSS dan diff lulus. URL sosial resmi yang belum diisi harus dilengkapi melalui Pengaturan; tujuan eksternal dan tata letak browser/perangkat fisik belum diuji.

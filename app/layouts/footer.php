@@ -1,5 +1,5 @@
 <?php if (!defined('APP_ROOT')) { http_response_code(403); exit; } ?>
-<footer class="site-footer site-footer-compact">
+<footer class="site-footer site-footer-compact footer-neat">
     <div class="container portal-container footer-compact-main">
         <div class="footer-identity">
             <a class="footer-brand" href="<?= e(base_url()) ?>">BKK SMKS JAYA BUANA</a>
@@ -18,7 +18,6 @@
         <nav class="footer-meta-links" aria-label="Media sosial BKK">
             <?php foreach (social_networks() as $key=>$label): $socialUrl=setting($key); if ($socialUrl && http_url($socialUrl)): ?>
             <a href="<?= e($socialUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($label) ?> (tab baru)" title="<?= e($label) ?>"><?= social_icon($key) ?></a>
-            <?php else: ?><span class="social-unavailable" role="link" aria-disabled="true" aria-label="<?= e($label) ?>: tautan belum tersedia" title="<?= e($label) ?>: tautan belum tersedia"><?= social_icon($key) ?></span>
             <?php endif; endforeach; ?>
         </nav>
     </div>
