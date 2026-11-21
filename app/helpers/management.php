@@ -60,6 +60,7 @@ function settings_fields(): array
         'profile_description'=>['Isi profil BKK (teks biasa)',50000,false],
         'participant_classes'=>['Pilihan kelas (satu per baris)',10000,false],
         'participant_departments'=>['Pilihan jurusan (satu per baris)',10000,false],
+        'participant_industries'=>['Pilihan kelas industri (satu nama per baris)',10000,false],
         'participant_years'=>['Pilihan angkatan (tahun, satu per baris)',10000,false]];
 }
 
@@ -74,6 +75,7 @@ function settings_sections(): array
         'privasi'=>['label'=>'Hak Cipta & Privasi','icon'=>'lock','description'=>'Penanggung jawab, layanan privasi, dan keterangan pengelolaan data.','fields'=>['manager_name','manager_unit','manager_address','manager_email','manager_phone','copyright_owner','privacy_retention']],
         'kelas'=>['label'=>'Pilihan Kelas','icon'=>'peserta','description'=>'Isi satu kelas per baris untuk pilihan pada formulir peserta. Nilai siswa lama tetap tersedia.','fields'=>['participant_classes']],
         'jurusan'=>['label'=>'Pilihan Jurusan','icon'=>'program','description'=>'Isi satu jurusan per baris untuk pilihan pada formulir peserta. Nilai siswa lama tetap tersedia.','fields'=>['participant_departments']],
+        'kelas_industri'=>['label'=>'Pilihan Kelas Industri','icon'=>'lowongan','description'=>'Isi satu nama kelas industri per baris untuk dropdown siswa. Gunakan nama yang benar, bukan Ya/Tidak. Nilai siswa lama tetap tersimpan.','fields'=>['participant_industries']],
         'angkatan'=>['label'=>'Pilihan Angkatan','icon'=>'calendar','description'=>'Isi satu tahun per baris, antara 1900 dan 2199. Tahun pada data lama tetap tersedia.','fields'=>['participant_years']],
     ];
 }

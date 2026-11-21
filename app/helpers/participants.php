@@ -8,6 +8,30 @@ function participant_columns(): array
     return ['nama'=>'Nama peserta','kelas'=>'Kelas','jurusan'=>'Jurusan','angkatan'=>'Angkatan','kelas_industri'=>'Kelas industri','telepon'=>'Telepon','email'=>'Email','tempat_pkl'=>'Tempat PKL','tahun_pkl'=>'Tahun PKL'];
 }
 
+function participant_industry_boolean(string $value): bool
+{
+    return in_array(mb_strtolower(trim($value)),['ya','tidak','yes','no','true','false','1','0'],true);
+}
+
+/** Resolve only the visible rows; never infer a class name from a yes/no flag. */
+function participant_industry_names(array $rows): array
+{
+    $names=[];$params=[];
+    foreach($rows as $row){
+        $value=trim((string)$row['kelas_industri']);$id=(int)$row['id'];
+        if($value!==''&&!participant_industry_boolean($value)){$names[$id]=$value;}
+        else{$names[$id]=$value!==''&&in_array(mb_strtolower($value),['ya','yes','true','1'],true)?'Nama kelas belum diisi':'Belum tercatat';$params['s'.$id]=$id;}
+    }
+    if(!$params){return $names;}
+    $ready=(int)panel_query("SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ('industry_classes','industry_class_participants')")->fetchColumn()===2;
+    if(!$ready){return $names;}
+    $linked=panel_query('SELECT ip.siswa_id,c.nama FROM industry_class_participants ip JOIN industry_classes c ON c.id=ip.class_id WHERE ip.siswa_id IN ('.implode(',',array_map(static fn($key)=>':'.$key,array_keys($params))).') ORDER BY c.nama,c.id',$params)->fetchAll();
+    $groups=[];
+    foreach($linked as $row){$groups[(int)$row['siswa_id']][]=$row['nama'];}
+    foreach($groups as $id=>$classes){$names[$id]=implode(', ',array_unique($classes));}
+    return $names;
+}
+
 function participant_sort_options(): array
 {
     return ['nama'=>'Nama A–Z','angkatan_baru'=>'Angkatan terbaru','angkatan_lama'=>'Angkatan terlama','kelas_industri'=>'Kelas industri A–Z'];
@@ -63,7 +87,7 @@ function participant_option_lines(string $value, int $max, string $label): array
 
 function participant_choice_lists(bool $studentsReady=true): array
 {
-    $settings=panel_query("SELECT setting_key,setting_value FROM settings WHERE setting_key IN ('participant_classes','participant_departments','participant_years')")->fetchAll(PDO::FETCH_KEY_PAIR);
+    $settings=panel_query("SELECT setting_key,setting_value FROM settings WHERE setting_key IN ('participant_classes','participant_departments','participant_years','participant_industries')")->fetchAll(PDO::FETCH_KEY_PAIR);
     $choices=[];
     foreach(['kelas'=>['participant_classes',80],'jurusan'=>['participant_departments',150],'angkatan'=>['participant_years',4]] as $field=>[$key,$max]){
         $choices[$field]=$field==='angkatan'?participant_year_options((string)($settings[$key]??'')):participant_option_lines((string)($settings[$key]??''),$max,$field);
@@ -74,7 +98,15 @@ function participant_choice_lists(bool $studentsReady=true): array
             }
         }
     }
+    $choices['kelas_industri']=participant_industry_options((string)($settings['participant_industries']??''));
     return $choices;
+}
+
+function participant_industry_options(string $value): array
+{
+    $options=participant_option_lines($value,150,'kelas industri');
+    foreach($options as $option){if(participant_industry_boolean($option)){throw new InvalidArgumentException('Pilihan kelas industri harus berupa nama, bukan Ya/Tidak.');}}
+    return $options;
 }
 
 function participant_year_options(string $value): array
@@ -89,6 +121,7 @@ function participant_year_options(string $value): array
 function participant_errors(array $data): array
 {
     $errors=[];
+    if(participant_industry_boolean($data['kelas_industri'])){$errors[]='Kelas industri harus berupa nama kelas, bukan Ya/Tidak. Kosongkan jika belum mengikuti kelas industri.';}
     foreach(['nama'=>150,'kelas'=>80,'jurusan'=>150,'kelas_industri'=>150,'telepon'=>25,'email'=>190,'tempat_pkl'=>190,'tahun_pkl'=>9] as $key=>$max){
         if(!mb_check_encoding($data[$key],'UTF-8')||mb_strlen($data[$key])>$max||preg_match('/[\x00-\x1F\x7F]/',$data[$key])){$errors[]=participant_columns()[$key].' tidak valid atau terlalu panjang.';}
     }

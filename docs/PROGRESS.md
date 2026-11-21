@@ -931,3 +931,29 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 ## Ikon riwayat PKL (21 November 2026)
 
 - Tombol Riwayat PKL menggunakan ikon history lokal (jam dengan panah melingkar), menggantikan reset. Warna dan tautan tetap. File panel/layouts/icons.php dan panel/pkl/index.php. Lint PHP/diff check lulus.
+
+
+## Warna tombol penempatan (21 November 2026)
+
+- Jurnal & laporan hijau, Penempatan baru biru dengan teks/ikon putih, hover dan dark mode. Khusus detail status siswa. File status-siswa.php, panel-theme.css. Tanpa SQL/logika berubah. Lint PHP, struktur CSS dan diff check lulus.
+
+
+## Nama kelas industri siswa (21 November 2026)
+
+- Kolom daftar siswa menampilkan nama kelas industri yang tersimpan. Nilai lama Ya/Tidak/boolean atau kosong menggunakan nama kelas dari industry_class_participants + industry_classes bila tersedia (satu query untuk maksimal 10 siswa terlihat). Jika nama tidak diketahui, tampil Nama kelas belum diisi atau Belum tercatat; tidak menebak nama perusahaan/kelas dan tidak mengubah data lama. Label filter boolean diperjelas sebagai data lama.
+- Form dan petunjuk impor Excel meminta nama kelas, bukan Ya/Tidak; validasi server bersama menolak boolean pada tambah/edit/impor dan tetap menerima kosong. Untuk data Ya lama tanpa hubungan kelas, pengelola perlu Edit nama yang benar. File app/helpers/participants.php, panel/peserta/index.php, app/layouts/participant-editor.php. Tanpa SQL.
+- Lint tiga PHP/diff check dan uji helper dengan query simulasi lulus: relasi tunggal/jamak, nama tersimpan tetap, nama belum diketahui, migrasi kelas industri belum ada, kueri terikat ID, penolakan boolean, nama sah/kosong diterima. Database dan browser operasional belum diuji langsung untuk perubahan ini.
+
+
+## Tampilan daftar siswa diringkas (21 November 2026)
+
+- Khusus halaman daftar: header batik ringkas, tab lebih pendek, filter grid sejajar dengan ikon, ekspor berupa tombol hijau, judul Nama siswa, tabel proporsional 25/15/12/28/20 dengan garis Excel dan padding lebih kecil. Edit biru/hapus merah, navigasi panah berwarna. HP filter bertumpuk dan target 44px, dark mode didukung. Batas 10 siswa, filter, nama kelas industri, scroll dan logika hapus tetap.
+- File panel/peserta/index.php dan assets/css/bmw.css. Tanpa SQL. Lint PHP/diff check, struktur CSS dan render sintetis (escaping, filter pada tautan halaman, tombol hapus/CSRF, nama kelas) lulus. Browser belum diuji langsung pada revisi ini.
+
+
+## Dropdown kelas industri dari Pengaturan (21 November 2026)
+
+- Pengaturan admin memiliki bagian Pilihan Kelas Industri (participant_industries), satu nama per baris memakai sheet bergaris yang ada. Simpan terpisah melalui upsert settings; duplikat dinormalisasi, maksimal 150 karakter/nama, 300 pilihan dan 10.000 karakter; Ya/Tidak ditolak. Tidak mengisi nama rekaan.
+- Form siswa memakai dropdown opsional dari pengaturan. Admin mendapat tautan pengaturan, staf mendapat petunjuk hubungi Admin. Nama lama di luar master tersedia khusus edit siswa itu, tidak menjadi pilihan siswa baru. Impor Excel memvalidasi nama terhadap master yang sama; kosong diterima.
+- File management.php, participants.php, participant-editor.php (helper/layout), panel/pengaturan/index.php dan simpan.php. Tidak perlu SQL baru. Cara pakai: Pengaturan > Pilihan Kelas Industri > isi nama sebenarnya satu per baris > Simpan > Tambah/Edit siswa.
+- Lint enam PHP/diff check lulus. Handler pengaturan asli dengan query simulasi memeriksa admin, CSRF, allowlist field, normalisasi duplikat dan penolakan boolean. Parser dan render formulir asli memverifikasi dropdown/selected/tautan tanpa input manual. Controller siswa asli menolak nama POST di luar master dan mempertahankan nama lama pada edit. Database/browser operasional belum diuji langsung pada perubahan ini.

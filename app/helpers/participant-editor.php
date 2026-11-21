@@ -7,7 +7,7 @@ try{[$filters,$where,$params,$order]=participant_filters($_GET);}
 catch(InvalidArgumentException $exception){http_response_code(400);exit(e($exception->getMessage()));}
 $listPath='panel/peserta/?'.http_build_query($filters);
 $ready=(bool)panel_query("SHOW TABLES LIKE 'siswa'")->fetchColumn();
-$participantChoices=$participantPage==='form'?participant_choice_lists($ready):[];
+$participantChoices=participant_choice_lists($ready);
 $errors=[];$data=participant_input([]);$id=$participantPage==='form'?positive_id($_GET['id']??''):null;
 if($participantPage==='form'&&isset($_GET['id'])&&!$id){panel_not_found();}
 $continuePkl=$participantPage==='form'&&$id===null&&(input_text($_GET,'lanjut')==='pkl'||input_text($_POST,'lanjut')==='pkl');
@@ -15,6 +15,8 @@ $continueTrip=$continuePkl&&(input_text($_GET,'kembali')==='perjalanan'||input_t
 if($continueTrip){require_permission($user,'biaya-perjalanan');}
 if($continuePkl){require_permission($user,'pkl');}
 if($ready&&$id){$row=panel_query('SELECT * FROM siswa WHERE id=:id',['id'=>$id])->fetch();if(!$row){panel_not_found();}$data=participant_input($row);}
+// Preserve the current legacy name for this edit only; new students use Settings choices.
+if($id&&$data['kelas_industri']!==''&&!participant_industry_boolean($data['kelas_industri'])&&!in_array($data['kelas_industri'],$participantChoices['kelas_industri'],true)){$participantChoices['kelas_industri'][]=$data['kelas_industri'];}
 if($_SERVER['REQUEST_METHOD']==='POST'){
     require_post_csrf();
     $action=input_text($_POST,'aksi');
@@ -30,6 +32,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             foreach($rows as $number=>$values){
                 $participant=participant_input(array_combine(array_keys(participant_columns()),$values));
                 $validation=participant_errors($participant);
+                if($participant['kelas_industri']!==''&&!in_array($participant['kelas_industri'],$participantChoices['kelas_industri'],true)){$validation[]='Pilih nama kelas industri yang sudah diatur di Pengaturan - Pilihan Kelas Industri.';}
                 if($validation){$errors[]='Baris data '.($number+1).': '.implode(' ',$validation);}
                 $participants[]=$participant;
             }
@@ -47,7 +50,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         finally{if($temp&&is_file($temp)){unlink($temp);}}
     }else{
         $data=participant_input($_POST);$errors=participant_errors($data);
-        foreach(['kelas','jurusan','angkatan'] as $choiceField){
+        foreach(['kelas','jurusan','angkatan','kelas_industri'] as $choiceField){
             if(isset($_POST[$choiceField])&&!is_string($_POST[$choiceField])){$errors[]='Pilihan '.$choiceField.' tidak valid.';}
             if($data[$choiceField]!==''&&!in_array($data[$choiceField],$participantChoices[$choiceField],true)){$errors[]='Pilih '.$choiceField.' dari daftar yang tersedia.';}
         }
