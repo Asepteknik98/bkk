@@ -1129,3 +1129,17 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Pengaturan Website memakai seluruh lebar panel; menu samping/header/isian/tombol diringkas. Hak cipta dibuat selebar baris agar tidak menyisakan sel kosong, textarea alamat/retensi dipendekkan, profil tetap lebih tinggi. HP menu dua kolom dan tombol 44px. Hapus petunjuk umum berulang, simpan per bagian/CSRF tetap. Lint PHP/struktur CSS/diff lulus; browser belum diuji.
 
 - Daftar Pengguna diberi pencarian GET nama/username/email dengan tombol Cari/Reset, validasi 100 karakter, prepared params terpisah dan escape wildcard LIKE. Nilai pencarian di-escape saat ditampilkan; empty state khusus hasil kosong. Hak akses admin dan tindakan akun tetap. Lint PHP/struktur CSS/diff lulus; query database/browser belum diuji langsung.
+
+- Ringkasan Tracer Study pada dashboard diganti infografik bintang geometris SVG lokal dengan bidang gradasi/ikon, total di tengah dan legenda angka/persentase berwarna. Empat bidang mengikuti empat status; bila data lama lainnya tersedia, lima bidang. Bentuk bersifat ringkasan kategori, bukan luas proporsional (grafik komposisi yang terpisah tetap). Tidak menambah kategori rekaan.
+- Animasi masuk bergiliran sekali saat terlihat, reduced-motion/cetak statis, legenda aksesibel dan tautan filter status_kegiatan valid (data lama lainnya ke daftar umum). Nilai tetap dari database. Layout responsif tanpa library baru. Lint PHP/node, struktur CSS/diff lulus; tampilan browser belum diuji.
+
+
+### Dashboard ringkas untuk laptop
+- Pada viewport >=1100px dan tinggi >=600px: kartu statistik 6 kolom/2 baris dipadatkan, tiga grafik sejajar satu baris, ilustrasi/legenda ringkas, padding konten/header/link dikurangi. Untuk tinggi <=800px grafik lebih kecil. Tidak memotong konten atau menyembunyikan scrollbar; HP dan layar lebih kecil tetap scroll normal.
+- Data/query/tautan/animasi tetap. CSS terisolasi dashboard admin. Chrome fixture data sintetis 1366x768 diperiksa: seluruh kartu dan footer terlihat setelah pemadatan; fixture memakai navbar/sidebar sederhana, belum akun operasional. Lint PHP/struktur CSS/diff lulus. Ukuran browser, zoom dan sidebar aktual dapat memengaruhi tinggi.
+
+- Dashboard: tiga kartu grafik dibuat stretch dengan header/note/area ilustrasi/legenda/footer seragam. Bagian bawah kartu kini sejajar, kartu komposisi mendapat tautan rekap nyata, jarak antarkartu 8px dan antarbagian 10px. Konten tetap terbuka tanpa overflow hidden tambahan; mobile tetap alami. PHP lint/struktur CSS/diff lulus; browser belum diuji pada penyejajaran ini.
+
+- Grafik kipas komposisi alumni diberi animasi masuk tiap segmen bergiliran saat terlihat, otomatis aktif lagi setiap refresh (tanpa penyimpanan status animasi). Proporsi dan interaksi legenda tetap; reduced-motion/cetak statis. node --check/struktur CSS/diff lulus; browser belum diuji.
+
+- Ruang kosong bawah dashboard laptop dikurangi: khusus dashboard admin >=1100x700, halaman mengikuti tinggi viewport dengan navbar/konten/footer, sidebar dibatasi tinggi tersedia dan grafik mengisi sisa ruang. Konten tetap bisa digulir bila diperlukan, tanpa dipotong. HP/modul lain tetap. Struktur CSS dan diff check lulus; browser belum diuji.

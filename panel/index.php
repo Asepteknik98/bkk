@@ -43,7 +43,20 @@ panel_start($user,'Dashboard','dashboard');
     <div class="tracer-summary-heading"><h2 id="tracer-chart-title"><?= panel_icon('tracer') ?> Ringkasan Tracer Study</h2><span class="badge"><?= (int) array_sum($tracer) ?> respons</span></div>
     <p class="tracer-sheet-note">Jumlah respons menurut kegiatan alumni, bukan jumlah alumni unik.</p>
     <?php $labels=tracer_statuses();if(isset($tracer['lainnya'])){$labels['lainnya']='Lainnya (data lama)';} ?>
-    <div class="tracer-sheet-table"><table><caption class="sr-only">Jumlah respons tracer study per kegiatan alumni</caption><thead><tr><th scope="col">Kegiatan alumni</th><th scope="col">Jumlah respons</th></tr></thead><tbody><?php foreach($labels as $status=>$label): ?><tr><th scope="row"><span class="tracer-category-marker category-<?= e($status) ?>" aria-hidden="true"></span><?= e($label) ?></th><td><?= (int)($tracer[$status]??0) ?></td></tr><?php endforeach; ?></tbody></table></div>
+    <?php $starTotal=(int)array_sum($tracer);$starColors=['#2458eb','#6355e8','#8319b7','#05a2d4','#277c62'];$starIcons=['bekerja'=>'lowongan','kuliah'=>'program','wirausaha'=>'mitra','mencari_kerja'=>'search','lainnya'=>'berita'];$starCount=count($labels); ?>
+    <div class="tracer-star-layout">
+        <div class="tracer-star-art" aria-hidden="true"><svg viewBox="0 0 360 360" focusable="false">
+            <defs><?php foreach(array_values($labels) as $i=>$label): ?><linearGradient id="tracer-star-<?= $i ?>" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="<?= $starColors[$i] ?>"/><stop offset="1" stop-color="<?= $starColors[$i] ?>" stop-opacity=".7"/></linearGradient><?php endforeach; ?></defs>
+            <?php $i=0;foreach($labels as $status=>$label):$angle=$i*360/$starCount; ?>
+            <g class="tracer-star-petal" style="--petal-delay:<?= $i*90 ?>ms"><g transform="rotate(<?= $angle ?> 180 180)"><path d="M174 18Q180 6 186 18L237 117Q242 130 229 143L180 184L131 143Q118 130 123 117Z" fill="url(#tracer-star-<?= $i ?>)"/><path d="M180 15L180 184L229 143Q242 130 237 117L186 18Q183 12 180 15Z" fill="#000" opacity=".08"/></g>
+            <?php $r=105;$cx=180+sin(deg2rad($angle))*$r;$cy=180-cos(deg2rad($angle))*$r; ?><g transform="translate(<?= round($cx-13,2) ?> <?= round($cy-13,2) ?>)" class="tracer-star-symbol"><?= str_replace('<svg ', '<svg width="26" height="26" ', panel_icon($starIcons[$status]??'berita')) ?></g></g>
+            <?php $i++;endforeach; ?>
+            <circle cx="180" cy="180" r="61" class="tracer-star-center"/><text x="180" y="179" class="tracer-star-total" text-anchor="middle"><?= $starTotal ?></text><text x="180" y="201" class="tracer-star-caption" text-anchor="middle">Total respons</text>
+        </svg></div>
+        <ul class="tracer-star-legend" aria-label="Jumlah respons per kegiatan alumni">
+        <?php $i=0;foreach($labels as $status=>$label):$count=(int)($tracer[$status]??0); ?><li style="--star-color:<?= $starColors[$i] ?>"><a href="<?= e(base_url('panel/tracer-study/'.($status==='lainnya'?'':'?status_kegiatan='.rawurlencode($status)))) ?>"><span class="tracer-star-icon"><?= panel_icon($starIcons[$status]??'berita') ?></span><span><?= e($label) ?><small><?= $starTotal?number_format($count/$starTotal*100,1,',','.'):'0' ?>% respons</small></span><strong><?= $count ?></strong></a></li><?php $i++;endforeach; ?>
+        </ul>
+    </div>
     <?php if(array_sum($tracer)===0): ?><p class="tracer-sheet-note">Belum ada respons tracer study yang masuk.</p><?php endif; ?>
     <a class="tracer-sheet-link" href="<?= e(base_url('panel/tracer-study/rekap.php')) ?>"><?= panel_icon('view') ?> Lihat rekap dan filter <?= panel_icon('next') ?></a>
 </section>
@@ -75,6 +88,7 @@ panel_start($user,'Dashboard','dashboard');
         </div>
     </div>
     <?php if(!$tracerTotal): ?><p class="muted">Belum ada respons. Bidang warna akan muncul setelah data tersedia.</p><?php endif; ?>
+    <a class="tracer-composition-link" href="<?= e(base_url('panel/tracer-study/rekap.php')) ?>"><?= panel_icon('tracer') ?> Lihat rekap dan filter <?= panel_icon('next') ?></a>
 </section>
 <section class="card tracer-summary pkl-summary pkl-completion-card" aria-labelledby="pkl-chart-title">
     <?php $pklTotal=(int)$participantStats['total'];$pklFilled=(int)$participantStats['pkl'];$pklMissing=$pklTotal-$pklFilled;$pklPercent=$pklTotal?$pklFilled/$pklTotal*100:0;$pklMissingPercent=$pklTotal?$pklMissing/$pklTotal*100:0; ?>

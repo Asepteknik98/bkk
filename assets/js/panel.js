@@ -390,3 +390,34 @@ document.querySelectorAll('[data-partner-filters], .partner-editor').forEach(for
     }, { threshold: 0.3 });
     nodes.forEach(node => observer.observe(node));
 })();
+// Reveal the tracer infographic once, keeping figures readable without JS.
+(() => {
+    const star = document.querySelector('.tracer-star-art');
+    if (!star || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+            star.classList.add('is-animated');
+            observer.disconnect();
+        }
+    }, { threshold: 0.25 });
+    observer.observe(star);
+})();
+// Replay the composition entrance on each page load, once the chart is visible.
+(() => {
+    const charts = document.querySelectorAll('.tracer-fan');
+    if (!charts.length || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const start = chart => {
+        chart.querySelectorAll('.fan-segment').forEach((segment, index) => {
+            segment.style.setProperty('--fan-enter-delay', `${index * 100}ms`);
+        });
+        chart.classList.add('fan-entering');
+    };
+    if (!('IntersectionObserver' in window)) { charts.forEach(start); return; }
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { start(entry.target); observer.unobserve(entry.target); }
+        });
+    }, { threshold: 0.2 });
+    charts.forEach(chart => observer.observe(chart));
+})();
