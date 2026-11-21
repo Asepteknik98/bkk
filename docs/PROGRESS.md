@@ -1172,3 +1172,9 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Lint tujuh PHP dan tes app/tests/tracer-management.php serta app/tests/tracer.php lulus (validasi, snapshot, tahun/status/detail). Simpan/hapus pada database dan alur browser operasional belum diuji; pembatasan FK mengandalkan schema yang ada.
 
 - Detail Alumni diperlebar, header batik menggabungkan Daftar/Edit/Hapus/Tautan, identitas dan kegiatan dua kolom berlabel/nilai bergaris seperti Excel, keterangan/persetujuan dipadatkan. HP satu kolom dan teks panjang membungkus. Query/privasi/CSRF/handler tidak berubah. Lint PHP/struktur CSS/diff lulus; browser belum diuji.
+
+### 22 November 2026 - Tautan formulir alumni
+- Halaman tautan alumni mengikuti komponen ringkas tautan mitra: header batik/Detail alumni, identitas, masa berlaku kecil dan tombol Buat hijau/Cabut merah sejajar. URL baru readonly terpisah, alamat relatif dinormalisasi, catatan privasi singkat dan responsif/dark mode mengikuti CSS bersama.
+- No-store pada halaman token; Cabut tidak terhalang field masa berlaku di browser. Lock record memastikan alumni masih ada sebelum membuat token. Kontrak POST/CSRF/masa berlaku/hash token tetap. Lint PHP/kontrak form/diff lulus; browser/database belum diuji.
+
+- Pesan WhatsApp diperlebar ke seluruh konten panel; filter ringkas dan kolom penerima/pesan seimbang, tabel berikon sejajar, input/textarea/preview/tombol dipadatkan. Penanda tahap/petunjuk pembuka dibuang, petunjuk penting pilihan/pesan manual tetap. HP satu kolom/44px. Query/seleksi/CSRF/pengiriman tidak diubah. Lint PHP/struktur CSS/kontrak selector/diff lulus; browser belum diuji.
