@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/participants.php';
+require_once __DIR__.'/pkl-locations.php';
 
 function pkl_ready(): bool
 {
@@ -31,6 +32,7 @@ function pkl_input(array $input): array
 {
     $data=['siswa_id'=>input_text($input,'siswa_id')];
     foreach(pkl_fields() as $key=>$meta){$data[$key]=input_text($input,$key);}
+    $data['latitude']=input_text($input,'latitude');$data['longitude']=input_text($input,'longitude');
     return $data;
 }
 
@@ -57,6 +59,7 @@ function pkl_find(int $id,bool $lock=false): array
 function pkl_save(array $data,?int $id,int $version,int $actor): int
 {
     if($errors=pkl_errors($data)){throw new InvalidArgumentException(implode(' ',$errors));}
+    $point=pkl_point_input($data);unset($data['latitude'],$data['longitude']);
     db()->beginTransaction();
     try{
         if($id){
@@ -84,6 +87,7 @@ function pkl_save(array $data,?int $id,int $version,int $actor): int
             $keys=implode(',',array_keys($data));$params=implode(',:',array_keys($data));
             panel_query('INSERT INTO pkl_placements('.$keys.',created_by,updated_by) VALUES(:'.$params.',:creator,:editor)',$data+['creator'=>$actor,'editor'=>$actor]);$id=(int)db()->lastInsertId();
         }
+        pkl_store_point($id,$point);
         db()->commit();return $id;
     }catch(Throwable $exception){if(db()->inTransaction()){db()->rollBack();}throw $exception;}
 }
@@ -166,4 +170,59 @@ function pkl_error(Throwable $exception): string
     if($exception instanceof InvalidArgumentException){return $exception->getMessage();}
     if($exception instanceof PDOException&&($exception->errorInfo[1]??0)===1062){return 'Data sudah ada: satu penempatan identik atau satu jurnal per tanggal. Gunakan Edit untuk memperbarui.';}
     error_log('Modul PKL gagal: '.get_class($exception));return 'Perubahan belum tersimpan. Silakan coba kembali.';
+}
+
+
+/** Revalidate a bounded selection on the server, never trust posted student metadata. */
+function pkl_selected_students(mixed $ids, bool $lock = false): array
+{
+    if (!is_array($ids) || !$ids || count($ids) > 50) {
+        throw new InvalidArgumentException('Pilih 1-50 siswa untuk penempatan bersama.');
+    }
+    $params = [];
+    foreach ($ids as $value) {
+        $id = positive_id($value);
+        if (!$id) { throw new InvalidArgumentException('Pilihan siswa tidak valid.'); }
+        $params['s'. $id] = $id;
+    }
+    $students = panel_query('SELECT id,nama,kelas,jurusan,tempat_pkl,tahun_pkl FROM siswa WHERE id IN ('.implode(',',array_map(static fn($key)=>':'.$key,array_keys($params))).') ORDER BY id'.($lock?' FOR UPDATE':''), $params)->fetchAll();
+    if (count($students) !== count($params)) { throw new InvalidArgumentException('Ada siswa yang tidak tersedia. Pilih kembali siswa.'); }
+    return $students;
+}
+
+/** All selected placements commit together; class/department remain student-specific. */
+function pkl_save_batch(mixed $ids, array $input, int $actor): array
+{
+    db()->beginTransaction();
+    try {
+        $point=pkl_point_input($input);
+        $students = pkl_selected_students($ids, true);
+        $entries = [];
+        foreach ($students as $student) {
+            $entry = pkl_input($input);
+            $entry['siswa_id'] = (string)$student['id'];
+            $entry['kelas'] = (string)$student['kelas'];
+            $entry['jurusan'] = (string)$student['jurusan'];
+            if ($errors = pkl_errors($entry)) { throw new InvalidArgumentException($student['nama'].': '.implode(' ', $errors)); }
+            if (panel_query('SELECT id FROM pkl_placements WHERE siswa_id=:siswa AND tanggal_mulai=:mulai AND tanggal_selesai=:selesai AND tempat_pkl=:tempat LIMIT 1', ['siswa'=>$student['id'],'mulai'=>$entry['tanggal_mulai'],'selesai'=>$entry['tanggal_selesai'],'tempat'=>$entry['tempat_pkl']])->fetchColumn()) {
+                throw new InvalidArgumentException($student['nama'].' sudah memiliki penempatan dengan tempat dan periode yang sama. Tidak ada penempatan baru yang disimpan.');
+            }
+            $entries[] = $entry;
+        }
+        $saved = [];
+        foreach ($entries as $entry) {
+            unset($entry['latitude'],$entry['longitude']);
+            $entry['siswa_id'] = (int)$entry['siswa_id'];
+            $keys = implode(',', array_keys($entry));
+            $values = implode(',:', array_keys($entry));
+            panel_query('INSERT INTO pkl_placements('.$keys.',created_by,updated_by) VALUES(:'.$values.',:creator,:editor)', $entry+['creator'=>$actor,'editor'=>$actor]);
+            $savedId=(int)db()->lastInsertId();pkl_store_point($savedId,$point);
+            $saved[] = $savedId;
+        }
+        db()->commit();
+        return $saved;
+    } catch (Throwable $exception) {
+        if (db()->inTransaction()) { db()->rollBack(); }
+        throw $exception;
+    }
 }

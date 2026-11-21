@@ -173,3 +173,20 @@ function pkl_trip_save(int $placementId,?int $id,int $version,array $data,int $a
         db()->commit();return $id;
     }catch(Throwable $exception){if(db()->inTransaction()){db()->rollBack();}throw $exception;}
 }
+
+
+function pkl_trip_delete(int $id, int $version): void
+{
+    db()->beginTransaction();
+    try {
+        $current = panel_query('SELECT version FROM pkl_business_trips WHERE id=:id FOR UPDATE', ['id'=>$id])->fetchColumn();
+        if ($current === false || (int)$current !== $version) {
+            throw new InvalidArgumentException('Catatan sudah berubah atau tidak tersedia. Muat ulang daftar sebelum menghapus.');
+        }
+        panel_query('DELETE FROM pkl_business_trips WHERE id=:id', ['id'=>$id]);
+        db()->commit();
+    } catch (Throwable $exception) {
+        if (db()->inTransaction()) { db()->rollBack(); }
+        throw $exception;
+    }
+}

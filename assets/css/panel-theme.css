@@ -2661,3 +2661,138 @@ html[data-theme=dark] .trip-totals strong { color:#a3dfc6; }
 .trip-picker-empty ol { padding-left:20px; margin:10px 0 14px; }
 html[data-theme=dark] .trip-workspace .trip-use-placement { background:#253a53; color:#c0d7ff; border-color:#445b78; }
 @media(max-width:600px) { .trip-workspace :is(.trip-create-placement,.trip-use-placement) { min-height:44px; }.trip-picker-intro>div { width:100%; } }
+
+/* Daftar biaya: hanya kontrol utama, semua ikon sejajar. */
+.panel-page .trip-workspace .trip-filter { display:flex; flex-wrap:wrap; align-items:flex-end; gap:8px; }
+.trip-workspace .trip-filter label { display:grid; gap:5px; font-size:.74rem; }
+.panel-page .trip-workspace .trip-filter>button,.panel-page .trip-workspace .trip-filter>a { display:inline-flex; flex-direction:row; align-items:center; justify-content:center; gap:6px; min-height:38px; padding:7px 10px; white-space:nowrap; text-decoration:none; border-radius:4px; font-size:.73rem; }
+.trip-workspace .trip-row-actions { display:flex; align-items:center; flex-wrap:nowrap; gap:6px; }
+.trip-row-actions form { display:flex; margin:0; }
+.panel-page .trip-workspace .trip-row-actions :is(a,button) { display:inline-flex; flex-direction:row; align-items:center; justify-content:center; gap:6px; min-height:36px; padding:6px 9px; margin:0; border-radius:4px; white-space:nowrap; font-size:.73rem; }
+.trip-workspace .trip-row-actions .trip-edit { background:#edf3ff; color:#355c9e; border-color:#c4d2f2; }
+.panel-page .trip-workspace .trip-row-actions .trip-delete { border:1px solid #efc6c6; background:#fff2f2; color:#b13e45; }
+.trip-workspace .trip-row-actions .panel-icon { width:16px; height:16px; flex:none; margin:0; }
+.trip-workspace .trip-sheet table { min-width:980px; }
+.trip-workspace .trip-sheet th:last-child { min-width:160px; }
+html[data-theme=dark] .trip-workspace .trip-row-actions .trip-edit { background:#253a53; color:#c0d7ff; border-color:#445b78; }
+html[data-theme=dark] .panel-page .trip-workspace .trip-row-actions .trip-delete { background:#493036; color:#ffc1c9; border-color:#80535c; }
+@media(max-width:600px) { .panel-page .trip-workspace .trip-row-actions :is(a,button),.panel-page .trip-workspace .trip-filter>button,.panel-page .trip-workspace .trip-filter>a { min-height:44px; } }
+
+/* Pemilihan siswa untuk penempatan PKL. */
+.pkl-placement-workspace { width:100%; min-width:0; --pkl-picker-line:#bdcfe2; --pkl-picker-head:#e8f0fa; }
+.panel-page .pkl-placement-workspace>.page-actions { padding:10px 12px; margin-bottom:10px; border:1px solid var(--pkl-picker-line); border-radius:5px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
+.pkl-placement-workspace>.page-actions h1 { display:flex; align-items:center; gap:7px; font-size:1.1rem; margin:0; }
+.pkl-placement-workspace .pkl-student-actions { gap:6px; }
+.pkl-placement-workspace .pkl-student-actions a { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; min-height:36px; border:1px solid var(--pkl-picker-line); border-radius:4px; background:var(--panel-surface); font-size:.74rem; text-decoration:none; }
+.pkl-placement-workspace .pkl-student-actions a.button { background:#356658; border-color:#356658; color:#fff; }
+.pkl-placement-workspace>.notice,.pkl-picker-help { font-size:.74rem; line-height:1.6; margin:8px 0; }
+.panel-page .pkl-placement-workspace>.filter-form { padding:9px 10px; border-color:var(--pkl-picker-line); border-radius:5px; gap:8px; margin-bottom:10px; }
+.pkl-placement-workspace>.filter-form label { font-size:.74rem; }
+.pkl-placement-workspace>.filter-form button { display:inline-flex; flex-direction:row; gap:6px; align-items:center; min-height:38px; border-radius:4px; font-size:.74rem; }
+.pkl-picker-heading { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:7px; margin-bottom:8px; }
+.pkl-picker-heading h2 { display:flex; gap:7px; align-items:center; font-size:.83rem; margin:0; }
+.pkl-picker-heading span { font-size:.7rem; color:var(--panel-muted); }
+.panel-page .pkl-placement-workspace .pkl-student-sheet { max-height:min(340px,55vh); overflow:auto; border:1px solid var(--pkl-picker-line); border-radius:5px; scrollbar-width:thin; scrollbar-gutter:stable; }
+.pkl-student-sheet table { width:100%; min-width:600px; margin:0; border-collapse:collapse; }
+.panel-page .pkl-student-sheet :is(th,td) { padding:8px 10px; border-right:1px solid var(--pkl-picker-line); border-bottom:1px solid var(--pkl-picker-line); font-size:.75rem; vertical-align:middle; }
+.panel-page .pkl-student-sheet th { position:sticky; top:0; z-index:1; background:var(--pkl-picker-head); text-align:left; }
+.pkl-student-sheet th:first-child { width:40%; }
+.pkl-student-sheet th:nth-child(2) { width:35%; }
+.panel-page .pkl-student-sheet :is(th,td):last-child { border-right:0; }
+.panel-page .pkl-student-sheet tr:last-child td { border-bottom:0; }
+.pkl-placement-workspace .pkl-pick-student { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:6px 9px; min-height:36px; border:1px solid #c4d2f2; border-radius:4px; color:#355c9e; background:#edf3ff; text-decoration:none; font-size:.74rem; }
+.pkl-placement-workspace :is(a,input,button,.pkl-student-sheet):focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] .pkl-placement-workspace { --pkl-picker-line:#44566d; --pkl-picker-head:#223246; }
+html[data-theme=dark] .panel-page .pkl-placement-workspace>.page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+html[data-theme=dark] .pkl-placement-workspace .pkl-pick-student { background:#253a53; border-color:#445b78; color:#c0d7ff; }
+@media(max-width:600px) { .pkl-placement-workspace .pkl-student-actions a,.pkl-placement-workspace .pkl-pick-student,.pkl-placement-workspace>.filter-form button { min-height:44px; }.panel-page .pkl-placement-workspace>.filter-form input { min-height:44px; font-size:16px; } }
+
+/* Proporsi tabel pemilihan siswa dan pager yang menyatu. */
+.pkl-placement-workspace .pkl-student-sheet table { table-layout:fixed; }
+.pkl-placement-workspace .pkl-student-sheet th:first-child { width:42%; }
+.pkl-placement-workspace .pkl-student-sheet th:nth-child(2) { width:38%; }
+.pkl-placement-workspace .pkl-student-sheet th:last-child { width:20%; text-align:center; }
+.panel-page .pkl-placement-workspace .pkl-student-sheet td { padding:6px 12px; height:46px; box-sizing:border-box; overflow-wrap:anywhere; line-height:1.5; }
+.panel-page .pkl-placement-workspace .pkl-student-sheet th { padding:9px 12px; font-size:.73rem; }
+.pkl-placement-workspace .pkl-student-sheet td:first-child { font-weight:600; }
+.pkl-placement-workspace .pkl-student-sheet td:nth-child(2) { color:var(--panel-muted); }
+.pkl-placement-workspace .pkl-student-sheet td:last-child { text-align:center; }
+.pkl-placement-workspace .pkl-pick-student { min-width:100px; min-height:32px; padding:5px 9px; font-size:.72rem; border-radius:4px; }
+.pkl-placement-workspace .pkl-pick-student .panel-icon { width:15px; height:15px; margin:0; }
+.pkl-placement-workspace .pkl-pick-student:hover { background:#dce8ff; border-color:#8caee8; }
+.panel-page .pkl-placement-workspace .pkl-student-sheet { border-radius:5px 5px 0 0; }
+.panel-page .pkl-placement-workspace .pkl-student-sheet+.admin-list-controls { display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:8px; margin:0; padding:8px 10px; border:1px solid var(--pkl-picker-line); border-top:0; border-radius:0 0 5px 5px; background:var(--panel-soft); }
+.panel-page .pkl-placement-workspace .pkl-student-sheet+.admin-list-controls[hidden] { display:none; }
+.pkl-placement-workspace .pkl-student-sheet+.admin-list-controls span { margin-right:auto; font-size:.72rem; color:var(--panel-muted); order:-1; }
+.panel-page .pkl-placement-workspace .admin-list-controls button { min-height:34px; padding:6px 9px; border-radius:4px; font-size:.72rem; }
+.pkl-placement-workspace .admin-list-controls button:disabled { opacity:.45; cursor:default; }
+@media(max-width:600px) { .pkl-placement-workspace .pkl-pick-student,.panel-page .pkl-placement-workspace .admin-list-controls button { min-height:44px; }.pkl-placement-workspace .pkl-student-sheet+.admin-list-controls span { flex-basis:100%; } }
+
+/* Form penempatan: tiga kelompok, dua kolom, tanpa ruang berlebih. */
+.pkl-selected-student { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin:10px 0; padding:9px 10px; border:1px solid var(--pkl-picker-line); background:var(--panel-surface); border-radius:4px; }
+.pkl-selected-student strong { display:flex; align-items:center; gap:7px; font-size:.8rem; }
+.pkl-selected-student small { display:block; margin-top:4px; color:var(--panel-muted); font-size:.7rem; }
+.pkl-selected-student>a { display:inline-flex; align-items:center; gap:6px; min-height:36px; padding:6px 9px; font-size:.73rem; text-decoration:none; border:1px solid var(--pkl-picker-line); border-radius:4px; }
+.panel-page .pkl-placement-workspace .pkl-placement-editor { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); padding:0; gap:0; border:1px solid var(--pkl-picker-line); border-radius:5px; overflow:hidden; }
+.pkl-placement-editor h2 { grid-column:1/-1; display:flex; align-items:center; gap:7px; padding:8px 10px; margin:0; font-size:.8rem; background:var(--pkl-picker-head); border-bottom:1px solid var(--pkl-picker-line); }
+.pkl-placement-cell { min-width:0; display:grid; gap:5px; align-content:start; padding:7px 10px; border-bottom:1px solid var(--pkl-picker-line); }
+.pkl-placement-cell:has(#kelas),.pkl-placement-cell:has(#tanggal_mulai),.pkl-placement-cell:has(#guru_pembimbing) { border-right:1px solid var(--pkl-picker-line); }
+.pkl-placement-wide { grid-column:1/-1; }
+.panel-page .pkl-placement-editor label { display:flex; align-items:center; gap:6px; margin:0; font-size:.75rem; }
+.pkl-placement-editor label .panel-icon,.pkl-placement-editor h2 .panel-icon { width:17px; height:17px; flex:none; margin:0; }
+.panel-page .pkl-placement-editor :is(input:not([type=hidden]),select,textarea) { width:100%; min-width:0; box-sizing:border-box; margin:0; min-height:38px; padding:7px 9px; font-size:14px; border-radius:4px; }
+.panel-page .pkl-placement-editor textarea { height:65px; min-height:60px; resize:vertical; }
+.pkl-placement-footer { grid-column:1/-1; display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:9px 10px; background:var(--panel-soft); }
+.pkl-placement-footer small { flex:1; min-width:180px; font-size:.7rem; line-height:1.6; color:var(--panel-muted); }
+.panel-page .pkl-placement-footer button { display:inline-flex; flex-direction:row; align-items:center; justify-content:center; gap:7px; min-height:38px; padding:7px 11px; font-size:.75rem; border:1px solid #356658; border-radius:4px; background:#356658; color:#fff; }
+@media(max-width:600px) { .panel-page .pkl-placement-workspace .pkl-placement-editor { grid-template-columns:minmax(0,1fr); }.pkl-placement-cell:has(#kelas),.pkl-placement-cell:has(#tanggal_mulai),.pkl-placement-cell:has(#guru_pembimbing) { border-right:0; }.panel-page .pkl-placement-editor :is(input:not([type=hidden]),select,textarea) { min-height:44px; font-size:16px; }.panel-page .pkl-placement-footer button,.pkl-selected-student>a { min-height:44px; } }
+
+.pkl-multi-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:7px; padding:8px 10px; border:1px solid var(--pkl-picker-line); border-radius:4px; margin-bottom:8px; background:var(--panel-surface); }
+.pkl-multi-toolbar>span { flex:1 1 250px; color:var(--panel-muted); font-size:.71rem; }
+.panel-page .pkl-multi-toolbar button { display:inline-flex; align-items:center; flex-direction:row; gap:6px; min-height:36px; padding:6px 9px; font-size:.72rem; border-radius:4px; }
+.panel-page .pkl-placement-workspace .pkl-multi-choice { display:flex; flex-direction:row; align-items:center; gap:8px; margin:0; font-size:inherit; font-weight:600; min-height:32px; cursor:pointer; }
+.pkl-multi-choice input { width:18px; height:18px; min-height:18px; margin:0; padding:0; flex:none; accent-color:#356658; }
+.pkl-batch-preview { margin:8px 0 10px; border:1px solid var(--pkl-picker-line); border-radius:4px; background:var(--panel-surface); }
+.pkl-batch-preview summary { padding:9px 10px; font-size:.76rem; cursor:pointer; }
+.panel-page .pkl-batch-preview .table-scroll { max-height:180px; overflow:auto; margin:0; border:0; border-top:1px solid var(--pkl-picker-line); border-radius:0; }
+.pkl-batch-preview table { width:100%; border-collapse:collapse; }
+.pkl-batch-preview :is(th,td) { text-align:left; padding:6px 10px; border-right:1px solid var(--pkl-picker-line); border-bottom:1px solid var(--pkl-picker-line); font-size:.73rem; }
+.pkl-batch-preview th { background:var(--pkl-picker-head); }
+@media(max-width:600px) { .panel-page .pkl-multi-toolbar button,.panel-page .pkl-placement-workspace .pkl-multi-choice { min-height:44px; } }
+
+/* Pemilih lokasi PKL: kontrol ringkas dan peta hanya saat diperlukan. */
+.pkl-location-picker { padding:8px 10px; border-bottom:1px solid var(--pkl-picker-line); min-width:0; }
+.pkl-location-search>div { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0; }
+.pkl-location-search>div input { flex:1 1 220px; }
+.pkl-location-picker button,.pkl-location-actions a { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:36px; padding:6px 9px; font-size:.73rem; border:1px solid var(--pkl-picker-line); border-radius:4px; background:var(--panel-soft); color:var(--panel-text); text-decoration:none; }
+.pkl-location-picker small,.pkl-location-picker #pkl-place-status { font-size:.71rem; line-height:1.6; color:var(--panel-muted); margin:5px 0; }
+.pkl-place-results { max-height:190px; overflow:auto; }
+.panel-page .pkl-location-picker .pkl-place-result { display:block; text-align:left; width:100%; margin:4px 0; background:var(--panel-surface); }
+.pkl-place-result strong,.pkl-place-result span { display:block; }.pkl-place-result span { font-size:.7rem; font-weight:400; margin-top:3px; }
+.pkl-location-map { border:1px solid var(--pkl-picker-line); border-radius:4px; padding:0 8px 8px; margin:8px 0; }
+.pkl-location-map summary { cursor:pointer; font-size:.75rem; padding:8px 0; }
+#pkl-place-map { height:250px; width:100%; margin:7px 0; position:relative; z-index:0; background:#e7edf3; }
+.pkl-coordinate-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.panel-page .pkl-coordinate-fields label { display:grid; font-size:.73rem; gap:5px; }
+.pkl-location-actions { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.pkl-location-picker .leaflet-control-attribution { font-size:10px; color:#222; }.pkl-location-picker .leaflet-control-attribution a { color:#135b93; }
+@media(max-width:600px) { .pkl-location-picker button,.pkl-location-actions a { min-height:44px; }.pkl-coordinate-fields { grid-template-columns:minmax(0,1fr); } }
+
+/* Form penempatan: tampilkan inti, rincian tambahan tetap bisa dibuka. */
+.pkl-placement-workspace .pkl-batch-preview { margin:0 0 8px; }
+.pkl-placement-workspace :is(.pkl-batch-preview,.pkl-location-map)>summary { display:flex; align-items:center; gap:7px; list-style:none; min-height:36px; padding:7px 9px; box-sizing:border-box; font-size:.73rem; }
+.pkl-placement-workspace :is(.pkl-batch-preview,.pkl-location-map)>summary::-webkit-details-marker { display:none; }
+.pkl-placement-workspace :is(.pkl-batch-preview,.pkl-location-map)>summary::marker { content:''; }
+.pkl-placement-workspace :is(.pkl-batch-preview,.pkl-location-map)>summary::after { content:'+'; margin-left:auto; font-size:16px; color:var(--panel-muted); }
+.pkl-placement-workspace :is(.pkl-batch-preview,.pkl-location-map)[open]>summary::after { content:'\2212'; }
+.pkl-placement-workspace :is(.pkl-batch-preview,.pkl-location-map)>summary .panel-icon { display:inline-block; width:16px; height:16px; flex:none; margin:0; }
+.pkl-location-picker { padding:7px 10px; }
+.pkl-location-search>div { display:grid; grid-template-columns:minmax(0,1fr) auto auto; align-items:center; gap:6px; margin:5px 0; }
+.panel-page .pkl-location-picker button { display:inline-flex; flex-direction:row; gap:6px; min-height:36px; padding:6px 9px; font-size:.72rem; }
+.pkl-location-picker button .panel-icon,.pkl-location-actions a .panel-icon { width:15px; height:15px; flex:none; margin:0; }
+.pkl-location-picker #pkl-place-status:empty,.pkl-place-results:empty { display:none; }
+.pkl-location-map { padding:0 8px; margin:6px 0; }
+.pkl-location-map[open] { padding-bottom:8px; }
+.pkl-location-map>summary { margin:0 -8px; }
+.pkl-location-picker>small { display:block; font-size:.68rem; margin:4px 0 0; }
+@media(max-width:600px) { .pkl-location-search>div { grid-template-columns:repeat(2,minmax(0,1fr)); }.pkl-location-search>div input { grid-column:1/-1; }.panel-page .pkl-location-picker button,.pkl-placement-workspace :is(.pkl-batch-preview,.pkl-location-map)>summary { min-height:44px; } }

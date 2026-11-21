@@ -202,7 +202,9 @@ document.querySelectorAll('.panel-content .table-scroll, .panel-content .media-g
         previous.hidden = next.hidden = status.hidden = totalSlides <= 1;
         previous.disabled = slide === 0;
         next.disabled = slide >= totalSlides - 1;
-        status.textContent = `${slide * perSlide + 1}?${Math.min((slide + 1) * perSlide, rows.length)} dari ${rows.length} baris pada halaman ini`;
+        status.textContent = viewport.classList.contains('pkl-student-sheet')
+            ? `${slide * perSlide + 1}\u2013${Math.min((slide + 1) * perSlide, rows.length)} dari ${rows.length} siswa`
+            : `${slide * perSlide + 1}?${Math.min((slide + 1) * perSlide, rows.length)} dari ${rows.length} baris pada halaman ini`;
         updateScroll();
     };
     viewport.after(controls);
@@ -267,7 +269,7 @@ if (document.querySelector('.panel-page')) {
         path.setAttribute('d',paths[name]); svg.append(path); element.prepend(svg);
     };
     document.querySelectorAll('.panel-content h1, .panel-content h2, .panel-content label, .panel-content th, .panel-content button, .panel-content .button, .panel-content .row-actions a, .panel-content .page-actions a, .panel-content .form-actions a, .panel-content .pagination a, .panel-content .filter-form > a, .bmw-admin .table-scroll td:last-child > a').forEach(element => {
-        if (element.querySelector('svg') || element.matches('.wa-selection label') || element.closest('.donut-legend, .fan-legend') || element.classList.contains('sr-only')) return;
+        if (element.querySelector('svg') || element.matches('.wa-selection label, .pkl-multi-choice') || element.closest('.donut-legend, .fan-legend') || element.classList.contains('sr-only')) return;
         if (element.closest('.bmw-admin') && element.matches('label,th')) return;
         const text = element.cloneNode(true);
         text.querySelectorAll('input,select,textarea,small,.badge').forEach(child => child.remove());
