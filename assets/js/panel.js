@@ -347,3 +347,16 @@ document.querySelectorAll('[data-partner-filters], .partner-editor').forEach(for
     kind.addEventListener('change', syncPartnerKind);
     syncPartnerKind();
 });
+// Animate the PKL chart once when visible; keep server-calculated percentages.
+(() => {
+    const bars = document.querySelectorAll('.pkl-completion-bar');
+    if (!bars.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const reveal = bar => bar.classList.add('pkl-chart-animated');
+    if (!('IntersectionObserver' in window)) { bars.forEach(reveal); return; }
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { reveal(entry.target); observer.unobserve(entry.target); }
+        });
+    }, { threshold: 0.2 });
+    bars.forEach(bar => observer.observe(bar));
+})();

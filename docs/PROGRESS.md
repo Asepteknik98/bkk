@@ -1069,3 +1069,50 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - panel/mou/index.php memakai header batik ringkas, tombol berikon/warna, petunjuk status yang dapat dibuka, filter sejajar, tabel bergaris dengan header melekat dan scroll internal. Label status aktif/belum berlaku/kedaluwarsa berbeda warna, tindakan perpanjang/unduh jelas, empty state memberi petunjuk. CSS terisolasi mou-list-page mendukung HP dan dark mode.
 - Query, filter mitra, pagination 20 dokumen, perhitungan tanggal WIB, izin dan endpoint dokumen privat tetap dipertahankan. Tanpa perubahan SQL atau data.
 - PHP lint, struktur CSS dan git diff --check lulus; tampilan browser dengan akun pengelola belum diuji pada perubahan ini.
+
+- Revisi tampilan: menghapus bagian Cara membaca status MoU dari halaman riwayat sesuai permintaan. Perhitungan status dan fitur dokumen tetap tersedia. PHP lint lulus.
+
+
+### Alur tambah MoU jelas ? 21 November 2026
+- Form MoU menjadi dua tahap: pilih mitra melalui tabel bergaris dengan tombol eksplisit, lalu isi nomor/periode/PDF. Pencarian server 10 mitra per halaman, scroll internal, status/jenis mitra, empty state dan tautan Data mitra. Validasi pencarian kini sebelum output layout.
+- Tahap dokumen memakai dua kolom ringkas, mitra terpilih dan Ganti mitra (dokumen baru), label perpanjangan serta referensi dokumen lama. Tidak menyediakan ganti mitra pada perpanjangan. Header batik, ikon, tombol warna dan responsif mengikuti desain panel.
+- Handler POST dalam form tetap menggunakan CSRF, validasi PDF, transaksi, relasi perpanjangan mitra yang sama dan penyimpanan riwayat baru. Tidak mengubah SQL/database/izin.
+- Lint PHP, pemeriksaan kontrak CSRF/pagination dan struktur CSS/diff lulus. Alur unggah dengan browser/database operasional belum diuji pada revisi ini.
+
+- Tabel daftar dokumen MoU dirampingkan: ikon/judul sejajar, proporsi kolom tetap, riwayat dan tombol dalam satu grup, nama PDF dipotong visual dengan title lengkap, ukuran berkas kecil. Garis tabel tetap sejajar; target sentuh HP 44px. Tanpa perubahan query/handler. PHP lint, struktur CSS dan diff check lulus; browser belum diverifikasi.
+
+- Tampilan tambah MoU disederhanakan sesuai permintaan: hapus penanda tahap, subjudul tutorial, petunjuk Data mitra dan penjelasan penyimpanan. Pertahankan konteks perpanjangan, validasi, batas PDF dan tindakan utama. Tabel pemilihan dirampingkan dengan ikon/judul sejajar, proporsi kolom tetap dan tombol kecil. PHP lint, kontrak CSRF, struktur CSS dan diff check lulus; browser belum diverifikasi.
+
+- Form mitra dipadatkan lagi: kolom kiri/kanan seimbang, nama/jabatan PIC berdampingan, ikon-teks sejajar, header tanpa subjudul, hilangkan nomor bagian dan keterangan berulang. Field/textarea dan jarak vertikal lebih ringkas; HP tetap satu kolom dengan input 44px. Kontrak CSRF/profil/unggah tetap. PHP lint/struktur CSS/diff lulus; browser belum diuji.
+
+
+### Jadwal Sarasehan Industri
+- Daftar memakai header batik ringkas, filter sejajar, tabel bergaris dengan header melekat/scroll internal, 10 kegiatan per halaman, ikon sejajar dan tombol Detail/Edit berwarna. Filter tetap dipertahankan di pagination. Empty state membedakan belum ada data dan hasil filter kosong. Tambah jadwal tidak ditampilkan sebelum migrasi modul tersedia.
+- Memeriksa alur form/detail/helper: validasi tanggal, jam WIB, URL http/https, lokasi atau tautan wajib, minimal satu mitra perusahaan dan PIC, CSRF serta version lock tetap tersedia. Tidak menambah fitur hapus atau mengubah SQL.
+- Lint 4 PHP dan uji validasi jadwal/tanggal/jam/URL/lokasi/undangan lulus. Struktur CSS dan diff check lulus. Simpan/edit database, ekspor dan browser operasional belum diuji pada perubahan ini.
+
+- Form tambah/edit sarasehan dirapikan menjadi kegiatan/waktu di kiri dan lokasi/tautan di kanan; tabel undangan bergaris dengan scroll internal dan ikon sejajar. Header batik, tombol simpan hijau, label ringkas. Keterangan panjang diganti petunjuk singkat yang diperlukan untuk lokasi/PIC dan risiko pencarian memuat ulang. Kontrak field, CSRF, version dan penyimpanan tetap. Lint PHP, struktur CSS dan kontrak field lulus; browser belum diuji.
+
+- Detail sarasehan: header batik dengan tindakan Daftar/Edit/Rekap Excel dikelompokkan, ringkasan tanggal/jam/lokasi/PIC bergaris dua kolom, tautan membungkus, tabel undangan bergaris/header melekat/scroll internal, jumlah mitra dan empty state. HP satu kolom, dark mode tersedia. Izin, escaping dan ekspor tetap. Lint PHP, struktur CSS/diff lulus; browser belum diuji.
+
+
+### Kotak Ide Industri: daftar dan alur
+- Daftar usulan memakai header batik ringkas, tombol Tautan pengiriman mitra, keterangan privasi singkat, filter status+Reset, status berwarna, tombol Baca usulan, tabel Excel/header melekat/scroll internal dan 10 usulan per halaman. CSS khusus idea-list-page mendukung mobile/dark mode. Query daftar tetap tidak mengambil isi/kontak.
+- Alur ditinjau: tautan satu kali terikat mitra aktif, token hash/kedaluwarsa/pencabutan, validasi persetujuan/kontak, detail berizin dan perubahan status POST+CSRF/version. Halaman tautan diberi no-store; tombol Cabut memakai formnovalidate agar tidak terhalang field jam yang hanya relevan untuk pembuatan. Server tetap memvalidasi aksi/izin.
+- Lint dua PHP, seluruh app/tests/industry-forums-ideas.php, struktur CSS/diff lulus. Transaksi database, pengiriman tautan riil dan browser operasional belum diuji pada revisi ini. Tanpa SQL/perubahan database.
+
+- Pilihan perusahaan pada Tautan khusus mitra kini berupa tabel bergaris dengan status aktif/nonaktif dan tombol Kelola tautan, bukan daftar bullet. Header batik, filter cari/reset, 10 mitra per halaman, scroll internal dan pagination mempertahankan pencarian. Validasi pencarian sebelum output. Alur pembuatan/pencabutan dan izin tetap. Lint PHP, struktur CSS/diff dan pemeriksaan CSRF/no-store lulus; browser/database belum diuji.
+
+- Detail tautan mitra diringkas: identitas perusahaan dan Ganti perusahaan, masa berlaku kecil, tombol Buat hijau/Cabut merah sejajar, URL readonly dalam bagian terpisah dan riwayat bergaris dengan header melekat/scroll. Penjelasan panjang diganti satu catatan sekali kirim/pencabutan, peringatan salin URL tetap. Mobile/dark mode dan empty state tersedia. CSRF/no-store/alur token tetap. Lint PHP/struktur CSS/diff lulus; browser belum diuji.
+
+- Halaman Pengguna memakai seluruh lebar konten panel, menghapus max-width 1150px dan margin tengah. Header, catatan dan sel tabel dipadatkan; tombol HP tetap 44px. Data/izin/aktivasi akun tidak diubah. PHP lint, struktur CSS dan diff check lulus; tampilan browser belum diuji.
+
+- Tambah/edit Pengguna memakai seluruh lebar konten panel. Identitas di kiri dan foto opsional di kanan, izin/password/tindakan tetap selebar lembar, garis pemisah rapi, jarak lebih padat dan nomor bagian/subjudul dibuang. Mobile satu kolom dan input 44px tetap. Tidak mengubah field/CSRF/izin/handler akun. Lint PHP, struktur CSS dan diff lulus; browser belum diuji.
+
+- Form pengguna direvisi menjadi dua kolom seimbang: identitas/role/password awal di kiri, foto dan izin Staf BKK di kanan. Tombol Batal/Simpan satu baris bawah selebar lembar. Reset password akun lama tetap formulir terpisah untuk menjaga tindakan tidak tercampur. Mobile satu kolom, izin memakai scroll internal. Field/CSRF/handler tetap. Lint PHP, pemeriksaan urutan kolom dan struktur CSS/diff lulus; browser belum diuji.
+
+- Pemadatan lanjutan form pengguna: padding/jarak/tinggi input desktop diperkecil, keterangan berulang diringkas, area izin dibatasi 190px dengan scroll internal agar tinggi kolom lebih seimbang. Tombol tetap di bawah, target HP 44px dipertahankan. Tanpa perubahan izin/handler/data. PHP lint, struktur CSS dan diff check lulus; browser belum diuji.
+
+- Footer publik dan panel diberi latar batik sekolah lokal melalui bmw.css bersama. Overlay navy pada publik, terang pada panel dan gelap mengikuti tema; tinggi/padding footer tidak ditambah. Background cetak dimatikan. Struktur CSS, HTTP aset batik/CSS dan diff check lulus; tampilan browser belum diuji.
+
+- Copyright footer publik dan panel diseragamkan menjadi &copy; BKK SMKS JAYA BUANA v.1.2.2 sesuai permintaan. Latar batik tetap. Lint kedua layout PHP lulus.

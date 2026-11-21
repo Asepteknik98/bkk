@@ -14,7 +14,7 @@
         </nav>
     </div>
     <div class="container portal-container footer-compact-bottom">
-        <span>&copy; BKK SMKS JAYA BUANA 2026</span>
+        <span>&copy; BKK SMKS JAYA BUANA v.1.2.2</span>
         <nav class="footer-meta-links" aria-label="Media sosial BKK">
             <?php foreach (social_networks() as $key=>$label): $socialUrl=setting($key); if ($socialUrl && http_url($socialUrl)): ?>
             <a href="<?= e($socialUrl) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= e($label) ?> (tab baru)" title="<?= e($label) ?>"><?= social_icon($key) ?></a>

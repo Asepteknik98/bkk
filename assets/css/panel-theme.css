@@ -1976,11 +1976,11 @@ html[data-theme=dark] .panel-page .applications-inbox .application-actions>a.app
 .settings-choice-sheet textarea:focus-visible { outline:none; }
 html[data-theme=dark] .settings-choice-sheet { --sheet-line:#405366; }
 html[data-theme=dark] .settings-sheet-header { background:#253c34; color:#b6ddc7; }
-.users-list-page { max-width:1150px; margin:auto; }
-.users-list-page .page-actions { align-items:center; gap:14px; margin-bottom:14px; }
-.users-list-page .page-actions h1 { margin:0; font-size:1.25rem; }
-.users-list-page .page-actions>a { min-height:44px; border-radius:7px; padding:10px 14px; font-size:.8rem; }
-.users-list-page .users-note { display:flex; align-items:flex-start; gap:8px; padding:12px 14px; margin:0 0 16px; border:1px solid var(--panel-line); border-radius:6px; background:var(--panel-surface); color:var(--panel-muted); font-size:.78rem; line-height:1.65; }
+.users-list-page { width:100%; max-width:none; min-width:0; margin:0; }
+.users-list-page .page-actions { align-items:center; gap:8px; margin-bottom:8px; }
+.users-list-page .page-actions h1 { margin:0; font-size:1.1rem; }
+.users-list-page .page-actions>a { min-height:36px; border-radius:4px; padding:7px 10px; font-size:.75rem; }
+.users-list-page .users-note { display:flex; align-items:center; gap:6px; padding:7px 10px; margin:0 0 8px; border:1px solid var(--panel-line); border-radius:4px; background:var(--panel-surface); color:var(--panel-muted); font-size:.72rem; line-height:1.5; }
 .users-list-page .users-note>.panel-icon { margin-top:2px; }
 .users-list-page .users-sheet { max-height:420px; overflow:auto; }
 .users-list-page .users-sheet table { min-width:900px; }
@@ -1988,7 +1988,8 @@ html[data-theme=dark] .settings-sheet-header { background:#253c34; color:#b6ddc7
 .users-list-page .users-sheet th>span { display:flex; align-items:center; gap:7px; white-space:nowrap; font-size:.77rem; }
 .users-list-page .users-sheet th:nth-child(3),.users-list-page .users-sheet th:nth-child(4) { width:115px; }
 .users-list-page .users-sheet th:last-child { width:275px; }
-.users-list-page .users-sheet td { font-size:.79rem; }
+.users-list-page .users-sheet :is(th,td) { padding:8px 10px; vertical-align:middle; }
+.users-list-page .users-sheet td { font-size:.76rem; }
 .users-list-page .users-sheet td:nth-child(2) { overflow-wrap:anywhere; }
 .users-list-page .user-identity>div { min-width:0; }
 .users-list-page .user-identity strong { overflow-wrap:anywhere; }
@@ -1996,14 +1997,14 @@ html[data-theme=dark] .settings-sheet-header { background:#253c34; color:#b6ddc7
 .users-list-page .user-role,.users-list-page .user-status { display:inline-flex; gap:5px; align-items:center; border:1px solid var(--panel-line); border-radius:5px; padding:5px 8px; font-size:.72rem; white-space:nowrap; }
 .users-list-page .user-role.is-admin { color:#2456a6; background:#eef4ff; border-color:#c9dafa; }
 .users-list-page .user-role.is-staff { color:#6b4393; background:#f6f0fb; border-color:#ddcdeb; }
-.users-list-page .row-actions { display:flex; align-items:center; flex-wrap:nowrap; gap:7px; }
+.users-list-page .row-actions { display:flex; align-items:center; flex-wrap:nowrap; gap:6px; }
 .users-list-page .row-actions>form { display:inline-flex; margin:0; padding:0; background:transparent; border:0; }
 .panel-page .users-list-page .row-actions>a,.panel-page .users-list-page .row-actions button { min-height:36px; height:36px; padding:8px 10px; margin:0; border-radius:6px; font-size:.75rem; line-height:1; white-space:nowrap; }
 .users-list-page :is(a,button):focus-visible { outline:2px solid #438dce; outline-offset:3px; }
 html[data-theme=dark] .users-list-page .user-role.is-admin { color:#b7d2ff; background:#1b2d49; border-color:#3c587e; }
 html[data-theme=dark] .users-list-page .user-role.is-staff { color:#e1c7fa; background:#30233f; border-color:#67507e; }
-@media(max-width:700px) { .panel-page .users-list-page .row-actions>a,.panel-page .users-list-page .row-actions button { min-height:44px; height:44px; }.users-list-page .page-actions>a { margin-left:auto; } }
-.panel-page .account-editor-structured { max-width:1000px; margin:auto; }
+@media(max-width:700px) { .panel-page .users-list-page .row-actions>a,.panel-page .users-list-page .row-actions button { min-height:44px; height:44px; }.users-list-page .page-actions>a { margin-left:auto; min-height:44px; } }
+.panel-page .account-editor-structured { width:100%; max-width:none; min-width:0; margin:0; }
 .account-editor-structured .page-actions { align-items:center; gap:14px; }
 .account-editor-structured .account-editor-intro { margin:8px 0 0; color:var(--panel-muted); font-size:.8rem; line-height:1.6; }
 .panel-page .account-editor-structured .account-editor { display:block; padding:0; overflow:hidden; }
