@@ -1116,3 +1116,9 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Footer publik dan panel diberi latar batik sekolah lokal melalui bmw.css bersama. Overlay navy pada publik, terang pada panel dan gelap mengikuti tema; tinggi/padding footer tidak ditambah. Background cetak dimatikan. Struktur CSS, HTTP aset batik/CSS dan diff check lulus; tampilan browser belum diuji.
 
 - Copyright footer publik dan panel diseragamkan menjadi &copy; BKK SMKS JAYA BUANA v.1.2.2 sesuai permintaan. Latar batik tetap. Lint kedua layout PHP lulus.
+
+- Grafik kelengkapan PKL diberi animasi reveal kiri-ke-kanan saat pertama terlihat dan kilau halus 2 putaran (4 detik). Persentase/lebar dari server tetap, tidak mengulang tanpa henti, menghormati reduced-motion dan cetak. JS tanpa IntersectionObserver tetap menampilkan grafik. node --check/struktur CSS/diff lulus; animasi browser belum diuji.
+
+- Angka persentase kelengkapan PKL memakai badge hijau menyatu, angka tebal tabular, simbol persen proporsional dan count-up satu kali 1,1 detik saat terlihat. Nilai server dan label aksesibel tetap, tanpa data menampilkan strip; reduced-motion/print menampilkan nilai akhir. Lint PHP/node/struktur CSS/diff lulus; browser belum diuji.
+
+- Akun Pribadi memakai seluruh lebar konten, panel foto lebih lapang agar file input tidak terpotong berlebihan, identitas ringkas bergaris, padding/header/tombol dipadatkan. Mobile satu kolom dan tombol/input 44px. Hanya CSS bmw.css, proses simpan/CSRF/unggah tidak diubah. Lint PHP/struktur CSS/diff lulus; browser belum diuji.

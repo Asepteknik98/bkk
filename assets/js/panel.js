@@ -360,3 +360,33 @@ document.querySelectorAll('[data-partner-filters], .partner-editor').forEach(for
     }, { threshold: 0.2 });
     bars.forEach(bar => observer.observe(bar));
 })();
+// Count once without altering the accessible, server-rendered percentage.
+(() => {
+    const nodes = document.querySelectorAll('[data-pkl-count]');
+    if (!nodes.length || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const formatter = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    let printing = false;
+    window.addEventListener('beforeprint', () => {
+        printing = true;
+        nodes.forEach(node => { node.textContent = formatter.format(Number(node.dataset.pklCount)); });
+    });
+    const animate = node => {
+        const value = Number(node.dataset.pklCount);
+        if (!Number.isFinite(value) || value < 0 || value > 100 || printing) return;
+        const start = performance.now();
+        const step = now => {
+            if (printing) return;
+            const progress = Math.min(1, (now - start) / 1100);
+            node.textContent = formatter.format(value * (1 - Math.pow(1 - progress, 3)));
+            if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+    };
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { animate(entry.target); observer.unobserve(entry.target); }
+        });
+    }, { threshold: 0.3 });
+    nodes.forEach(node => observer.observe(node));
+})();
