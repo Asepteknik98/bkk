@@ -1051,3 +1051,21 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Komponen bersama connection-assets.php memuat CSS/JS lokal pada layout publik, panel dan login. Banner ringkas responsif dengan ikon, status aksesibel, offline sejak awal dan event perubahan koneksi browser.
 - Setelah jaringan kembali, tampil tombol Muat ulang dan pengingat menyalin isian belum disimpan. Tidak reload otomatis; navigasi GET menghindari pengiriman ulang POST. Tidak menambah penyimpanan offline, service worker atau SQL. Status jaringan browser tidak menjamin server/internet dapat dijangkau; halaman yang belum pernah dimuat tetap mengikuti halaman error browser saat offline.
 - Lint 4 PHP, node --check, uji state JS online/offline/reconnect/tombol dan HTTP publik/login lulus. Putus-sambung jaringan perangkat fisik belum diuji.
+
+
+### Detail mitra ringkas ? 21 November 2026
+- Merapikan panel/mitra/detail.php dan CSS terisolasi di bmw.css: header batik lembut, tombol berikon/warna, identitas-logo kecil, profil dan PIC dua kolom, tabel definisi bergaris seperti Excel, deskripsi terpisah. Mobile menjadi satu kolom; alamat/URL panjang membungkus. Mendukung dark mode.
+- PIC tetap internal dan akses/izin MoU serta Kotak Ide tetap diperiksa. Tidak mengubah data, handler, atau SQL. Tampilan kampus tidak menampilkan klaster perusahaan.
+- PHP lint, struktur kurung CSS, pemeriksaan escaping/izin dan git diff --check lulus. Tampilan browser dengan akun pengelola belum diverifikasi pada perubahan ini.
+
+
+### Formulir mitra terstruktur ? 21 November 2026
+- Form bersama tambah/edit mitra kini berupa lembar bergaris: identitas dan profil di kiri, PIC serta status/logo di kanan; satu kolom di HP. Header batik lembut, tombol berikon, label jelas dan logo ringkas. CSS khusus partner-form-sheet mendukung dark mode.
+- Mempertahankan nama field, nilai lama, CSRF, version/profile_complete, helper unggah dan selector JS jenis/klaster/bidang usaha. Tidak mengubah penyimpanan, database atau izin.
+- Lint PHP, pemeriksaan kontrak field/CSRF/helper gambar, struktur CSS dan git diff --check lulus. Browser login pengelola dan unggah aktual belum diuji pada perubahan desain ini.
+
+
+### Desain riwayat MoU ? 21 November 2026
+- panel/mou/index.php memakai header batik ringkas, tombol berikon/warna, petunjuk status yang dapat dibuka, filter sejajar, tabel bergaris dengan header melekat dan scroll internal. Label status aktif/belum berlaku/kedaluwarsa berbeda warna, tindakan perpanjang/unduh jelas, empty state memberi petunjuk. CSS terisolasi mou-list-page mendukung HP dan dark mode.
+- Query, filter mitra, pagination 20 dokumen, perhitungan tanggal WIB, izin dan endpoint dokumen privat tetap dipertahankan. Tanpa perubahan SQL atau data.
+- PHP lint, struktur CSS dan git diff --check lulus; tampilan browser dengan akun pengelola belum diuji pada perubahan ini.
