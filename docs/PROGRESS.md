@@ -868,3 +868,19 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 ## Batas jurnal PKL (21 November 2026)
 
 - Jurnal harian di detail PKL menjadi 5 data per halaman, navigasi maksimal 5 nomor dengan Sebelumnya/Berikutnya. Scroll vertikal/horizontal tabel dan header melekat tetap tersedia; rekap mingguan tetap mencakup semua jurnal. File panel/pkl/detail.php. Tanpa SQL. Lint PHP, pemeriksaan batas pagination sintetis dan diff check lulus.
+
+
+## Garis ringkasan detail PKL (21 November 2026)
+
+- Dua sisi ringkasan memakai baris CSS subgrid bersama agar garis horizontal sejajar meski alamat panjang. Garis label/nilai tetap utuh sampai akhir baris. Pada layar kecil bagian ditumpuk kembali dengan garis pemisah masing-masing. Hanya assets/css/panel-theme.css; tanpa SQL/logika data. Pemeriksaan diff dan struktur CSS lulus; tampilan browser belum diverifikasi langsung.
+
+
+## Form laporan akhir dua kolom (21 November 2026)
+
+- Laporan akhir PKL disusun kiri Pelaksanaan & hasil (tanggal, ringkasan, kompetensi) dan kanan Evaluasi & kesimpulan (kendala, saran, kesimpulan). Header batik ringkas, identitas terpisah, garis sel Excel, ikon, tombol simpan di bawah. HP satu kolom, input 16px dan tindakan minimal 44px.
+- Backend, validasi, CSRF, versi data dan unduhan tetap. File panel/pkl/laporan.php, assets/css/panel-theme.css. Tanpa SQL. Lint PHP/diff check dan render sintetis dua kolom/lima textarea/escaping/CSRF/version/tautan unduh lulus. Tampilan browser belum diuji langsung.
+
+
+## Garis form laporan sejajar (21 November 2026)
+
+- Kedua kolom laporan berbagi empat baris CSS subgrid (judul + tiga baris isian). Garis horizontal mengikuti tinggi terbesar pasangan isian, termasuk saat textarea diperbesar; kontrol tetap rata atas. Pada HP kembali satu kolom. File assets/css/panel-theme.css; tanpa perubahan PHP/SQL. Struktur CSS dan diff check lulus; browser belum diuji langsung.
