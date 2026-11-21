@@ -8,7 +8,7 @@ $tripNext=$continueTrip?['lanjut'=>'perjalanan']:[];
 $id=positive_id($_GET['id']??'');if(isset($_GET['id'])&&!$id){panel_not_found();}
 $old=null;if($id){try{$old=pkl_find($id);}catch(InvalidArgumentException){panel_not_found();}}
 $locationReady=pkl_points_ready();
-$data=$old?pkl_input(array_map('strval',$old)):pkl_input(['status'=>'aktif']);$errors=[];$version=(int)($old['version']??0);
+$data=$old?pkl_input(array_map('strval',$old)):pkl_input(['status'=>pkl_status_ready()?'belum':'aktif']);$errors=[];$version=(int)($old['version']??0);
 if($old&&$locationReady){$savedPoint=panel_query('SELECT latitude,longitude FROM pkl_location_points WHERE placement_id=:id',['id'=>$id])->fetch();if($savedPoint){$data=array_replace($data,$savedPoint);}}
 $studentId=$old?(int)$old['siswa_id']:(positive_id($_GET['siswa_id']??'')??0);
 $batchStudents=[];$batchIds=[];$isBatch=false;$replaceStudentId=null;$replacementRows=[];$replacementSearch='';
@@ -112,7 +112,8 @@ panel_start($user,$id?'Edit penempatan PKL':'Tambah penempatan PKL','pkl');
 <?php if($key==='tempat_pkl'){require APP_ROOT.'/app/layouts/pkl-location-picker.php';} ?>
 <div class="pkl-placement-cell <?= in_array($key,['tempat_pkl','alamat_lengkap','status'],true)?'pkl-placement-wide':'' ?>"><label for="<?= $key ?>"><?= panel_icon($pklFieldIcons[$key]) ?> <?= e($label) ?><?= !in_array($key,['kelas','jurusan','status'],true)?' *':'' ?></label>
 <?php if($key==='alamat_lengkap'): ?><textarea id="<?= $key ?>" name="<?= $key ?>" maxlength="<?= $max ?>" rows="2" required placeholder="Jalan, desa/kelurahan, kecamatan, kabupaten/kota, provinsi, kode pos"><?= e($data[$key]) ?></textarea>
-<?php elseif($key==='status'): ?><select id="status" name="status"><?php foreach(['aktif'=>'Aktif','selesai'=>'Selesai','arsip'=>'Arsip'] as $keyStatus=>$labelStatus): ?><option value="<?= $keyStatus ?>" <?= $data['status']===$keyStatus?'selected':'' ?>><?= $labelStatus ?></option><?php endforeach; ?></select>
+<?php elseif($key==='status'): ?><select id="status" name="status"><?php foreach(pkl_status_ready()?pkl_status_options($old&&$old['status']==='arsip'):['aktif'=>'Aktif','selesai'=>'Selesai','arsip'=>'Arsip'] as $keyStatus=>$labelStatus): ?><option value="<?= $keyStatus ?>" <?= $data['status']===$keyStatus?'selected':'' ?>><?= $labelStatus ?></option><?php endforeach; ?></select>
+<?php if(pkl_status_ready()): ?><label for="status-reason">Alasan / catatan status<?= $old?' (wajib jika status berubah)':' (wajib untuk Gagal PKL)' ?></label><textarea id="status-reason" name="status_reason" maxlength="2000" rows="2"><?= e($data['status_reason']) ?></textarea><small>Gagal PKL dapat berarti batal berangkat atau berhenti di tengah PKL; jelaskan pada alasan. Status tidak berubah otomatis berdasarkan tanggal.</small><?php endif; ?>
 <?php else: ?><input id="<?= $key ?>" name="<?= $key ?>" type="<?= str_starts_with($key,'tanggal_')?'date':'text' ?>" maxlength="<?= $max ?>" value="<?= e($data[$key]) ?>" <?= in_array($key,['kelas','jurusan'],true)?'':'required' ?>><?php endif; ?></div><?php if($key==='alamat_lengkap'){require APP_ROOT.'/app/layouts/pkl-location-map.php';} ?><?php endforeach; ?><?php endforeach; ?></div><?php endforeach; ?>
 <div class="pkl-placement-footer"><small>* Wajib diisi. <?= $isBatch?'Kelas/jurusan mengikuti data masing-masing siswa.':'Isi minimal kelas atau jurusan.' ?> Nama pembimbing tidak membuat akun.</small><button type="submit" <?= $replaceStudentId?'disabled':'' ?>><?= panel_icon('save') ?> <?= $isBatch?'Simpan '.count($batchStudents).' penempatan':($continueTrip?'Simpan & lanjut ke perjalanan':'Simpan penempatan') ?></button></div></form><?php endif; ?>
 </div>

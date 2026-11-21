@@ -270,7 +270,7 @@ if (document.querySelector('.panel-page')) {
         path.setAttribute('d',paths[name]); svg.append(path); element.prepend(svg);
     };
     document.querySelectorAll('.panel-content h1, .panel-content h2, .panel-content label, .panel-content th, .panel-content button, .panel-content .button, .panel-content .row-actions a, .panel-content .page-actions a, .panel-content .form-actions a, .panel-content .pagination a, .panel-content .filter-form > a, .bmw-admin .table-scroll td:last-child > a').forEach(element => {
-        if (element.querySelector('svg') || element.matches('.wa-selection label, .pkl-multi-choice, .schedule-multi-choice') || element.closest('.donut-legend, .fan-legend') || element.classList.contains('sr-only')) return;
+        if (element.querySelector('svg') || element.matches('.wa-selection label, .pkl-multi-choice, .schedule-multi-choice, .pkl-journal-pagination a:not([rel])') || element.closest('.donut-legend, .fan-legend') || element.classList.contains('sr-only')) return;
         if (element.closest('.bmw-admin') && element.matches('label,th')) return;
         const text = element.cloneNode(true);
         text.querySelectorAll('input,select,textarea,small,.badge').forEach(child => child.remove());

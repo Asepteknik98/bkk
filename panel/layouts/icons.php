@@ -13,6 +13,7 @@ function panel_icon(string $name): string
         'edit'=>'<path d="m15 4 5 5M4 20l5-1L21 7a2.1 2.1 0 0 0-5-5L4 14l-1 7 6-2"/>',
         'check-circle'=>'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
         'search'=>'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+        'history'=>'<path d="M3 11a9 9 0 1 1 2.7 7M3 4v7h7M12 7v5l3 2"/>',
         'reset'=>'<path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/>',
         'trash'=>'<path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/>',
         'save'=>'<path d="M4 3h13l4 4v14H3V3h1Zm3 0v6h10V3M7 21v-8h10v8M14 3v4"/>',

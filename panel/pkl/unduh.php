@@ -14,6 +14,7 @@ try{
 }catch(Throwable $exception){if(db()->inTransaction()){db()->rollBack();}throw $exception;}
 header('Cache-Control: no-store');header('X-Content-Type-Options: nosniff');
 if($type==='rekap'){
+    $placement['status']=pkl_status_label($placement['status']);
     $summary=[];foreach($weeks as $week){$week['kegiatan']=implode("\n",$week['kegiatan']);$week['catatan']=implode("\n",$week['catatan']);$summary[]=$week;}
     excel_download('rekap-pkl-'.$id.'.xlsx',[
         ['name'=>'Penempatan','columns'=>['nama'=>'Siswa']+array_map(static fn($meta)=>$meta[0],pkl_fields()),'rows'=>[$placement]],

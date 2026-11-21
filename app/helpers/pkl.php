@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__.'/participants.php';
 require_once __DIR__.'/pkl-locations.php';
+require_once __DIR__.'/pkl-status.php';
 
 function pkl_ready(): bool
 {
@@ -32,6 +33,7 @@ function pkl_input(array $input): array
 {
     $data=['siswa_id'=>input_text($input,'siswa_id')];
     foreach(pkl_fields() as $key=>$meta){$data[$key]=input_text($input,$key);}
+    $data['status_reason']=input_text($input,'status_reason');
     $data['latitude']=input_text($input,'latitude');$data['longitude']=input_text($input,'longitude');
     return $data;
 }
@@ -46,7 +48,7 @@ function pkl_errors(array $data): array
     if($data['kelas']===''&&$data['jurusan']===''){$errors[]='Isi kelas atau jurusan siswa.';}
     if(!pkl_date($data['tanggal_mulai'])||!pkl_date($data['tanggal_selesai'])){$errors[]='Periode PKL harus berupa tanggal valid (1900–2199).';}
     elseif($data['tanggal_selesai']<$data['tanggal_mulai']){$errors[]='Tanggal selesai tidak boleh sebelum tanggal mulai.';}
-    if(!in_array($data['status'],['aktif','selesai','arsip'],true)){$errors[]='Status PKL tidak valid.';}
+    if(!in_array($data['status'],pkl_status_ready()?array_keys(pkl_status_options(true)):['aktif','selesai','arsip'],true)){$errors[]='Status PKL tidak valid.';}
     return $errors;
 }
 
@@ -59,9 +61,12 @@ function pkl_find(int $id,bool $lock=false): array
 function pkl_save(array $data,?int $id,int $version,int $actor): int
 {
     if($errors=pkl_errors($data)){throw new InvalidArgumentException(implode(' ',$errors));}
-    $point=pkl_point_input($data);unset($data['latitude'],$data['longitude']);
+    $point=pkl_point_input($data);$reason=$data['status_reason']??'';unset($data['latitude'],$data['longitude'],$data['status_reason']);
     db()->beginTransaction();
     try{
+        panel_query('SELECT id FROM siswa WHERE id=:id FOR UPDATE',['id'=>(int)$data['siswa_id']])->fetchColumn();
+        $isNew=$id===null;
+        if($isNew&&pkl_status_ready()&&$data['status']==='arsip'){throw new InvalidArgumentException('Pilih salah satu dari empat status PKL untuk penempatan baru.');}
         if($id){
             $old=pkl_find($id,true);
             if((int)$old['version']!==$version){throw new InvalidArgumentException('Penempatan sudah diubah pengelola lain. Muat ulang sebelum menyimpan.');}
@@ -88,6 +93,7 @@ function pkl_save(array $data,?int $id,int $version,int $actor): int
             panel_query('INSERT INTO pkl_placements('.$keys.',created_by,updated_by) VALUES(:'.$params.',:creator,:editor)',$data+['creator'=>$actor,'editor'=>$actor]);$id=(int)db()->lastInsertId();
         }
         pkl_store_point($id,$point);
+        pkl_record_status($id,$isNew?null:$old['status'],$data['status'],$reason,$isNew?1:$version+1,$actor);
         db()->commit();return $id;
     }catch(Throwable $exception){if(db()->inTransaction()){db()->rollBack();}throw $exception;}
 }
@@ -201,6 +207,7 @@ function pkl_save_batch(mixed $ids, array $input, int $actor): array
         foreach ($students as $student) {
             $entry = pkl_input($input);
             $entry['siswa_id'] = (string)$student['id'];
+            if(pkl_status_ready()&&$entry['status']==='arsip'){throw new InvalidArgumentException('Arsip hanya untuk data lama. Pilih status PKL siswa.');}
             $entry['kelas'] = (string)$student['kelas'];
             $entry['jurusan'] = (string)$student['jurusan'];
             if ($errors = pkl_errors($entry)) { throw new InvalidArgumentException($student['nama'].': '.implode(' ', $errors)); }
@@ -211,12 +218,13 @@ function pkl_save_batch(mixed $ids, array $input, int $actor): array
         }
         $saved = [];
         foreach ($entries as $entry) {
-            unset($entry['latitude'],$entry['longitude']);
+            unset($entry['latitude'],$entry['longitude'],$entry['status_reason']);
             $entry['siswa_id'] = (int)$entry['siswa_id'];
             $keys = implode(',', array_keys($entry));
             $values = implode(',:', array_keys($entry));
             panel_query('INSERT INTO pkl_placements('.$keys.',created_by,updated_by) VALUES(:'.$values.',:creator,:editor)', $entry+['creator'=>$actor,'editor'=>$actor]);
             $savedId=(int)db()->lastInsertId();pkl_store_point($savedId,$point);
+            pkl_record_status($savedId,null,$entry['status'],input_text($input,'status_reason'),1,$actor);
             $saved[] = $savedId;
         }
         db()->commit();
@@ -233,7 +241,7 @@ function pkl_list_filters(array $input): array
 {
     foreach(['q','status'] as $key){if(isset($input[$key])&&!is_string($input[$key])){throw new InvalidArgumentException('Filter PKL tidak valid.');}}
     $q=input_text($input,'q');$status=input_text($input,'status');
-    if(!valid_text($q,100,false)||!in_array($status,['','aktif','selesai','arsip'],true)){throw new InvalidArgumentException('Filter PKL tidak valid.');}
+    if(!valid_text($q,100,false)||!in_array($status,array_merge([''],array_keys(pkl_status_options(true))),true)){throw new InvalidArgumentException('Filter PKL tidak valid.');}
     $where='1=1';$params=[];
     if($q!==''){
         $pattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$q).'%';

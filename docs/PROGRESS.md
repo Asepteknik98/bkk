@@ -884,3 +884,50 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 ## Garis form laporan sejajar (21 November 2026)
 
 - Kedua kolom laporan berbagi empat baris CSS subgrid (judul + tiga baris isian). Garis horizontal mengikuti tinggi terbesar pasangan isian, termasuk saat textarea diperbesar; kontrol tetap rata atas. Pada HP kembali satu kolom. File assets/css/panel-theme.css; tanpa perubahan PHP/SQL. Struktur CSS dan diff check lulus; browser belum diuji langsung.
+
+
+## Navigasi jurnal berwarna (21 November 2026)
+
+- Pagination jurnal memakai nomor biru muda, halaman aktif biru navy, tombol arah hijau lembut dengan ikon panah lokal. Ikon dokumen otomatis pada nomor dihilangkan khusus navigasi ini. Batas 5 data/5 nomor dan parameter tautan tetap. Target HP minimal 44px, dukungan dark mode. File detail.php, panel-theme.css, panel.js. Lint PHP/JS dan diff check lulus; tampilan browser belum diuji langsung.
+
+
+## Rekap mingguan jelas dan bernavigasi (21 November 2026)
+
+- Label Minggu/tahun dan rentang tanggal diperjelas; jumlah hari berwarna dengan penjelasan bukan kehadiran. Rincian kegiatan/catatan memakai tombol disclosure berikon, jumlah entri dan daftar bergaris; catatan kosong eksplisit.
+- Rekap terbaru dahulu, maksimal 5 minggu per halaman dan 5 nomor navigasi berwarna. Parameter week_page terpisah dari page jurnal; navigasi keduanya mempertahankan parameter pasangan. Tabel tetap scroll dengan header melekat; total/Excel tetap seluruh data.
+- File panel/pkl/detail.php, assets/css/panel-theme.css. Tanpa SQL. Lint PHP/diff check dan render sintetis 7 minggu (5 tampil, halaman berikut, terbaru dahulu, escape HTML, catatan kosong) lulus. Tampilan browser belum diuji langsung.
+
+
+## Empat status siswa PKL dan riwayat (21 November 2026)
+
+- Status yang tersedia: Sedang PKL (nilai internal aktif untuk kompatibilitas), Belum PKL (belum), Gagal PKL (gagal), PKL selesai (selesai). Arsip lama tetap dipertahankan dan diberi label perlu ditinjau, tidak diubah menjadi gagal. Status bersifat pencatatan pengelola; tanggal atau simpan laporan tidak otomatis mengubahnya.
+- Halaman baru panel/pkl/status-siswa.php ditautkan dari daftar dan detail PKL. Satu baris per siswa, termasuk siswa tanpa penempatan (Belum PKL). Status keseluruhan mengikuti penempatan terakhir yang dicatat (ID terbesar), bukan menimpa penempatan sebelumnya. Riwayat tempat/tahun lama pada siswa tidak dianggap bukti selesai. Ringkasan seluruh siswa, pencarian nama/kelas, filter status, 10 data per halaman, maksimal 5 nomor navigasi berwarna, tabel scroll/header melekat.
+- Detail siswa menyediakan perubahan status penempatan terakhir dengan alasan wajib, versi data, serta riwayat seluruh penempatan (waktu WIB, sebelum/sesudah, alasan, pengelola, tautan penempatan). Status sama tidak membuat riwayat palsu. Gagal mencakup batal berangkat/berhenti pelaksanaan sesuai alasan. Penempatan ulang dibuat baru agar kegagalan sebelumnya tetap terlihat. Tanpa penempatan, buat penempatan dahulu sebelum mencatat pelaksanaan/gagal/selesai.
+- Integrasi pkl_save dan pkl_save_batch mencatat status awal/perubahan dalam transaksi yang sama dengan penempatan dan koordinat. Perubahan status pada form lama wajib alasan; edit metadata tanpa perubahan status tidak menambah event. Lock siswa/penempatan dan version check menolak benturan; handler mengikat penempatan terakhir ke siswa yang dipilih. Riwayat tidak menyediakan edit/hapus. Form penempatan baru memilih Belum PKL secara default setelah migrasi; batch tetap atomik. Label/filter/rekap Excel/laporan mengikuti empat status.
+- SQL TERPISAH: database/updates/027_pkl_status_history.sql. Prasyarat tabel siswa/users dan migrasi 019. Memperluas enum tanpa mengganti nilai lama, membuat pkl_status_history dengan FK RESTRICT dan indeks versi unik, serta snapshot awal. Snapshot jelas diberi waktu saat impor, tidak mengarang tanggal/pengelola masa lalu. Pengujian impor ulang tidak menggandakan baseline/riwayat. Tidak mengubah bkk_jaya_buana.sql atau migrasi lama.
+- Cara mengaktifkan: backup database, pilih database aplikasi pada phpMyAdmin, impor hanya 027_pkl_status_history.sql, lalu Panel > PKL > Status siswa & riwayat. JANGAN mengimpor ulang SQL instalasi awal. SQL ini belum dijalankan pada database operasional. Sebelum impor, penyimpanan penempatan lama tetap bekerja dan halaman status memberi petunjuk migrasi. Jangan memproses perubahan data saat impor.
+- File utama: app/helpers/pkl-status.php (baru), app/helpers/pkl.php, panel/pkl/status-siswa.php (baru), form.php, index.php, detail.php, rekap-excel.php, unduh.php, app/layouts/pkl-report.php, assets/css/panel-theme.css. Tidak menambah dependency atau mengubah modul lain.
+- Validasi: MariaDB 10.4 terisolasi, migrasi 019 + 027, 26 assertion untuk empat status, snapshot/idempotensi, alasan, versi lama, siswa salah, status invalid/sama, rollback, penempatan ulang, batch dan status siswa terakhir. Middleware autentikasi/role/izin asli pada database sintetis memverifikasi tamu ditolak, admin boleh, staf perlu izin PKL+peserta, akun nonaktif ditolak; CSRF valid/invalid diuji. Handler POST asli, redirect, escaping alasan HTML dan query/render daftar/filter/riwayat/tanpa penempatan lulus. XLSX asli diperiksa ZIP/XML: seluruh 5 penempatan dan label empat status. Kompatibilitas sebelum migrasi lulus. Lint 16 PHP terkait, node --check dan diff check lulus. Chrome headless fixture sintetis desktop dan lebar 390px diperiksa; tabel scroll tanpa memanjangkan daftar. Login/browser end-to-end di situs operasional belum dilakukan. Server MariaDB uji dihentikan dan artefak QA dibersihkan.
+- Uji manual setelah impor: buka siswa tanpa penempatan; buat penempatan Belum PKL; ubah Sedang dengan alasan; ubah Gagal; buat penempatan baru untuk siswa yang sama, lalu selesaikan. Pastikan riwayat penempatan lama tetap ada. Coba tanpa alasan, dua tab dengan versi lama, filter empat status, rekap Excel, serta akses staf tanpa izin.
+
+
+## Tata letak detail status PKL (21 November 2026)
+
+- Ringkasan penempatan kiri dalam sel label/nilai bergaris; formulir perubahan status kanan dengan judul, status, alasan dan footer simpan terpisah. Satu bingkai, jarak ringkas, ikon eksplisit, catatan bersama di bawah. HP satu kolom; siswa tanpa penempatan tidak menampilkan form perubahan. Riwayat dan backend tetap.
+- File panel/pkl/status-siswa.php dan assets/css/panel-theme.css. Tanpa SQL. Lint PHP/diff check, struktur CSS, render sintetis dengan/tanpa penempatan, escaping serta CSRF/placement/version field lulus. Browser belum diuji langsung untuk revisi ini.
+
+
+## Tabel riwayat status dirapikan (21 November 2026)
+
+- Lebar kolom proporsional 16/27/27/30; tanggal/jam dipisah, jenis event kecil, nama tempat tebal, badge sebelum/sesudah sejajar dengan panah. Alasan dan pengelola dibedakan secara visual. Penjelasan snapshot dipindah ke disclosure Tentang riwayat. Garis/scroll/header tabel dan pagination tetap, backend tidak diubah.
+- File status-siswa.php dan panel-theme.css. Tanpa SQL. Lint PHP/diff check, struktur CSS dan render sintetis perubahan/snapshot (format WIB, escaping, badge sebelum hanya bila ada) lulus. Browser belum diuji langsung pada revisi ini.
+
+
+## Tombol riwayat di daftar PKL (21 November 2026)
+
+- Kolom Tindakan memiliki ikon Riwayat PKL berwarna ungu, title/aria-label nama siswa, menuju status-siswa.php?siswa_id=ID#pkl-status-history. Menggunakan siswa_id, bukan ID penempatan. Jurnal dan Edit tetap tersedia; tombol dapat wrap agar tidak saling menimpa. File panel/pkl/index.php dan panel-theme.css. Tanpa SQL. Lint PHP/diff check dan pemeriksaan tujuan link lulus.
+
+
+## Ikon riwayat PKL (21 November 2026)
+
+- Tombol Riwayat PKL menggunakan ikon history lokal (jam dengan panah melingkar), menggantikan reset. Warna dan tautan tetap. File panel/layouts/icons.php dan panel/pkl/index.php. Lint PHP/diff check lulus.
