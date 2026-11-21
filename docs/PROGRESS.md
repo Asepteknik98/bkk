@@ -964,3 +964,78 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Tahun PKL pada form siswa menjadi dropdown opsional dengan pilihan Belum ditentukan. Admin mengelola satu tahun/tahun ajaran per baris melalui Pengaturan > Pilihan Tahun PKL (participant_pkl_years), memakai sheet dan simpan bagian terpisah. Format 1900-2199 atau dua tahun berurutan seperti 2026/2027; duplikat dinormalisasi.
 - Form dan impor memvalidasi pilihan di server; tahun lama yang sah di luar master tetap tersedia khusus edit siswa itu. Tidak mengubah tanggal atau status penempatan PKL. File participants.php, management.php, participant-editor.php (helper/layout), panel/pengaturan/index.php dan simpan.php. Memakai tabel settings; tidak perlu SQL baru.
 - Lint enam PHP/diff check lulus. Parser, batas tahun/rentang invalid, render dropdown/selected/link pengaturan, dan handler simpan pengaturan asli dengan kueri simulasi (hanya key sasaran, normalisasi, rentang salah ditolak) lulus. Database/browser operasional belum diuji langsung pada perubahan ini.
+
+
+## Impor dan template mengikuti dropdown Pengaturan (21 November 2026)
+
+- Bagian impor menjadi dua langkah ringkas: siapkan template dan unggah, petunjuk bullet, tombol template hijau, tautan Pengaturan Kelas Industri/Tahun PKL khusus admin. Batas unggahan dan peringatan impor menambah data tetap jelas.
+- Template XLSX kini tiga sheet: Peserta (pertama, 9 header asli tetap), Pilihan dan Panduan. Dropdown native Excel untuk kelas/jurusan/angkatan/kelas industri/tahun PKL menggunakan named ranges dari pilihan server, berlaku baris 2-1001. Kolom data berformat teks untuk telepon/tahun; header berwarna dan dibekukan. Tidak berisi siswa contoh. Jika master kosong, tidak membuat rentang/dropdown kosong yang rusak. Pilihan adalah snapshot saat unduh; setelah Pengaturan berubah, unduh ulang. Validasi server tetap berlaku meski dropdown Excel dilewati.
+- File panel/peserta/template.php, app/layouts/participant-editor.php, assets/css/bmw.css. Tanpa SQL. Lint dua PHP/diff check dan render impor/CSRF/upload/pengaturan lulus. XLSX asli diperiksa ZIP/XML: tiga sheet, lima dropdown dan named ranges, batas 1.000 baris, header 9 kolom, format teks, escape karakter khusus, master kosong. Template diisi sintetis lalu dibaca parser impor asli: data dan nol awal telepon tetap; rumus ditolak. Excel desktop/browser operasional belum diuji langsung. Artefak QA dibersihkan.
+
+
+## Tampilan kesalahan impor ringkas (21 November 2026)
+
+- Khusus halaman impor, pesan kesalahan ditampilkan sebagai panel ringkas: judul/jumlah masalah, tabel bernomor bergaris dengan header melekat, area scroll maksimal 230px/35vh, dan petunjuk unggah ulang. Batas lama 30 pesan tetap, jumlah total dan sisa masalah jelas. Halaman tambah/edit serta validasi/pemrosesan impor tidak berubah.
+- File app/layouts/participant-editor.php dan assets/css/bmw.css. Tanpa SQL. Lint PHP/diff check, struktur CSS dan render sintetis 100 kesalahan (30 tampil, total benar, escaping, region scroll keyboard, upload/CSRF tetap) lulus. Browser belum diuji langsung pada revisi ini.
+
+
+## Audit dan perapian formulir rapor siswa (21 November 2026)
+
+- Form rapor diringkas dengan header batik, identitas dua kolom bergaris Excel, label wajib, kompetensi dalam area scroll, hitungan 1-50, tombol tambah hijau/hapus merah, dan footer simpan. HP satu kolom/target 44px. CSS hidden diperbaiki agar kontrol yang belum diaktifkan JS tidak tampak; dukungan dark mode dan versi aset CSS/JS khusus rapor ditambahkan agar pembaruan tidak tertahan cache.
+- Pemilih siswa mencari nama atau kelas, maksimal 50 hasil ditambah siswa terpilih (menggantikan 500). Peringatan sebelum pencarian ulang/navigasi membuang isian yang berubah; penghapusan kompetensi terisi meminta konfirmasi. Tombol tambah dibatasi 50, penomoran/nama field diperbarui dan predikat required saat Final. Tidak menghitung predikat otomatis dari nilai.
+- Periode dinormalisasi untuk spasi, slash dan tanda hubung, sehingga satu siswa tidak mendapat rapor ganda hanya karena perbedaan penulisan periode. Pemeriksaan duplikat juga menormalkan periode lama tanpa mengubah data lama; konflik unique key menjadi pesan terarah. Transaksi, kunci siswa, versi, snapshot identitas dan satu siswa/periode tetap. Rapor lama tanpa detail diberi satu baris kosong saat edit. Isian nilai invalid tidak dipotong menjadi nilai valid secara diam-diam saat validasi gagal.
+- File app/helpers/learning-reports.php, panel/capaian-pembelajaran/form.php, assets/css/learning-reports.css, assets/js/learning-reports.js, panel/layouts/header.php (versi CSS rapor saja). Tanpa SQL atau perubahan database operasional.
+- MariaDB 10.4 terisolasi dengan migrasi 025: 22 assertion lulus untuk draft/final, desimal/batas angka, periode duplikat termasuk tanda hubung lama, tanggal, identitas/versi, snapshot, rollback, dan hapus anak. Query/render formulir asli memverifikasi 50 hasil + siswa terpilih dan rapor kosong. POST invalid asli mengembalikan 422 serta mempertahankan 100.005 dan escape HTML.
+- Chrome headless fixture lokal sintetis: tampilan desktop diperiksa; uji DOM lebar 390px untuk tambah/hapus/konfirmasi batal, batas 50, predikat Final/Draft, pembatalan pencarian ketika isian belum tersimpan dan tidak ada overflow halaman semuanya lulus. Lint PHP terkait, node --check, struktur CSS dan diff check lulus. Login dan alur browser end-to-end operasional belum diuji; tidak mengubah middleware yang ada. MariaDB uji dihentikan dan artefak QA dibersihkan.
+- Uji manual: cari siswa lalu isi periode/pembimbing; simpan Draft tanpa predikat; isi semua predikat lalu Final; coba nilai di luar 0-100; coba membuat periode sama dengan variasi spasi; coba dua tab edit; coba pencarian ulang setelah mengisi kompetensi.
+
+
+## Lebar formulir rapor (21 November 2026)
+
+- Batas lebar 1.100px pada editor rapor dihapus; formulir dan area konten khusus halaman ini menggunakan lebar tersedia penuh dengan gutter 14px. Halaman lain dan logika rapor tetap. File assets/css/learning-reports.css. Struktur CSS/diff check lulus; browser belum diuji langsung pada revisi ini.
+
+
+## Desain dokumen rapor sekolah dan kop (21 November 2026)
+
+- Pratinjau/detail dan cetak memakai partial dokumen yang sama: kop, judul rapor, identitas dua kolom, bagian A kompetensi dengan kolom proporsional/garis hitam, bagian B catatan, serta tanggal/nama pembimbing dan ruang tanda tangan. Tipografi dokumen serif, skor dua desimal, nilai kosong ditandai garis, draft ditandai jelas. Tidak menambah NIS/nomor peserta atau pejabat penandatangan yang tidak tersedia.
+- Cetak A4 portrait margin 12mm, header tabel berulang saat lanjut halaman, baris/catatan/tanda tangan dijaga dari pemotongan bila memungkinkan. Pratinjau HP tabel scroll di dalam kertas. Ikon otomatis panel tidak disisipkan ke dokumen rapor. Toolbar dan cache versi CSS/JS halaman cetak disesuaikan. Tidak mengubah penyimpanan/penilaian.
+- Kop referensi pengguna belum tersedia sebagai file di proyek. Dukungan kop gambar utuh siap: assets/images/kop-rapor.png (juga mendukung .webp/.jpg/.jpeg). Jika file ada dan valid, langsung dipakai pada detail serta cetak, tanpa crop. Sementara memakai logo sekolah dan identitas dari Pengaturan serta pita batik lokal; alamat placeholder tidak dicetak. Logo mitra/teks kop referensi tidak direka ulang. Pemasangan kop persis referensi masih memerlukan berkas gambar tersebut.
+- File app/layouts/learning-report.php, panel/capaian-pembelajaran/detail.php, cetak.php, assets/css/learning-reports.css, assets/js/panel.js (pengecualian ikon dokumen). Tanpa SQL.
+- Uji render sintetis partial asli lulus: escaping identitas/deskripsi, Final/Draft, nilai opsional, alamat placeholder tidak muncul, tanda tangan, kop fallback dan kop gambar valid (fixture), penilaian kosong. Chrome headless memeriksa tampilan dokumen dan menghasilkan PDF uji dengan 45 kompetensi menjadi 4 halaman A4 (media box sekitar 595x842pt). Lint tiga PHP, node --check, struktur CSS/diff check lulus. File kop asli dan browser operasional belum diverifikasi; artefak QA dibersihkan.
+
+
+## Kop rapor asli terpasang (21 November 2026)
+
+- File pengguna assets/images/kop-rapor.png sudah tersedia dan diperiksa visual: sesuai referensi, 892x165. Partial rapor otomatis menggunakan gambar utuh pada detail dan cetak. Dimensi natural ditambahkan, width 100%/height auto mempertahankan proporsi; garis tambahan di luar gambar dihilangkan. URL berversi filemtime agar penggantian kop tidak tertahan cache. Berkas gambar asli tidak diedit.
+- File app/layouts/learning-report.php, assets/css/learning-reports.css. Tanpa SQL. Lint/diff check lulus. Chrome fixture lokal dengan data sintetis memverifikasi gambar termuat, proporsi benar, tanpa fallback/garis tambahan. PDF A4 dihasilkan dengan gambar tertanam. Artefak QA dibersihkan.
+
+
+## Garis rapor dan ketajaman kop (21 November 2026)
+
+- Identitas rapor memiliki bingkai dan garis label/nilai; baris kiri/kanan sejajar memakai subgrid, HP satu kolom dan cetak kembali dua kolom. Border tabel hitam utuh termasuk baris terakhir; override khusus rapor mengatasi CSS panel yang menghapus border bawah. Catatan memakai warna garis yang sama.
+- Kop asli 892x165 dipertahankan tanpa edit/upscale. Maksimal lebar tampil mengikuti lebar piksel sumber (dari getimagesize), responsif height auto dan rata tengah. Ini mencegah blur karena pembesaran layar; detail cetak lebih tinggi tetap memerlukan berkas sumber beresolusi lebih tinggi. Tidak mengklaim menambah detail yang tidak ada pada gambar asli.
+- File app/layouts/learning-report.php dan assets/css/learning-reports.css. Tanpa SQL. Lint/diff check serta struktur CSS lulus. Chrome fixture dengan CSS panel lengkap, layar 1700px dan nama siswa panjang memverifikasi kop termuat/tidak dibesarkan/proporsional, border terakhir tampil, baris identitas sejajar dan tidak ada overflow halaman. Artefak QA dibersihkan.
+
+
+## Kop dan lembar rapor seimbang (21 November 2026)
+
+- Lebar pratinjau kertas kini mengikuti kop asli ditambah gutter/border (892+58px untuk gambar saat ini), sehingga sisi kop, identitas dan tabel sejajar tanpa ruang kosong lebar di dalam kertas. Lembar rata tengah, jarak atas dan judul diringkas. Pengaturan lebar ini hanya layar, cetak A4 tetap. Variabel ukuran gambar dipindah ke artikel. Berkas kop asli tidak diubah/diperbesar.
+- File app/layouts/learning-report.php dan assets/css/learning-reports.css. Tanpa SQL/logika data. Lint PHP, struktur CSS dan diff check lulus.
+
+
+## Desain rekap absensi peserta (21 November 2026)
+
+- Header batik ringkas, toolbar Daftar kegiatan/Rekap Excel, filter grid sejajar, penjelasan cara membaca dalam disclosure. Tabel bergaris Excel, nama tegas, angka rata tengah dengan warna Hadir hijau/Izin biru/Sakit emas/Alpa merah/Belum diisi ungu; nol lebih redup.
+- Area tabel scroll dengan header melekat; slider client 5 baris dihapus khusus tabel ini agar tidak bertumpuk dengan pagination server. Query/perhitungan/25 peserta per halaman tetap, navigasi server maksimal 5 nomor berwarna dan mempertahankan filter. HP target 44px, dukungan dark mode.
+- File panel/absensi/rekap.php, assets/css/bmw.css, assets/js/panel.js (nomor halaman tanpa ikon otomatis). Tanpa SQL. Lint PHP/node --check/diff check dan struktur CSS lulus. Render sintetis memverifikasi escape nama, warna status, area scroll, filter/tautan ekspor dan halaman berikut tetap. Browser operasional belum diuji langsung pada revisi ini.
+
+
+## Perapian dan audit alur mitra (21 November 2026)
+
+- Daftar mitra/direktori kampus memakai header batik, toolbar ringkas, filter sejajar, tabel bergaris/header melekat/scroll internal dan tindakan ikon berlabel: Detail/PIC hijau, Edit biru, MoU ungu sesuai izin, Hapus merah. Logo hilang memakai ikon lokal. Status aktif/nonaktif jelas. Pagination server tetap 20 mitra dengan maksimal 5 nomor; slider client tidak menggandakan navigasi. HP target 44px dan dark mode.
+- Filter kampus mengabaikan klaster perusahaan yang tidak relevan; UI menonaktifkan filter/field klaster saat Kampus. Form perusahaan mewajibkan klaster/bidang usaha di browser sesuai validasi server. Parameter array/filter invalid ditolak; LIKE menggunakan prepared params dan escape wildcard. Izin MoU dibaca sekali untuk seluruh daftar, bukan setiap baris.
+- partner_save menolak permintaan tanpa profil ketika migrasi 022 sudah aktif, menutup jalur melewati pemeriksaan versi. Penulisan base/profile tetap satu transaksi. Hapus memakai helper baru partner_delete: POST+CSRF pada handler, lock mitra/profil, versi dari daftar harus sama, ID sudah hilang tidak dianggap berhasil. FK tetap melindungi MoU/Kelas Industri/riwayat; pesan menyarankan Nonaktif. Logo/media tidak dihapus.
+- Query publik tetap hanya nama/jenis/logo/website/deskripsi untuk mitra aktif; PIC dan MoU tidak ditambahkan ke publik. Download MoU tetap lewat middleware login/izin MoU+mitra dan penyimpanan privat. Tidak mengganti klasifikasi kampus dalam negeri yang sudah ada.
+- File app/helpers/partners.php, panel/mitra/index.php, hapus.php, assets/css/bmw.css, assets/js/panel.js. Tanpa SQL/perubahan database operasional. Sebelum migrasi 022, daftar dan penyimpanan base lama tetap didukung.
+- MariaDB 10.4 terisolasi dengan schema mitra + migrasi 022: 22 assertion lulus untuk tambah/edit, canonical negara, data PIC, konflik versi, profil hilang, URL unsafe, aturan klaster, perubahan jenis berelasi, hapus versi lama/null, FK MoU/Kelas Industri, cascade profil untuk mitra tanpa relasi, filter kampus dan LIKE. Middleware asli memeriksa tamu/staf tanpa izin ditolak, admin/staf berizin boleh, unduh MoU ditolak tanpa izin tersendiri, GET dan CSRF invalid ditolak.
+- Query/render asli dengan data sintetis memverifikasi escaping, field versi+CSRF, tautan MoU sesuai izin, filter kampus/direktori dan query publik tidak mengandung PIC/nonaktif. Chrome fixture desktop diperiksa; probe ponsel memastikan klaster dinonaktifkan/diaktifkan dengan tepat, tabel scroll dan tidak ada overflow halaman. Lint 9 PHP/node --check/struktur CSS/diff check lulus. Unggah logo, berkas MoU asli dan login browser operasional belum diuji end-to-end; helper unggah tidak diubah. Database uji dihentikan dan artefak QA dibersihkan.

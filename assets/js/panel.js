@@ -270,7 +270,7 @@ if (document.querySelector('.panel-page')) {
         path.setAttribute('d',paths[name]); svg.append(path); element.prepend(svg);
     };
     document.querySelectorAll('.panel-content h1, .panel-content h2, .panel-content label, .panel-content th, .panel-content button, .panel-content .button, .panel-content .row-actions a, .panel-content .page-actions a, .panel-content .form-actions a, .panel-content .pagination a, .panel-content .filter-form > a, .bmw-admin .table-scroll td:last-child > a').forEach(element => {
-        if (element.querySelector('svg') || element.matches('.wa-selection label, .pkl-multi-choice, .schedule-multi-choice, .pkl-journal-pagination a:not([rel])') || element.closest('.donut-legend, .fan-legend') || element.classList.contains('sr-only')) return;
+        if (element.querySelector('svg') || element.matches('.wa-selection label, .pkl-multi-choice, .schedule-multi-choice, .pkl-journal-pagination a:not([rel]), .recap-page-number, .partner-page-number') || element.closest('.donut-legend, .fan-legend, .student-report') || element.classList.contains('sr-only')) return;
         if (element.closest('.bmw-admin') && element.matches('label,th')) return;
         const text = element.cloneNode(true);
         text.querySelectorAll('input,select,textarea,small,.badge').forEach(child => child.remove());
@@ -327,4 +327,23 @@ document.querySelectorAll('.settings-choice-sheet').forEach(sheet => {
     textarea.addEventListener('input', renderRows);
     if (window.ResizeObserver) new ResizeObserver(renderRows).observe(textarea);
     renderRows();
+});
+
+// Industry clusters apply to companies, not campus filters/profiles.
+document.querySelectorAll('[data-partner-filters], .partner-editor').forEach(form => {
+    const kind = form.querySelector('[name="jenis"]');
+    const cluster = form.querySelector('[name="klaster"]');
+    if (!kind || !cluster) return;
+    const syncPartnerKind = () => {
+        const campus = kind.value === 'kampus';
+        cluster.disabled = campus;
+        if (campus) cluster.value = '';
+        if (form.classList.contains('partner-editor')) {
+            cluster.required = !campus;
+            const business = form.querySelector('[name="bidang_usaha"]');
+            if (business) business.required = !campus;
+        }
+    };
+    kind.addEventListener('change', syncPartnerKind);
+    syncPartnerKind();
 });

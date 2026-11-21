@@ -19,6 +19,24 @@ function partner_clusters(): array
     return ['dalam_negeri'=>'Industri Dalam Negeri','luar_negeri'=>'Industri Luar Negeri'];
 }
 
+function partner_list_filters(array $input,bool $campusDirectory,bool $ready): array
+{
+    foreach(['q','jenis','klaster'] as $key){if(isset($input[$key])&&!is_string($input[$key])){throw new InvalidArgumentException('Filter mitra tidak valid.');}}
+    $q=input_text($input,'q');$kind=$campusDirectory?'kampus':input_text($input,'jenis');$cluster=input_text($input,'klaster');
+    if(!valid_text($q,100,false)||!in_array($kind,['','perusahaan','kampus'],true)||!in_array($cluster,['','dalam_negeri','luar_negeri','belum'],true)){throw new InvalidArgumentException('Filter mitra tidak valid.');}
+    if($kind==='kampus'){$cluster='';}
+    $where='1=1';$params=[];
+    if($q!==''){$where.=" AND m.nama LIKE :nama ESCAPE '!'";$params['nama']='%'.str_replace(['!','%','_'],['!!','!%','!_'],$q).'%';}
+    if($kind!==''){$where.=' AND m.jenis=:jenis';$params['jenis']=$kind;}
+    if($campusDirectory){$where.=$ready?" AND p.negara='Indonesia'":' AND 1=0';}
+    if($cluster!==''){
+        $where.=" AND m.jenis='perusahaan'";
+        if($cluster==='belum'){$where.=$ready?" AND (p.klaster IS NULL OR p.klaster='')":'';}
+        elseif($ready){$where.=' AND p.klaster=:klaster';$params['klaster']=$cluster;}else{$where.=' AND 1=0';}
+    }
+    return [$q,$kind,$cluster,$where,$params];
+}
+
 function partner_profile_input(array $input): array
 {
     $data=['klaster'=>input_text($input,'klaster')];foreach(partner_profile_fields() as $key=>$meta){$data[$key]=input_text($input,$key);}return $data;
@@ -55,6 +73,7 @@ function partner_save(array $data,?array $profile,?int $version,?int $id,int $ac
     return management_transaction(static function()use($data,$profile,$version,$id,$actor,$upload):int{
         $ready=partner_profiles_ready();
         if($profile&&!$ready){throw new InvalidArgumentException('Impor pembaruan database 022 terlebih dahulu.');}
+        if($ready&&$profile===null){throw new InvalidArgumentException('Formulir profil tidak lengkap. Muat ulang halaman sebelum menyimpan.');}
         $old=$id?panel_query('SELECT * FROM mitra WHERE id=:id FOR UPDATE',['id'=>$id])->fetch():null;
         if($id&&!$old){throw new InvalidArgumentException('Mitra tidak ditemukan.');}
         $oldProfile=$ready&&$id?panel_query('SELECT * FROM mitra_profiles WHERE mitra_id=:id FOR UPDATE',['id'=>$id])->fetch():null;
@@ -75,7 +94,7 @@ function partner_save(array $data,?array $profile,?int $version,?int $id,int $ac
         if($id){panel_query('UPDATE mitra SET nama=:nama,jenis=:jenis,website=:website,deskripsi=:deskripsi,aktif=:aktif,logo=:logo WHERE id=:id',$params+['id'=>$id]);}
         else{panel_query('INSERT INTO mitra(nama,jenis,website,deskripsi,aktif,logo) VALUES(:nama,:jenis,:website,:deskripsi,:aktif,:logo)',$params);$id=(int)db()->lastInsertId();}
         if($ready){
-            // Legacy writes keep all private profile values; only advance the edit version.
+            // Keep profile and base changes in the same transaction and advance the edit version.
             $values=$profile??partner_profile_input($oldProfile?:[]);
             if($profile&&($data['jenis']==='kampus'||$values['klaster']==='dalam_negeri')){$values['negara']='Indonesia';}
             $values['klaster']=$data['jenis']==='kampus'||$values['klaster']===''?null:$values['klaster'];
@@ -84,5 +103,18 @@ function partner_save(array $data,?array $profile,?int $version,?int $id,int $ac
             panel_query('INSERT INTO mitra_profiles(mitra_id,klaster,bidang_usaha,alamat_lengkap,negara,pic_nama,pic_jabatan,pic_kontak,version) VALUES(:id,:klaster,:bidang_usaha,:alamat_lengkap,:negara,:pic_nama,:pic_jabatan,:pic_kontak,:version) ON DUPLICATE KEY UPDATE '.$set.',version=VALUES(version)',$values);
         }
         return $id;
+    });
+}
+
+function partner_delete(int $id,?int $version): void
+{
+    management_transaction(static function()use($id,$version):void{
+        if(!panel_query('SELECT id FROM mitra WHERE id=:id FOR UPDATE',['id'=>$id])->fetchColumn()){throw new InvalidArgumentException('Mitra tidak ditemukan. Muat ulang daftar.');}
+        if(partner_profiles_ready()){
+            $current=panel_query('SELECT version FROM mitra_profiles WHERE mitra_id=:id FOR UPDATE',['id'=>$id])->fetchColumn();
+            if($version===null||(int)$current!==$version){throw new InvalidArgumentException('Mitra sudah diubah pengelola lain. Muat ulang daftar sebelum menghapus.');}
+        }
+        // Foreign keys retain partners that still have MoU/class/other internal history.
+        panel_query('DELETE FROM mitra WHERE id=:id',['id'=>$id]);
     });
 }
