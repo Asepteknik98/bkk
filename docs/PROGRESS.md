@@ -847,3 +847,24 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Memilih hasil mengisi nama/alamat/koordinat lalu menutup daftar hasil, tanpa membuka peta otomatis. Peta tetap dibuka hanya saat diperlukan. Ambil alamat dari pin langsung mengisi alamat (tidak perlu memilih hasil lagi), tidak mengganti nama perusahaan atau menggeser pin ke koordinat hasil reverse geocoding. Nama perusahaan yang kosong tetap harus diisi sendiri, bukan diganti nama jalan. Attribution OSM tetap terlihat, isian manual tetap tersedia.
 - JS memakai satu konteks kolom kanan untuk pencarian/field/peta agar elemen terpisah tetap terhubung. Peta diselaraskan ke titik aktif saat dibuka. Batas request/cache/CSRF/validasi koordinat/server tidak berubah. File panel/pkl/form.php, app/layouts/pkl-location-picker.php, pkl-location-map.php (baru), assets/js/pkl-location.js, CSS panel. Tanpa SQL/perubahan data.
 - Lint tiga PHP, node --check dan diff check lulus. Render PHP asli memeriksa urutan komponen; Chrome headless dengan DOM asli dan layanan/Leaflet simulasi menguji isi otomatis, peta tidak auto-open, pin tanpa request, reverse langsung mengisi alamat sambil mempertahankan nama/titik, hasil tertutup, clear/reuse dan escape HTML. Tidak memanggil layanan peta/database nyata. Artefak QA dibersihkan.
+
+## Rekap Excel daftar penempatan PKL (21 November 2026)
+
+- Tombol Rekap Excel berikon ditambahkan di toolbar daftar PKL, membawa pencarian/status aktif. Endpoint baru panel/pkl/rekap-excel.php memerlukan login/role/izin PKL, modul siap, dan GET saja. Mengambil seluruh penempatan sesuai filter tanpa LIMIT halaman; tidak mengekspor NIS/nomor peserta.
+- XLSX menggunakan helper Excel lokal yang ada: Ringkasan (jumlah penempatan/aktif/selesai/arsip dan cakupan filter) serta Daftar penempatan (nama, kelas/jurusan, periode, tempat/alamat, kedua pembimbing, status). Sel teks eksplisit menjaga nama/keterangan dari formula injection. Jumlah adalah penempatan, bukan siswa unik. Ekspor per siswa/jurnal/laporan yang sudah ada tidak diubah.
+- pkl_list_filters pada app/helpers/pkl.php digunakan bersama oleh daftar dan ekspor agar validasi/escape LIKE/prepared params sama. File panel/pkl/index.php, panel/pkl/rekap-excel.php, app/helpers/pkl.php, CSS panel. Tanpa SQL/data operasional.
+- Lint tiga PHP/diff check lulus. XLSX sungguhan dari query sintetis diperiksa sebagai ZIP/XML: dua sheet, 25 penempatan melampaui satu halaman, total 25, q/status tetap, wildcard di-escape, input filter invalid ditolak, nama formula tetap teks. Browser/Excel desktop dan database nyata belum diuji langsung.
+
+
+## Detail PKL: jurnal dan rekap lebih jelas (21 November 2026)
+
+- Detail PKL memakai ringkasan dua kolom bergaris Excel (satu kolom pada HP), header batik, tindakan berikon, status laporan, tautan Maps dari titik tersimpan/alamat. Jurnal bukan rekap kehadiran; laporan tidak otomatis mengubah status penempatan.
+- Jurnal terbaru dahulu, 10 per halaman, maksimal 10 nomor navigasi, tabel scroll dengan header melekat. Rekap mingguan memakai seluruh jurnal; rincian panjang dapat dibuka sesuai kebutuhan. Edit/hapus berikon dan berlabel, hapus tetap POST + CSRF + pemeriksaan versi.
+- Tanggal jurnal tidak dipaksa ke batas periode ketika hari ini di luar PKL. Laporan baru sebelum periode mulai juga tidak diisi tanggal masa depan otomatis. Gagal hapus tidak mengosongkan form edit. Duplikat tanggal diarahkan ke Edit. Payload edit hanya tiga field jurnal.
+- File: panel/pkl/detail.php, panel/pkl/laporan.php, assets/css/panel-theme.css. Tanpa SQL/perubahan data operasional.
+- Uji MariaDB 10.4 terisolasi dengan migrasi 019 dan data sintetis lulus: tambah/edit/hapus, tanggal di luar periode, duplikat, versi lama, jurnal milik penempatan lain, rollback, rekap ISO lintas tahun, simpan/edit/konflik laporan dan status tetap aktif. Render template asli memverifikasi 10 jurnal + halaman berikut dan form setelah gagal hapus. XLSX asli diperiksa ZIP/XML: tiga sheet, seluruh 12 jurnal. Lint PHP/diff check lulus. Sesi operasional dan tampilan browser desktop/HP belum diuji langsung. Database uji dihentikan dan artefak dibersihkan.
+
+
+## Batas jurnal PKL (21 November 2026)
+
+- Jurnal harian di detail PKL menjadi 5 data per halaman, navigasi maksimal 5 nomor dengan Sebelumnya/Berikutnya. Scroll vertikal/horizontal tabel dan header melekat tetap tersedia; rekap mingguan tetap mencakup semua jurnal. File panel/pkl/detail.php. Tanpa SQL. Lint PHP, pemeriksaan batas pagination sintetis dan diff check lulus.

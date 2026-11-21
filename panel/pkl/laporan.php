@@ -4,7 +4,7 @@ require_once dirname(__DIR__,2).'/app/helpers/pkl.php';
 $user=require_role('admin','staf_bkk');pkl_require_ready();$id=positive_id($_GET['id']??'');if(!$id){panel_not_found();}
 try{$placement=pkl_find($id);}catch(InvalidArgumentException){panel_not_found();}
 $report=panel_query('SELECT * FROM pkl_final_reports WHERE placement_id=:id',['id'=>$id])->fetch();
-$data=['tanggal_laporan'=>$report['tanggal_laporan']??max(date('Y-m-d'),$placement['tanggal_mulai'])];foreach(pkl_report_fields() as $key=>$label){$data[$key]=$report[$key]??'';}
+$data=['tanggal_laporan'=>$report['tanggal_laporan']??(date('Y-m-d')>=$placement['tanggal_mulai']?date('Y-m-d'):'')];foreach(pkl_report_fields() as $key=>$label){$data[$key]=$report[$key]??'';}
 $version=(int)($report['version']??0);$errors=[];
 if(($_SERVER['REQUEST_METHOD']??'GET')==='POST'){
     require_post_csrf();foreach($data as $key=>$value){$data[$key]=input_text($_POST,$key);}
@@ -16,6 +16,7 @@ panel_start($user,'Laporan akhir PKL','pkl');
 ?>
 <div class="page-actions"><h1>Laporan akhir PKL</h1><a href="<?= e(base_url('panel/pkl/detail.php?id='.$id)) ?>">Kembali ke jurnal</a><?php if($report): ?><a class="button" href="<?= e(base_url('panel/pkl/unduh.php?id='.$id.'&jenis=laporan')) ?>">Unduh laporan HTML / cetak</a><?php endif; ?></div>
 <p><?= e($placement['nama'].' — '.$placement['tempat_pkl']) ?> · <?= e($placement['tanggal_mulai'].' – '.$placement['tanggal_selesai']) ?></p>
+<p>Menyimpan laporan tidak mengubah status penempatan secara otomatis. Ubah status melalui Edit penempatan bila diperlukan.</p>
 <p>Unduhan memuat identitas penempatan, penugasan pembimbing, narasi laporan, rekap mingguan, dan jurnal terbaru. Buka berkas HTML untuk mencetak atau menyimpan sebagai PDF melalui browser.</p>
 <?php if($errors): ?><div class="notice" role="alert"><?php foreach($errors as $error): ?><p><?= e($error) ?></p><?php endforeach; ?></div><?php endif; ?>
 <form class="editor-form card" method="post"><?= csrf_field() ?><input type="hidden" name="version" value="<?= $version ?>">

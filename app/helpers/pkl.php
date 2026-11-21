@@ -226,3 +226,20 @@ function pkl_save_batch(mixed $ids, array $input, int $actor): array
         throw $exception;
     }
 }
+
+
+/** Shared filters for the placement list and its Excel export. */
+function pkl_list_filters(array $input): array
+{
+    foreach(['q','status'] as $key){if(isset($input[$key])&&!is_string($input[$key])){throw new InvalidArgumentException('Filter PKL tidak valid.');}}
+    $q=input_text($input,'q');$status=input_text($input,'status');
+    if(!valid_text($q,100,false)||!in_array($status,['','aktif','selesai','arsip'],true)){throw new InvalidArgumentException('Filter PKL tidak valid.');}
+    $where='1=1';$params=[];
+    if($q!==''){
+        $pattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$q).'%';
+        $where.=" AND (s.nama LIKE :nama ESCAPE '!' OR s.nis LIKE :nis ESCAPE '!' OR p.tempat_pkl LIKE :tempat ESCAPE '!' OR p.guru_pembimbing LIKE :guru ESCAPE '!')";
+        $params=['nama'=>$pattern,'nis'=>$pattern,'tempat'=>$pattern,'guru'=>$pattern];
+    }
+    if($status!==''){$where.=' AND p.status=:status';$params['status']=$status;}
+    return [$q,$status,$where,$params];
+}
