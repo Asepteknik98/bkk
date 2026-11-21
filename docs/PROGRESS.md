@@ -1127,3 +1127,5 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Enam halaman tujuan footer HTTP 200; hasil render tidak mengandung href kosong/#. Lint PHP, struktur CSS dan diff lulus. URL sosial resmi yang belum diisi harus dilengkapi melalui Pengaturan; tujuan eksternal dan tata letak browser/perangkat fisik belum diuji.
 
 - Pengaturan Website memakai seluruh lebar panel; menu samping/header/isian/tombol diringkas. Hak cipta dibuat selebar baris agar tidak menyisakan sel kosong, textarea alamat/retensi dipendekkan, profil tetap lebih tinggi. HP menu dua kolom dan tombol 44px. Hapus petunjuk umum berulang, simpan per bagian/CSRF tetap. Lint PHP/struktur CSS/diff lulus; browser belum diuji.
+
+- Daftar Pengguna diberi pencarian GET nama/username/email dengan tombol Cari/Reset, validasi 100 karakter, prepared params terpisah dan escape wildcard LIKE. Nilai pencarian di-escape saat ditampilkan; empty state khusus hasil kosong. Hak akses admin dan tindakan akun tetap. Lint PHP/struktur CSS/diff lulus; query database/browser belum diuji langsung.
