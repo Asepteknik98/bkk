@@ -1039,3 +1039,9 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - File app/helpers/partners.php, panel/mitra/index.php, hapus.php, assets/css/bmw.css, assets/js/panel.js. Tanpa SQL/perubahan database operasional. Sebelum migrasi 022, daftar dan penyimpanan base lama tetap didukung.
 - MariaDB 10.4 terisolasi dengan schema mitra + migrasi 022: 22 assertion lulus untuk tambah/edit, canonical negara, data PIC, konflik versi, profil hilang, URL unsafe, aturan klaster, perubahan jenis berelasi, hapus versi lama/null, FK MoU/Kelas Industri, cascade profil untuk mitra tanpa relasi, filter kampus dan LIKE. Middleware asli memeriksa tamu/staf tanpa izin ditolak, admin/staf berizin boleh, unduh MoU ditolak tanpa izin tersendiri, GET dan CSRF invalid ditolak.
 - Query/render asli dengan data sintetis memverifikasi escaping, field versi+CSRF, tautan MoU sesuai izin, filter kampus/direktori dan query publik tidak mengandung PIC/nonaktif. Chrome fixture desktop diperiksa; probe ponsel memastikan klaster dinonaktifkan/diaktifkan dengan tepat, tabel scroll dan tidak ada overflow halaman. Lint 9 PHP/node --check/struktur CSS/diff check lulus. Unggah logo, berkas MoU asli dan login browser operasional belum diuji end-to-end; helper unggah tidak diubah. Database uji dihentikan dan artefak QA dibersihkan.
+
+
+### Pratinjau bingkai HP lokal ? 21 November 2026
+- Menambahkan preview-hp.php serta assets/css/preview-hp.css dan assets/js/preview-hp.js: bingkai iPhone/Android, ukuran otomatis/100%, navigasi halaman relatif, beranda dan muat ulang. Website utama tidak diubah; URL aset mengikuti base_url subfolder.
+- Hanya localhost, GET, no-store/noindex dan CSP terbatas. Ini pratinjau bingkai/viewport, bukan emulator mesin Safari/Android.
+- PHP lint, node --check, HTTP 200, penolakan akses nonlokal/POST dan screenshot Chrome iPhone/Android lulus. Tidak menguji perangkat fisik. Tanpa SQL/dependency baru.
