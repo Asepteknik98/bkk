@@ -16,6 +16,7 @@ require_once __DIR__.'/icons.php';
     <link rel="stylesheet" href="<?= e(asset_url('css/bmw.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/bmw.css') ?>">
     <?php if(($activePanel??'')==='capaian'): ?><link rel="stylesheet" href="<?= e(asset_url('css/learning-reports.css')) ?>?v=<?= (int)filemtime(APP_ROOT.'/assets/css/learning-reports.css') ?>"><?php endif; ?>
     <script src="<?= e(asset_url('js/panel.js')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/js/panel.js') ?>" defer></script>
+    <?php require APP_ROOT.'/app/layouts/connection-assets.php'; ?>
 </head>
 <body class="panel-page<?= in_array($activePanel??'',['program','program-minat','peserta','capaian','absensi','pemateri'],true)?' bmw-admin':'' ?>">
 <a class="skip-link" href="#konten">Lewati ke konten</a>

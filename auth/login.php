@@ -17,6 +17,7 @@ unset($_SESSION['login_error']);
     <link rel="icon" type="image/jpeg" href="<?= e(asset_url('images/ppks.jpeg')) ?>">
     <meta name="description" content="Login BMW SAKTI untuk admin dan pengguna.">
     <link rel="stylesheet" href="<?= e(asset_url('css/login.css')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/css/login.css') ?>">
+    <?php require APP_ROOT.'/app/layouts/connection-assets.php'; ?>
 </head>
 <body>
 <main class="login-shell">

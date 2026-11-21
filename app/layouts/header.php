@@ -19,6 +19,7 @@ $siteName = setting('site_name', (string) app_config('name'));
     <script src="<?= e(asset_url('vendor/bootstrap/bootstrap.bundle.min.js')) ?>" defer></script>
     <script src="<?= e(asset_url('js/main.js')) ?>?v=<?= (int) filemtime(APP_ROOT . '/assets/js/main.js') ?>" defer></script>
     <noscript><style>.topbar .container{display:block}.navbar-collapse.collapse{display:block}.main-nav .dropdown-menu{display:block;position:static}.navbar-toggler,.dropdown-toggle{display:none!important}</style></noscript>
+    <?php require APP_ROOT.'/app/layouts/connection-assets.php'; ?>
 </head>
 <body class="portal-page">
 <a class="skip-link" href="#konten">Langsung ke konten</a>

@@ -1045,3 +1045,9 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Menambahkan preview-hp.php serta assets/css/preview-hp.css dan assets/js/preview-hp.js: bingkai iPhone/Android, ukuran otomatis/100%, navigasi halaman relatif, beranda dan muat ulang. Website utama tidak diubah; URL aset mengikuti base_url subfolder.
 - Hanya localhost, GET, no-store/noindex dan CSP terbatas. Ini pratinjau bingkai/viewport, bukan emulator mesin Safari/Android.
 - PHP lint, node --check, HTTP 200, penolakan akses nonlokal/POST dan screenshot Chrome iPhone/Android lulus. Tidak menguji perangkat fisik. Tanpa SQL/dependency baru.
+
+
+### Pemberitahuan koneksi ? 21 November 2026
+- Komponen bersama connection-assets.php memuat CSS/JS lokal pada layout publik, panel dan login. Banner ringkas responsif dengan ikon, status aksesibel, offline sejak awal dan event perubahan koneksi browser.
+- Setelah jaringan kembali, tampil tombol Muat ulang dan pengingat menyalin isian belum disimpan. Tidak reload otomatis; navigasi GET menghindari pengiriman ulang POST. Tidak menambah penyimpanan offline, service worker atau SQL. Status jaringan browser tidak menjamin server/internet dapat dijangkau; halaman yang belum pernah dimuat tetap mengikuti halaman error browser saat offline.
+- Lint 4 PHP, node --check, uji state JS online/offline/reconnect/tombol dan HTTP publik/login lulus. Putus-sambung jaringan perangkat fisik belum diuji.
