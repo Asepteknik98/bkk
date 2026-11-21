@@ -12,8 +12,7 @@ $labels=tracer_fields();
 panel_start($user,'Detail Respons Alumni','tracer');
 ?>
 <div class="alumni-detail">
-<div class="page-actions"><h1><?= panel_icon('akun') ?> Detail Alumni</h1><a href="<?= e(base_url('panel/tracer-study/?'.http_build_query(['tahun_lulus'=>(string)$row['tahun_lulus']]))) ?>"><?= panel_icon('back') ?> Daftar alumni</a></div>
-<div class="tracer-record-actions"><a class="tracer-edit" href="<?= e(base_url('panel/tracer-study/edit.php?id='.$id)) ?>"><?= panel_icon('edit') ?> Edit data</a><a class="tracer-delete" href="<?= e(base_url('panel/tracer-study/hapus.php?id='.$id)) ?>"><?= panel_icon('trash') ?> Hapus data</a><a href="<?= e(base_url('panel/tracer-study/tautan.php?id='.$id)) ?>"><?= panel_icon('link') ?> Tautan formulir alumni</a></div>
+<header class="page-actions"><h1><?= panel_icon('akun') ?> Detail Alumni</h1><nav class="tracer-record-actions" aria-label="Tindakan data alumni"><a href="<?= e(base_url('panel/tracer-study/?'.http_build_query(['tahun_lulus'=>(string)$row['tahun_lulus']]))) ?>"><?= panel_icon('back') ?> Daftar alumni</a><a class="tracer-edit" href="<?= e(base_url('panel/tracer-study/edit.php?id='.$id)) ?>"><?= panel_icon('edit') ?> Edit</a><a class="tracer-delete" href="<?= e(base_url('panel/tracer-study/hapus.php?id='.$id)) ?>"><?= panel_icon('trash') ?> Hapus</a><a href="<?= e(base_url('panel/tracer-study/tautan.php?id='.$id)) ?>"><?= panel_icon('link') ?> Tautan formulir</a></nav></header>
 <section class="card alumni-detail-card">
 <header class="alumni-detail-heading"><div><h2><?= e($row['nama_lengkap']) ?></h2><p><?= e($row['jurusan']) ?> &middot; Angkatan <?= (int)$row['tahun_lulus'] ?></p></div><span class="badge"><?= e(tracer_statuses()[$row['status_kegiatan']]??$row['status_kegiatan']) ?></span></header>
 <div class="alumni-detail-grid">
