@@ -2599,3 +2599,65 @@ html[data-theme=dark] .panel-page .alumni-list .alumni-view-link { background:#2
 html[data-theme=dark] .wa-sheet-page { --wa-sheet-line:#44566d; --wa-sheet-head:#223246; }
 html[data-theme=dark] .panel-page .wa-sheet-page>.page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
 @media(max-width:600px) { .wa-sheet-page .wa-steps { grid-template-columns:minmax(0,1fr); }.wa-sheet-page .wa-steps li { border-right:0; border-bottom:1px solid var(--wa-sheet-line); }.wa-sheet-page .wa-steps li:last-child { border-bottom:0; }.panel-page .wa-sheet-page .wa-filters :is(input,select),.panel-page .wa-sheet-page .editor-form :is(input,textarea) { font-size:16px; min-height:44px; }.panel-page .wa-sheet-page .wa-filters :is(a,button),.panel-page .wa-sheet-page .wa-selection-toolbar button { min-height:44px; }.panel-page .wa-sheet-page .wa-compose .table-scroll td { border-right:0; border-bottom:0; }.wa-sheet-page .wa-compose .table-scroll tr { border-color:var(--wa-sheet-line); } }
+
+/* Perjalanan PKL: alur pilih penempatan, catat biaya, lalu rekap. */
+.trip-workspace { --trip-line:#bdcfe2; --trip-head:#e8f0fa; width:100%; min-width:0; }
+.panel-page .trip-workspace .page-actions { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; margin-bottom:12px; border:1px solid var(--trip-line); border-radius:5px; background:linear-gradient(105deg,#ffffffef,#eef4ffe0),url('../images/batik-sekolah.webp') repeat; background-size:auto,180px auto; }
+.trip-workspace h1 { display:flex; align-items:center; gap:7px; font-size:1.1rem; margin:0; }
+.trip-workspace .page-actions p { margin:4px 0 0; font-size:.73rem; color:var(--panel-muted); }
+.trip-actions { display:flex; flex-wrap:wrap; gap:6px; }
+.trip-workspace :is(.trip-actions a,.page-actions>a,.trip-edit,.pagination a) { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:36px; padding:6px 9px; border:1px solid var(--trip-line); border-radius:4px; background:var(--panel-surface); color:var(--panel-text); text-decoration:none; font-size:.73rem; }
+.trip-workspace .trip-actions .trip-primary { background:#356658; color:#fff; border-color:#356658; }
+.trip-help { border:1px solid var(--trip-line); border-radius:4px; background:var(--panel-soft); margin-bottom:10px; }
+.trip-help summary { cursor:pointer; padding:8px 10px; min-height:36px; font-size:.75rem; }
+.trip-help :is(ol,p) { font-size:.73rem; line-height:1.65; margin:0 12px 10px; }
+.trip-help ol { padding-left:18px; }
+.panel-page .trip-workspace .trip-filter { padding:9px 10px; gap:8px; border-radius:5px; border-color:var(--trip-line); }
+.trip-filter label { flex:1 1 230px; }
+.trip-filter label small { font-size:.67rem; color:var(--panel-muted); }
+.trip-workspace .trip-filter-context { flex-basis:100%; margin:0; font-size:.73rem; }
+.trip-workspace .trip-scope { font-size:.72rem; margin:8px 0; color:var(--panel-muted); }
+.trip-totals { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border:1px solid var(--trip-line); border-radius:4px; background:var(--panel-surface); margin:10px 0 12px; }
+.trip-totals>div { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:6px; padding:10px; border-right:1px solid var(--trip-line); }
+.trip-totals>div:last-child { border-right:0; }
+.trip-totals span { display:flex; align-items:center; gap:6px; font-size:.74rem; }
+.trip-totals strong { color:#287154; font-size:1rem; }
+.trip-list-heading { display:flex; justify-content:space-between; flex-wrap:wrap; gap:7px; margin-bottom:8px; }
+.trip-list-heading h2 { margin:0; display:flex; align-items:center; gap:7px; font-size:.83rem; }
+.trip-list-heading>span { color:var(--panel-muted); font-size:.71rem; }
+.panel-page .trip-workspace .table-scroll { max-height:min(360px,55vh); overflow:auto; border:1px solid var(--trip-line); border-radius:5px; scrollbar-width:thin; }
+.trip-workspace table { width:100%; min-width:850px; border-collapse:collapse; margin:0; }
+.panel-page .trip-workspace :is(th,td) { padding:8px 10px; font-size:.74rem; border-right:1px solid var(--trip-line); border-bottom:1px solid var(--trip-line); vertical-align:middle; }
+.panel-page .trip-workspace th { position:sticky; top:0; z-index:1; background:var(--trip-head); }
+.panel-page .trip-workspace :is(th,td):last-child { border-right:0; }
+.panel-page .trip-workspace tr:last-child td { border-bottom:0; }
+.trip-workspace td small { display:block; color:var(--panel-muted); margin-top:3px; }
+.trip-workspace .pagination a[aria-current=page] { background:#24548b; color:#fff; border-color:#24548b; }
+.trip-workspace .trip-context { display:flex; flex-wrap:wrap; gap:5px 12px; padding:10px; margin-bottom:10px; border:1px solid var(--trip-line); background:var(--panel-surface); font-size:.76rem; }
+.trip-context>span { color:var(--panel-muted); }.trip-context>a { margin-left:auto; }
+.panel-page .trip-workspace .trip-editor { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); padding:0; gap:0; border:1px solid var(--trip-line); border-radius:5px; overflow:hidden; }
+.trip-editor h2 { grid-column:1/-1; padding:8px 10px; margin:0; font-size:.8rem; border-bottom:1px solid var(--trip-line); background:var(--trip-head); }
+.trip-cell { min-width:0; display:grid; align-content:start; gap:6px; padding:8px 10px; border-bottom:1px solid var(--trip-line); }
+.trip-cell:has(#tujuan),.trip-cell:has(#nominal) { border-right:1px solid var(--trip-line); }
+.trip-wide,.trip-cell:has(#tanggal) { grid-column:1/-1; }
+.panel-page .trip-editor label { margin:0; font-size:.76rem; }.trip-editor small { font-size:.71rem; line-height:1.6; color:var(--panel-muted); }
+.panel-page .trip-workspace :is(input:not([type=hidden]),select) { min-width:0; width:100%; box-sizing:border-box; font-size:14px; min-height:38px; border-radius:4px; }
+.trip-form-note { grid-column:1/-1; padding:8px 10px; margin:0; font-size:.73rem; color:var(--panel-muted); line-height:1.6; }
+.panel-page .trip-editor .form-actions { grid-column:1/-1; display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:9px 10px; margin:0; border-top:1px solid var(--trip-line); background:var(--panel-soft); }
+.trip-editor .form-actions>small { margin-right:auto; }.trip-editor button { background:#356658; border-color:#356658; color:#fff; }
+.trip-workspace :is(a,input,select,button,summary,.table-scroll):focus-visible { outline:2px solid #438dce; outline-offset:2px; }
+html[data-theme=dark] .trip-workspace { --trip-line:#44566d; --trip-head:#223246; }
+html[data-theme=dark] .panel-page .trip-workspace .page-actions { background-image:linear-gradient(105deg,#182432f2,#223246e6),url('../images/batik-sekolah.webp'); }
+html[data-theme=dark] .trip-totals strong { color:#a3dfc6; }
+@media(max-width:600px) { .trip-totals,.panel-page .trip-workspace .trip-editor { grid-template-columns:minmax(0,1fr); }.trip-totals>div { border-right:0; border-bottom:1px solid var(--trip-line); }.trip-totals>div:last-child { border-bottom:0; }.trip-cell:has(#tujuan),.trip-cell:has(#nominal) { border-right:0; }.panel-page .trip-workspace :is(input:not([type=hidden]),select) { min-height:44px; font-size:16px; }.trip-workspace :is(button,.trip-actions a,.page-actions>a,.trip-edit,.pagination a) { min-height:44px; } }
+
+.trip-picker-intro { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+.trip-picker-intro h2,.trip-picker-empty h2 { display:flex; align-items:center; gap:7px; font-size:.9rem; margin:0 0 5px; }
+.trip-picker-intro p { margin:0; font-size:.75rem; color:var(--panel-muted); max-width:700px; line-height:1.6; }
+.trip-workspace :is(.trip-create-placement,.trip-use-placement) { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:38px; padding:7px 10px; border:1px solid #356658; border-radius:4px; background:#356658; color:#fff; font-size:.74rem; text-decoration:none; }
+.trip-workspace .trip-use-placement { background:#edf3ff; color:#355c9e; border-color:#c4d2f2; }
+.trip-picker-empty { padding:16px; border:1px solid var(--trip-line); border-radius:5px; background:var(--panel-surface); }
+.trip-picker-empty p,.trip-picker-empty ol { font-size:.76rem; line-height:1.7; color:var(--panel-muted); }
+.trip-picker-empty ol { padding-left:20px; margin:10px 0 14px; }
+html[data-theme=dark] .trip-workspace .trip-use-placement { background:#253a53; color:#c0d7ff; border-color:#445b78; }
+@media(max-width:600px) { .trip-workspace :is(.trip-create-placement,.trip-use-placement) { min-height:44px; }.trip-picker-intro>div { width:100%; } }

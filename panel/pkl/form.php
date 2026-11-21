@@ -2,6 +2,9 @@
 declare(strict_types=1);
 require_once dirname(__DIR__,2).'/app/helpers/pkl.php';
 $user=require_role('admin','staf_bkk');pkl_require_ready();
+$continueTrip=input_text($_POST,'lanjut')==='perjalanan'||input_text($_GET,'lanjut')==='perjalanan';
+if($continueTrip){require_permission($user,'biaya-perjalanan');}
+$tripNext=$continueTrip?['lanjut'=>'perjalanan']:[];
 $id=positive_id($_GET['id']??'');if(isset($_GET['id'])&&!$id){panel_not_found();}
 $old=null;if($id){try{$old=pkl_find($id);}catch(InvalidArgumentException){panel_not_found();}}
 $data=$old?pkl_input(array_map('strval',$old)):pkl_input(['status'=>'aktif']);$errors=[];$version=(int)($old['version']??0);
@@ -9,7 +12,7 @@ $studentId=$old?(int)$old['siswa_id']:(positive_id($_GET['siswa_id']??'')??0);
 if(($_SERVER['REQUEST_METHOD']??'GET')==='POST'){
     require_post_csrf();$data=pkl_input($_POST);$studentId=positive_id($data['siswa_id'])??0;
     $version=(int)(filter_var($_POST['version']??null,FILTER_VALIDATE_INT)?:0);
-    try{$saved=pkl_save($data,$id,$version,(int)$user['id']);panel_message('Penempatan PKL berhasil disimpan.','panel/pkl/detail.php?id='.$saved);}
+    try{$saved=pkl_save($data,$id,$version,(int)$user['id']);panel_message('Penempatan PKL berhasil disimpan.',$continueTrip?'panel/biaya-perjalanan/form.php?placement_id='.$saved:'panel/pkl/detail.php?id='.$saved);}
     catch(Throwable $exception){$errors[]=pkl_error($exception);}
 }
 $student=$studentId?panel_query('SELECT * FROM siswa WHERE id=:id',['id'=>$studentId])->fetch():false;
@@ -19,21 +22,22 @@ $students=[];
 if(!$student){$pattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$search).'%';$students=panel_query("SELECT id,nis,nama,kelas,jurusan FROM siswa WHERE nama LIKE :nama ESCAPE '!' OR nis LIKE :nis ESCAPE '!' ORDER BY nama,id LIMIT 50",['nama'=>$pattern,'nis'=>$pattern])->fetchAll();}
 panel_start($user,$id?'Edit penempatan PKL':'Tambah penempatan PKL','pkl');
 ?>
-<div class="page-actions"><h1><?= $id?'Edit':'Tambah' ?> penempatan PKL</h1><div class="pkl-student-actions"><?php if(!$student): ?><a class="button" href="<?= e(base_url('panel/peserta/form.php?lanjut=pkl#peserta-form')) ?>"><?= panel_icon('add') ?> Tambah siswa baru</a><?php endif; ?><a href="<?= e(base_url('panel/pkl/')) ?>"><?= panel_icon('back') ?> Daftar PKL</a></div></div>
+<div class="page-actions"><h1><?= $id?'Edit':'Tambah' ?> penempatan PKL</h1><div class="pkl-student-actions"><?php if(!$student): ?><a class="button" href="<?= e(base_url('panel/peserta/form.php?'.http_build_query(['lanjut'=>'pkl']+($continueTrip?['kembali'=>'perjalanan']:[])).'#peserta-form')) ?>"><?= panel_icon('add') ?> Tambah siswa baru</a><?php endif; ?><a href="<?= e(base_url('panel/pkl/')) ?>"><?= panel_icon('back') ?> Daftar PKL</a></div></div>
+<?php if($continueTrip): ?><p class="notice">Lengkapi penempatan PKL. Setelah disimpan, formulir perjalanan terbuka otomatis; biaya belum dicatat pada langkah ini.</p><?php endif; ?>
 <?php if($errors): ?><div class="notice" role="alert"><?php foreach($errors as $error): ?><p><?= e($error) ?></p><?php endforeach; ?></div><?php endif; ?>
 <?php if(!$student): ?>
 <p>Pilih siswa yang sudah terdaftar, atau klik <strong>Tambah siswa baru</strong>. Setelah siswa dipilih, formulir penempatan PKL akan ditampilkan.</p>
-<form class="filter-form card" method="get"><label for="pkl-student-search">Cari nama siswa<input id="pkl-student-search" name="q_siswa" maxlength="100" value="<?= e($search) ?>"></label><button type="submit">Cari siswa</button><?php if($search!==''): ?><a href="<?= e(base_url('panel/pkl/form.php')) ?>">Tampilkan semua siswa</a><?php endif; ?></form>
+<form class="filter-form card" method="get"><?php if($continueTrip): ?><input type="hidden" name="lanjut" value="perjalanan"><?php endif; ?><label for="pkl-student-search">Cari nama siswa<input id="pkl-student-search" name="q_siswa" maxlength="100" value="<?= e($search) ?>"></label><button type="submit">Cari siswa</button><?php if($search!==''): ?><a href="<?= e(base_url('panel/pkl/form.php'.($continueTrip?'?lanjut=perjalanan':''))) ?>">Tampilkan semua siswa</a><?php endif; ?></form>
 <p>Menampilkan maksimal 50 siswa. Persempit pencarian untuk menemukan siswa lain.</p>
-<div class="table-scroll"><table><thead><tr><th>Siswa</th><th>Kelas / jurusan</th><th>Pilih</th></tr></thead><tbody><?php foreach($students as $item): ?><tr><td><?= e($item['nama']) ?></td><td><?= e($item['kelas'].' / '.$item['jurusan']) ?></td><td><a href="<?= e(base_url('panel/pkl/form.php?siswa_id='.$item['id'])) ?>">Pilih siswa</a></td></tr><?php endforeach; ?><?php if(!$students): ?><tr><td colspan="3" class="pkl-student-empty"><strong><?= $search!==''?'Tidak ada siswa yang sesuai pencarian.':'Belum ada data siswa.' ?></strong><p><?= $search!==''?'Ubah kata kunci atau tambahkan siswa yang belum terdaftar.':'Tambahkan siswa terlebih dahulu, lalu lengkapi tempat, periode, dan pembimbing PKL.' ?></p><a class="button" href="<?= e(base_url('panel/peserta/form.php?lanjut=pkl#peserta-form')) ?>"><?= panel_icon('add') ?> Tambah siswa baru</a></td></tr><?php endif; ?></tbody></table></div>
+<div class="table-scroll"><table><thead><tr><th>Siswa</th><th>Kelas / jurusan</th><th>Pilih</th></tr></thead><tbody><?php foreach($students as $item): ?><tr><td><?= e($item['nama']) ?></td><td><?= e($item['kelas'].' / '.$item['jurusan']) ?></td><td><a href="<?= e(base_url('panel/pkl/form.php?'.http_build_query(['siswa_id'=>$item['id']]+$tripNext))) ?>">Pilih siswa</a></td></tr><?php endforeach; ?><?php if(!$students): ?><tr><td colspan="3" class="pkl-student-empty"><strong><?= $search!==''?'Tidak ada siswa yang sesuai pencarian.':'Belum ada data siswa.' ?></strong><p><?= $search!==''?'Ubah kata kunci atau tambahkan siswa yang belum terdaftar.':'Tambahkan siswa terlebih dahulu, lalu lengkapi tempat, periode, dan pembimbing PKL.' ?></p><a class="button" href="<?= e(base_url('panel/peserta/form.php?'.http_build_query(['lanjut'=>'pkl']+($continueTrip?['kembali'=>'perjalanan']:[])).'#peserta-form')) ?>"><?= panel_icon('add') ?> Tambah siswa baru</a></td></tr><?php endif; ?></tbody></table></div>
 <?php else: ?>
 <p><strong><?= e($student['nama']) ?></strong></p>
-<?php if(!$old): ?><p>Riwayat lama: <?= e($student['tempat_pkl']?:'Tempat belum diisi') ?> · <?= e($student['tahun_pkl']?:'Tahun belum diisi') ?>. Lengkapi periode dan alamat untuk penempatan ini.</p><a href="<?= e(base_url('panel/pkl/form.php')) ?>">Pilih siswa lain</a><?php endif; ?>
-<form class="editor-form card" method="post"><?= csrf_field() ?><input type="hidden" name="siswa_id" value="<?= e($data['siswa_id']) ?>"><input type="hidden" name="version" value="<?= $version ?>">
+<?php if(!$old): ?><p>Riwayat lama: <?= e($student['tempat_pkl']?:'Tempat belum diisi') ?> · <?= e($student['tahun_pkl']?:'Tahun belum diisi') ?>. Lengkapi periode dan alamat untuk penempatan ini.</p><a href="<?= e(base_url('panel/pkl/form.php'.($continueTrip?'?lanjut=perjalanan':''))) ?>">Pilih siswa lain</a><?php endif; ?>
+<form class="editor-form card" method="post"><?= csrf_field() ?><?php if($continueTrip): ?><input type="hidden" name="lanjut" value="perjalanan"><?php endif; ?><input type="hidden" name="siswa_id" value="<?= e($data['siswa_id']) ?>"><input type="hidden" name="version" value="<?= $version ?>">
 <p>Kelas atau jurusan wajib diisi. Guru pembimbing dicatat sebagai penugasan; tidak dibuatkan akun.</p>
 <?php foreach(pkl_fields() as $key=>[$label,$max]): ?><label for="<?= $key ?>"><?= e($label) ?>
 <?php if($key==='alamat_lengkap'): ?><textarea id="<?= $key ?>" name="<?= $key ?>" maxlength="<?= $max ?>" rows="3" required placeholder="Jalan, nomor, desa/kelurahan, kecamatan, kabupaten/kota, provinsi, kode pos"><?= e($data[$key]) ?></textarea>
 <?php elseif($key==='status'): ?><select id="status" name="status"><?php foreach(['aktif'=>'Aktif','selesai'=>'Selesai','arsip'=>'Arsip'] as $keyStatus=>$labelStatus): ?><option value="<?= $keyStatus ?>" <?= $data['status']===$keyStatus?'selected':'' ?>><?= $labelStatus ?></option><?php endforeach; ?></select>
 <?php else: ?><input id="<?= $key ?>" name="<?= $key ?>" type="<?= str_starts_with($key,'tanggal_')?'date':'text' ?>" maxlength="<?= $max ?>" value="<?= e($data[$key]) ?>" <?= in_array($key,['kelas','jurusan'],true)?'':'required' ?>><?php endif; ?></label><?php endforeach; ?>
-<button>Simpan penempatan</button></form><?php endif; ?>
+<button><?= $continueTrip?'Simpan & lanjut ke perjalanan':'Simpan penempatan' ?></button></form><?php endif; ?>
 <?php panel_end($user); ?>

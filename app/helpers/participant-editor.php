@@ -11,6 +11,8 @@ $participantChoices=$participantPage==='form'?participant_choice_lists($ready):[
 $errors=[];$data=participant_input([]);$id=$participantPage==='form'?positive_id($_GET['id']??''):null;
 if($participantPage==='form'&&isset($_GET['id'])&&!$id){panel_not_found();}
 $continuePkl=$participantPage==='form'&&$id===null&&(input_text($_GET,'lanjut')==='pkl'||input_text($_POST,'lanjut')==='pkl');
+$continueTrip=$continuePkl&&(input_text($_GET,'kembali')==='perjalanan'||input_text($_POST,'kembali')==='perjalanan');
+if($continueTrip){require_permission($user,'biaya-perjalanan');}
 if($continuePkl){require_permission($user,'pkl');}
 if($ready&&$id){$row=panel_query('SELECT * FROM siswa WHERE id=:id',['id'=>$id])->fetch();if(!$row){panel_not_found();}$data=participant_input($row);}
 if($_SERVER['REQUEST_METHOD']==='POST'){
@@ -52,7 +54,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         if(!$errors){
             try{
                 participant_save($data,$id);
-                if($continuePkl){panel_message('Siswa berhasil ditambahkan. Lengkapi penempatan PKL berikut.','panel/pkl/form.php?siswa_id='.(int)db()->lastInsertId());}
+                if($continuePkl){panel_message('Siswa berhasil ditambahkan. Lengkapi penempatan PKL berikut.','panel/pkl/form.php?siswa_id='.(int)db()->lastInsertId().($continueTrip?'&lanjut=perjalanan':''));}
                 panel_message('Data peserta berhasil disimpan.',$listPath);
             }
             catch(PDOException $exception){if($exception->getCode()!=='23000'){throw $exception;}$errors[]='Data peserta belum tersimpan karena konflik data. Muat ulang dan coba kembali.';}
