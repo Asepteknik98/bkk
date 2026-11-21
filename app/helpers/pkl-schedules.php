@@ -15,7 +15,7 @@ function pkl_schedules_require_ready(): void
 
 function pkl_schedule_types(): array
 {
-    return ['monitoring'=>'Monitoring mingguan','orang_tua'=>'Pertemuan orang tua / wali','sidang'=>'Sidang PKL'];
+    return ['monitoring'=>'Monitoring mingguan','orang_tua'=>'Rapat orang tua / wali','sidang'=>'Sidang PKL'];
 }
 
 function pkl_schedule_statuses(): array
@@ -189,4 +189,44 @@ function pkl_trip_delete(int $id, int $version): void
         if (db()->inTransaction()) { db()->rollBack(); }
         throw $exception;
     }
+}
+
+
+function pkl_schedule_placements(mixed $ids, bool $lock=false): array
+{
+    if(!is_array($ids)||!$ids||count($ids)>50){throw new InvalidArgumentException('Pilih 1-50 penempatan siswa.');}
+    $params=[];foreach($ids as $raw){$id=positive_id($raw);if(!$id){throw new InvalidArgumentException('Pilihan penempatan tidak valid.');}$params['p'.$id]=$id;}
+    $rows=panel_query('SELECT p.*,s.nama FROM pkl_placements p JOIN siswa s ON s.id=p.siswa_id WHERE p.id IN ('.implode(',',array_map(static fn($key)=>':'.$key,array_keys($params))).') ORDER BY p.id'.($lock?' FOR UPDATE':''),$params)->fetchAll();
+    if(count($rows)!==count($params)){throw new InvalidArgumentException('Ada penempatan yang tidak tersedia. Pilih siswa kembali.');}
+    return $rows;
+}
+
+function pkl_schedule_save_batch(mixed $ids, array $data, int $actor): array
+{
+    $data=pkl_schedule_input($data);
+    db()->beginTransaction();
+    try{
+        $placements=pkl_schedule_placements($ids,true);
+        foreach($placements as $placement){
+            if($errors=pkl_schedule_errors($data,$placement)){throw new InvalidArgumentException($placement['nama'].': '.implode(' ',$errors));}
+            if(panel_query('SELECT id FROM pkl_schedules WHERE placement_id=:placement AND jenis=:jenis AND tanggal=:tanggal AND jam=:jam LIMIT 1',['placement'=>$placement['id'],'jenis'=>$data['jenis'],'tanggal'=>$data['tanggal'],'jam'=>$data['jam']])->fetchColumn()){
+                throw new InvalidArgumentException($placement['nama'].' sudah memiliki jenis jadwal yang sama pada tanggal dan jam ini. Tidak ada jadwal baru disimpan.');
+            }
+        }
+        $saved=[];
+        foreach($placements as $placement){
+            $params=$data+['placement'=>$placement['id'],'actor'=>$actor];
+            panel_query('INSERT INTO pkl_schedules(placement_id,'.implode(',',array_keys($data)).',updated_by) VALUES(:placement,:'.implode(',:',array_keys($data)).',:actor)',$params);
+            $saved[]=(int)db()->lastInsertId();
+        }
+        db()->commit();return $saved;
+    }catch(Throwable $exception){if(db()->inTransaction()){db()->rollBack();}throw $exception;}
+}
+
+
+function pkl_parent_meeting_defaults(string $school, string $address): array
+{
+    $school=trim($school);$address=trim($address);
+    if(preg_match('/^(?:belum|placeholder|contoh)\b/iu',$address)){$address='';}
+    return ['petugas'=>'','tujuan'=>mb_substr($school,0,190),'alamat_lengkap'=>$address,'agenda'=>'Rapat orang tua / wali'];
 }

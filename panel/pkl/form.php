@@ -11,16 +11,46 @@ $locationReady=pkl_points_ready();
 $data=$old?pkl_input(array_map('strval',$old)):pkl_input(['status'=>'aktif']);$errors=[];$version=(int)($old['version']??0);
 if($old&&$locationReady){$savedPoint=panel_query('SELECT latitude,longitude FROM pkl_location_points WHERE placement_id=:id',['id'=>$id])->fetch();if($savedPoint){$data=array_replace($data,$savedPoint);}}
 $studentId=$old?(int)$old['siswa_id']:(positive_id($_GET['siswa_id']??'')??0);
-$batchStudents=[];$batchIds=[];$isBatch=false;
+$batchStudents=[];$batchIds=[];$isBatch=false;$replaceStudentId=null;$replacementRows=[];$replacementSearch='';
 if(($_SERVER['REQUEST_METHOD']??'GET')==='POST'){
     require_post_csrf();
     $batchAction=input_text($_POST,'aksi');
-    if(in_array($batchAction,['pilih_banyak','simpan_banyak'],true)){
+    if(isset($_POST['hapus_siswa'])){$batchAction='ubah_pilihan';}
+    elseif(isset($_POST['ganti_siswa'])){$batchAction='mulai_ganti';}
+    elseif(isset($_POST['cari_pengganti'])){$batchAction='cari_pengganti';}
+    elseif(isset($_POST['pilih_pengganti'])){$batchAction='pilih_pengganti';}
+    elseif(isset($_POST['batal_ganti'])){$batchAction='batal_ganti';}
+    elseif(input_text($_POST,'perbarui_siswa')==='1'){$batchAction='perbarui_pilihan';}
+    if(in_array($batchAction,['pilih_banyak','simpan_banyak','ubah_pilihan','perbarui_pilihan','mulai_ganti','cari_pengganti','pilih_pengganti','batal_ganti'],true)){
         if($id){http_response_code(400);exit('Edit penempatan hanya untuk satu siswa.');}
+        if($batchAction!=='pilih_banyak'){$data=pkl_input($_POST);}
         try{
             $batchStudents=pkl_selected_students($_POST['siswa_ids']??null);
             $batchIds=array_map(static fn($row)=>(string)$row['id'],$batchStudents);$isBatch=true;
+            if($batchAction==='ubah_pilihan'){
+                $removeId=positive_id($_POST['hapus_siswa']??null);
+                if(!$removeId||!in_array((string)$removeId,$batchIds,true)){throw new InvalidArgumentException('Siswa tidak ada dalam pilihan.');}
+                if(count($batchIds)===1){throw new InvalidArgumentException('Minimal satu siswa harus tetap dipilih. Gunakan Ganti siswa untuk memilih ulang.');}
+                $batchStudents=array_values(array_filter($batchStudents,static fn($row)=>(int)$row['id']!==$removeId));
+                $batchIds=array_map(static fn($row)=>(string)$row['id'],$batchStudents);
+            }
+            if(in_array($batchAction,['mulai_ganti','cari_pengganti','pilih_pengganti'],true)){
+                $oldChoice=positive_id($_POST[$batchAction==='mulai_ganti'?'ganti_siswa':($batchAction==='cari_pengganti'?'cari_pengganti':'siswa_diganti')]??null);
+                if(!$oldChoice||!in_array((string)$oldChoice,$batchIds,true)){throw new InvalidArgumentException('Siswa yang akan diganti tidak ada dalam pilihan.');}
+                $replaceStudentId=$oldChoice;
+                if($batchAction==='pilih_pengganti'){
+                    $newChoice=positive_id($_POST['pilih_pengganti']??null);
+                    if(!$newChoice||in_array((string)$newChoice,$batchIds,true)){throw new InvalidArgumentException('Pilih siswa pengganti yang belum ada dalam daftar.');}
+                    $replacement=pkl_selected_students([(string)$newChoice])[0];
+                    foreach($batchStudents as &$selectedStudent){if((int)$selectedStudent['id']===$oldChoice){$selectedStudent=$replacement;break;}}unset($selectedStudent);
+                    $batchIds=array_map(static fn($row)=>(string)$row['id'],$batchStudents);$replaceStudentId=null;
+                }
+            }
             if($batchAction==='simpan_banyak'){
+                if(isset($_POST['pending_ganti'])){
+                    $pending=positive_id($_POST['pending_ganti']);if($pending&&in_array((string)$pending,$batchIds,true)){$replaceStudentId=$pending;}
+                    throw new InvalidArgumentException('Pilih siswa pengganti atau batalkan penggantian sebelum menyimpan.');
+                }
                 $data=pkl_input($_POST);
                 $savedIds=pkl_save_batch($batchIds,$_POST,(int)$user['id']);
                 panel_message(count($savedIds).' penempatan berhasil dibuat. '.($continueTrip?'Pilih penempatan yang akan dicatat perjalanannya; biaya tidak dibuat otomatis.':''),$continueTrip?'panel/biaya-perjalanan/form.php':'panel/pkl/');
@@ -32,6 +62,14 @@ if(($_SERVER['REQUEST_METHOD']??'GET')==='POST'){
         try{$saved=pkl_save($data,$id,$version,(int)$user['id']);panel_message('Penempatan PKL berhasil disimpan.',$continueTrip?'panel/biaya-perjalanan/form.php?placement_id='.$saved:'panel/pkl/detail.php?id='.$saved);}
         catch(Throwable $exception){$errors[]=pkl_error($exception);}
     }
+}
+if($replaceStudentId){
+    $replacementSearch=input_text($_POST,'q_pengganti');
+    if(!valid_text($replacementSearch,100,false)){$errors[]='Pencarian pengganti maksimal 100 karakter.';$replacementSearch='';}
+    $replacementPattern='%'.str_replace(['!','%','_'],['!!','!%','!_'],$replacementSearch).'%';
+    $replacementParams=['nama'=>$replacementPattern,'kelas'=>$replacementPattern];$excluded=[];
+    foreach($batchIds as $index=>$selectedId){$key='exclude'.$index;$excluded[]=':'.$key;$replacementParams[$key]=(int)$selectedId;}
+    $replacementRows=panel_query("SELECT id,nama,kelas,jurusan FROM siswa WHERE (nama LIKE :nama ESCAPE '!' OR kelas LIKE :kelas ESCAPE '!') AND id NOT IN (".implode(',',$excluded).') ORDER BY nama,id LIMIT 10',$replacementParams)->fetchAll();
 }
 $student=$studentId?panel_query('SELECT * FROM siswa WHERE id=:id',['id'=>$studentId])->fetch():false;
 if($isBatch){$student=['nama'=>count($batchStudents).' siswa dipilih','tempat_pkl'=>'Mengikuti penempatan baru','tahun_pkl'=>''];}
@@ -53,17 +91,30 @@ panel_start($user,$id?'Edit penempatan PKL':'Tambah penempatan PKL','pkl');
 <div class="table-scroll pkl-student-sheet" data-list-size="10" tabindex="0" role="region" aria-label="Pilih siswa, gulir untuk melihat data"><table><thead><tr><th>Siswa</th><th>Kelas / jurusan</th><th>Tindakan</th></tr></thead><tbody><?php foreach($students as $item): ?><tr><td><label class="pkl-multi-choice"><input type="checkbox" name="siswa_ids[]" value="<?= (int)$item['id'] ?>"><span><?= e($item['nama']) ?></span></label></td><td><?= e($item['kelas'].' / '.$item['jurusan']) ?></td><td><a href="<?= e(base_url('panel/pkl/form.php?'.http_build_query(['siswa_id'=>$item['id']]+$tripNext))) ?>" class="pkl-pick-student"><?= panel_icon('next') ?> Pilih siswa</a></td></tr><?php endforeach; ?><?php if(!$students): ?><tr><td colspan="3" class="pkl-student-empty"><strong><?= $search!==''?'Tidak ada siswa yang sesuai pencarian.':'Belum ada data siswa.' ?></strong><p><?= $search!==''?'Ubah kata kunci atau tambahkan siswa yang belum terdaftar.':'Tambahkan siswa terlebih dahulu, lalu lengkapi tempat, periode, dan pembimbing PKL.' ?></p><a class="button" href="<?= e(base_url('panel/peserta/form.php?'.http_build_query(['lanjut'=>'pkl']+($continueTrip?['kembali'=>'perjalanan']:[])).'#peserta-form')) ?>"><?= panel_icon('add') ?> Tambah siswa baru</a></td></tr><?php endif; ?></tbody></table></div></form>
 <?php else: ?>
 <div class="pkl-selected-student"><div><strong><?= panel_icon('peserta') ?> <?= e($student['nama']) ?></strong><?php if(!$old&&!$isBatch): ?><small>Riwayat siswa: <?= e($student['tempat_pkl']?:'Tempat belum diisi') ?> &middot; <?= e($student['tahun_pkl']?:'Tahun belum diisi') ?></small><?php endif; ?></div><?php if(!$old): ?><a href="<?= e(base_url('panel/pkl/form.php'.($continueTrip?'?lanjut=perjalanan':''))) ?>"><?= panel_icon('reset') ?> Ganti siswa</a><?php endif; ?></div>
-<?php if($isBatch): ?><details class="pkl-batch-preview"><summary><?= panel_icon('peserta') ?> Rincian <?= count($batchStudents) ?> siswa terpilih</summary><div class="table-scroll" data-vertical-list><table><thead><tr><th>Siswa</th><th>Kelas / jurusan</th></tr></thead><tbody><?php foreach($batchStudents as $member): ?><tr><td><?= e($member['nama']) ?></td><td><?= e($member['kelas'].' / '.$member['jurusan']) ?></td></tr><?php endforeach; ?></tbody></table></div></details><?php endif; ?>
-<form class="editor-form card pkl-placement-editor" method="post"><?= csrf_field() ?><?php if($isBatch): ?><input type="hidden" name="aksi" value="simpan_banyak"><?php foreach($batchIds as $batchId): ?><input type="hidden" name="siswa_ids[]" value="<?= e($batchId) ?>"><?php endforeach; ?><?php endif; ?><?php if($continueTrip): ?><input type="hidden" name="lanjut" value="perjalanan"><?php endif; ?><input type="hidden" name="siswa_id" value="<?= e($data['siswa_id']) ?>"><input type="hidden" name="version" value="<?= $version ?>">
+<?php if($isBatch): ?><details class="pkl-batch-preview" <?= ($replaceStudentId||in_array($batchAction??'',['ubah_pilihan','perbarui_pilihan','mulai_ganti','cari_pengganti','pilih_pengganti','batal_ganti'],true))?'open':'' ?>><summary><?= panel_icon('peserta') ?> Rincian <?= count($batchStudents) ?> siswa terpilih</summary>
+<div class="pkl-batch-tools"><small>Ganti untuk memilih siswa lain. Hapus untuk mengeluarkan siswa dari daftar.</small></div>
+<?php if($replaceStudentId):$replacedName='';foreach($batchStudents as $selectedMember){if((int)$selectedMember['id']===$replaceStudentId){$replacedName=$selectedMember['nama'];break;}} ?>
+<section class="pkl-replace-panel"><h3><?= panel_icon('reset') ?> Ganti <?= e($replacedName) ?> dengan siswa lain</h3>
+<input type="hidden" form="pkl-placement-form" name="siswa_diganti" value="<?= (int)$replaceStudentId ?>"><input type="hidden" form="pkl-placement-form" name="pending_ganti" value="<?= (int)$replaceStudentId ?>">
+<div class="pkl-replace-search"><label for="q-pengganti">Cari nama atau kelas<input id="q-pengganti" form="pkl-placement-form" name="q_pengganti" maxlength="100" value="<?= e($replacementSearch) ?>"></label><button form="pkl-placement-form" type="submit" name="cari_pengganti" value="<?= (int)$replaceStudentId ?>" formnovalidate><?= panel_icon('search') ?> Cari</button><button form="pkl-placement-form" type="submit" name="batal_ganti" value="1" formnovalidate>Batal ganti</button></div>
+<div class="table-scroll" data-vertical-list><table><thead><tr><th>Siswa pengganti</th><th>Kelas / jurusan</th><th>Pilih</th></tr></thead><tbody><?php foreach($replacementRows as $candidate): ?><tr><td><?= e($candidate['nama']) ?></td><td><?= e($candidate['kelas'].' / '.$candidate['jurusan']) ?></td><td><button form="pkl-placement-form" type="submit" name="pilih_pengganti" value="<?= (int)$candidate['id'] ?>" formnovalidate>Gunakan siswa ini</button></td></tr><?php endforeach; ?><?php if(!$replacementRows): ?><tr><td colspan="3">Tidak ada siswa pengganti yang sesuai. Coba nama/kelas lain.</td></tr><?php endif; ?></tbody></table></div><small>Maksimal 10 hasil. Siswa yang sudah dipilih tidak ditampilkan.</small></section>
+<?php endif; ?>
+<div class="table-scroll" data-vertical-list><table><thead><tr><th>Siswa</th><th>Kelas / jurusan</th><th>Tindakan</th></tr></thead><tbody><?php foreach($batchStudents as $member): ?><tr><td><?= e($member['nama']) ?></td><td><?= e($member['kelas'].' / '.$member['jurusan']) ?></td><td><div class="pkl-batch-actions"><button class="pkl-replace-student" type="submit" form="pkl-placement-form" name="ganti_siswa" value="<?= (int)$member['id'] ?>" formnovalidate title="Ganti siswa" aria-label="<?= e('Ganti '.$member['nama'].' dengan siswa lain') ?>"><?= panel_icon('edit') ?></button><button type="submit" form="pkl-placement-form" name="hapus_siswa" value="<?= (int)$member['id'] ?>" formnovalidate data-confirm="Keluarkan siswa ini dari pilihan penempatan? Data siswa tidak dihapus." title="Hapus dari pilihan" aria-label="<?= e('Hapus '.$member['nama'].' dari pilihan') ?>"><?= panel_icon('trash') ?></button></div></td></tr><?php endforeach; ?></tbody></table></div></details><?php endif; ?>
+<form id="pkl-placement-form" class="editor-form card pkl-placement-editor pkl-editor-split" method="post"><?= csrf_field() ?><?php if($isBatch): ?><input type="hidden" name="aksi" value="simpan_banyak"><?php foreach($batchIds as $batchId): ?><input type="hidden" name="siswa_ids[]" value="<?= e($batchId) ?>"><?php endforeach; ?><?php endif; ?><?php if($continueTrip): ?><input type="hidden" name="lanjut" value="perjalanan"><?php endif; ?><input type="hidden" name="siswa_id" value="<?= e($data['siswa_id']) ?>"><input type="hidden" name="version" value="<?= $version ?>">
 <?php $pklFieldIcons=['kelas'=>'peserta','jurusan'=>'program','tanggal_mulai'=>'calendar','tanggal_selesai'=>'calendar','tempat_pkl'=>'lowongan','alamat_lengkap'=>'location','guru_pembimbing'=>'akun','pembimbing_industri'=>'pengguna','status'=>'check-circle']; ?>
-<?php foreach(pkl_fields() as $key=>[$label,$max]): if($isBatch&&in_array($key,['kelas','jurusan'],true)){continue;} ?>
-<?php if($key==='kelas'||($isBatch&&$key==='tanggal_mulai')): ?><h2><?= panel_icon('calendar') ?> 1. <?= $isBatch?'Periode PKL':'Kelas &amp; periode PKL' ?></h2><?php elseif($key==='tempat_pkl'): ?><h2><?= panel_icon('location') ?> 2. Tempat pelaksanaan</h2><?php elseif($key==='guru_pembimbing'): ?><h2><?= panel_icon('pengguna') ?> 3. Pembimbing &amp; status</h2><?php endif; ?>
+<?php $pklFieldMeta=pkl_fields();$pklEditorColumns=[
+    ['pkl-editor-data', [['calendar',$isBatch?'Periode PKL':'Kelas & periode PKL',['kelas','jurusan','tanggal_mulai','tanggal_selesai']],['pengguna','Pembimbing & status',['guru_pembimbing','pembimbing_industri','status']]]],
+    ['pkl-editor-location', [['location','Lokasi tempat PKL',['tempat_pkl','alamat_lengkap']]]],
+]; ?>
+<?php foreach($pklEditorColumns as [$columnClass,$groups]): ?><div class="pkl-editor-column <?= $columnClass ?>">
+<?php foreach($groups as [$groupIcon,$groupTitle,$keys]): ?><h2><?= panel_icon($groupIcon) ?> <?= e($groupTitle) ?></h2>
+<?php foreach($keys as $key):[$label,$max]=$pklFieldMeta[$key];if($isBatch&&in_array($key,['kelas','jurusan'],true)){continue;} ?>
 <?php if($key==='tempat_pkl'){require APP_ROOT.'/app/layouts/pkl-location-picker.php';} ?>
 <div class="pkl-placement-cell <?= in_array($key,['tempat_pkl','alamat_lengkap','status'],true)?'pkl-placement-wide':'' ?>"><label for="<?= $key ?>"><?= panel_icon($pklFieldIcons[$key]) ?> <?= e($label) ?><?= !in_array($key,['kelas','jurusan','status'],true)?' *':'' ?></label>
 <?php if($key==='alamat_lengkap'): ?><textarea id="<?= $key ?>" name="<?= $key ?>" maxlength="<?= $max ?>" rows="2" required placeholder="Jalan, desa/kelurahan, kecamatan, kabupaten/kota, provinsi, kode pos"><?= e($data[$key]) ?></textarea>
 <?php elseif($key==='status'): ?><select id="status" name="status"><?php foreach(['aktif'=>'Aktif','selesai'=>'Selesai','arsip'=>'Arsip'] as $keyStatus=>$labelStatus): ?><option value="<?= $keyStatus ?>" <?= $data['status']===$keyStatus?'selected':'' ?>><?= $labelStatus ?></option><?php endforeach; ?></select>
-<?php else: ?><input id="<?= $key ?>" name="<?= $key ?>" type="<?= str_starts_with($key,'tanggal_')?'date':'text' ?>" maxlength="<?= $max ?>" value="<?= e($data[$key]) ?>" <?= in_array($key,['kelas','jurusan'],true)?'':'required' ?>><?php endif; ?></div><?php endforeach; ?>
-<div class="pkl-placement-footer"><small>* Wajib diisi. <?= $isBatch?'Kelas/jurusan mengikuti data masing-masing siswa.':'Isi minimal kelas atau jurusan.' ?> Nama pembimbing tidak membuat akun.</small><button type="submit"><?= panel_icon('save') ?> <?= $isBatch?'Simpan '.count($batchStudents).' penempatan':($continueTrip?'Simpan & lanjut ke perjalanan':'Simpan penempatan') ?></button></div></form><?php endif; ?>
+<?php else: ?><input id="<?= $key ?>" name="<?= $key ?>" type="<?= str_starts_with($key,'tanggal_')?'date':'text' ?>" maxlength="<?= $max ?>" value="<?= e($data[$key]) ?>" <?= in_array($key,['kelas','jurusan'],true)?'':'required' ?>><?php endif; ?></div><?php if($key==='alamat_lengkap'){require APP_ROOT.'/app/layouts/pkl-location-map.php';} ?><?php endforeach; ?><?php endforeach; ?></div><?php endforeach; ?>
+<div class="pkl-placement-footer"><small>* Wajib diisi. <?= $isBatch?'Kelas/jurusan mengikuti data masing-masing siswa.':'Isi minimal kelas atau jurusan.' ?> Nama pembimbing tidak membuat akun.</small><button type="submit" <?= $replaceStudentId?'disabled':'' ?>><?= panel_icon('save') ?> <?= $isBatch?'Simpan '.count($batchStudents).' penempatan':($continueTrip?'Simpan & lanjut ke perjalanan':'Simpan penempatan') ?></button></div></form><?php endif; ?>
 </div>
 <?php if($student): ?><link rel="stylesheet" href="<?= e(asset_url('vendor/leaflet/leaflet.css')) ?>"><script src="<?= e(asset_url('vendor/leaflet/leaflet.js')) ?>" defer></script><script src="<?= e(asset_url('js/pkl-location.js')) ?>?v=<?= (int)filemtime(APP_ROOT.'/assets/js/pkl-location.js') ?>" defer></script><?php endif; ?>
 <?php if(!$student): ?><script src="<?= e(asset_url('js/pkl-selection.js')) ?>?v=<?= (int)filemtime(APP_ROOT.'/assets/js/pkl-selection.js') ?>" defer></script><?php endif; ?>
