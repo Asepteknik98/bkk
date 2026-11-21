@@ -1155,3 +1155,18 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Lamaran Masuk memakai lebar penuh panel, header batik, filter/baris dipadatkan, ikon judul sejajar, tindakan kecil berwarna (lihat biru/WA hijau/hapus merah) dan status baru/diproses/diterima/ditolak berbeda warna. HP target 44px, dark mode tetap. Query/pagination 25 data/izin WhatsApp/CSRF/hapus tidak diubah. Lint PHP/struktur CSS/kontrak izin dan diff lulus; browser belum diuji.
 
 - Lamaran Masuk dibatasi 10 data per halaman. Pagination diseragamkan dengan berita: nomor biru/aktif tegas, panah hijau, batas disabled, rentang data dan maksimal 10 nomor yang dapat digeser di HP. Filter tetap dipertahankan, gulir internal/izin/CSRF tidak berubah. PHP lint, simulasi batas pagination 0-1000 data, struktur CSS/diff lulus; browser/database belum diuji.
+
+- Daftar alumni pada Kelola lamaran tetap 10 per halaman; slider pagination diseragamkan: nomor biru/aktif, panah hijau, rentang data, prev/next disabled di batas dan nomor dapat digeser di HP. Pencarian dipertahankan. Detail/pencatatan lamaran dan query tidak diubah. PHP lint/struktur CSS/diff lulus; browser/database belum diuji.
+
+- Data Alumni/Tracer Study dibatasi 10 respons per halaman; pagination seragam dengan nomor biru/panah hijau, halaman aktif dan maksimal 10 nomor dapat digeser di HP. Semua filter diteruskan ke URL halaman. Gulir internal, ekspor dan akses privat tetap. PHP lint/struktur CSS/kontrak filter/diff lulus; browser/database belum diuji.
+
+- Tahun lulus pada Tambah Data Alumni diganti dropdown dari tahun berjalan (WIB) menurun ke 1900 sesuai batas validasi server. Pilihan wajib dan nilai POST valid tetap terpilih saat error. Tidak mengubah formulir publik/handler/database. PHP lint dan pemeriksaan kontrak select lulus.
+
+- Rekap Tracer Study dipadatkan: header batik/tombol berwarna, filter sejajar, kartu status ringkas tanpa ikon ganda, grafik dan rincian sejajar dengan pemisah bergaris, nilai rata kanan. Ikon ekspor dibetulkan menjadi download. Responsif/dark mode tetap; query/filter/ekspor tidak berubah. Lint PHP/struktur CSS/diff lulus; browser belum diuji.
+
+
+### Edit dan hapus data alumni
+- Tombol Lihat/Edit/Hapus berwarna di daftar dan detail. Tambah/edit memakai form bersama (panel/tracer-study/form.php), dropdown tahun lulus dan field dinamis dipertahankan; jurusan lama tetap bisa dipilih.
+- Edit server memakai validasi tracer, prepared statements, transaksi/row lock dan snapshot seluruh record untuk menolak perubahan bersamaan termasuk timestamp sama. Persetujuan data/WhatsApp, submission_key dan created_at tidak ditimpa.
+- Hapus membuka halaman konfirmasi GET; penghapusan hanya POST+CSRF, transaksi/snapshot dan middleware role/izin Data alumni. FK menolak respons terkait lamaran/pekerjaan; tautan formulir milik respons ikut cascade sesuai schema yang ada. Metode lain 405. Error SQL tidak ditampilkan. Tanpa SQL/migrasi baru.
+- Lint tujuh PHP dan tes app/tests/tracer-management.php serta app/tests/tracer.php lulus (validasi, snapshot, tahun/status/detail). Simpan/hapus pada database dan alur browser operasional belum diuji; pembatasan FK mengandalkan schema yang ada.

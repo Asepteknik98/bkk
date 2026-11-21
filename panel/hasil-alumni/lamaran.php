@@ -27,10 +27,16 @@ panel_start($user,'Kelola lamaran alumni','hasil-alumni');
 <div class="table-scroll alumni-picker-sheet" data-vertical-list tabindex="0" role="region" aria-label="Daftar alumni, gulir untuk melihat data"><table><thead><tr><th scope="col">Nama alumni</th><th scope="col">Jurusan</th><th scope="col">Tahun lulus</th><th scope="col">Tindakan</th></tr></thead><tbody>
 <?php foreach($people as $person): ?><tr><td><strong><?= e($person['nama_lengkap']) ?></strong></td><td><?= e($person['jurusan']) ?></td><td><?= (int)$person['tahun_lulus'] ?></td><td><a class="alumni-manage" href="<?= e(base_url('panel/hasil-alumni/lamaran.php?tracer_id='.$person['id'])) ?>"><?= panel_icon('view') ?> Kelola lamaran</a></td></tr><?php endforeach; ?>
 <?php if(!$people): ?><tr><td colspan="4" class="empty-panel">Belum ada alumni yang sesuai. Coba nama lain atau periksa data tracer study.</td></tr><?php endif; ?></tbody></table></div>
-<?php if($peoplePages>1):$start=max(1,min($peoplePage-4,$peoplePages-9));$end=min($peoplePages,$start+9); ?><nav class="alumni-picker-pagination" aria-label="Halaman daftar alumni">
-<?php if($peoplePage>1): ?><a rel="prev" href="<?= e(base_url('panel/hasil-alumni/lamaran.php?'.http_build_query(['q'=>$q,'page'=>$peoplePage-1]))) ?>">Sebelumnya</a><?php endif; ?>
-<?php for($number=$start;$number<=$end;$number++): ?><a href="<?= e(base_url('panel/hasil-alumni/lamaran.php?'.http_build_query(['q'=>$q,'page'=>$number]))) ?>" aria-label="Halaman <?= $number ?>" <?= $number===$peoplePage?'aria-current="page"':'' ?>><?= $number ?></a><?php endfor; ?>
-<?php if($peoplePage<$peoplePages): ?><a rel="next" href="<?= e(base_url('panel/hasil-alumni/lamaran.php?'.http_build_query(['q'=>$q,'page'=>$peoplePage+1]))) ?>">Berikutnya</a><?php endif; ?></nav><?php endif; ?>
+<?php $pageStart=max(1,min($peoplePage-4,$peoplePages-9));$pageEnd=min($peoplePages,$pageStart+9); ?>
+<nav class="pagination news-page-slider" aria-label="Halaman daftar alumni">
+<span class="news-page-summary"><?= $peopleTotal?($peoplePage-1)*10+1:0 ?>&ndash;<?= min($peopleTotal,$peoplePage*10) ?> dari <?= $peopleTotal ?> alumni</span>
+<?php if($peoplePage>1): ?><a class="news-page-arrow" rel="prev" href="<?= e(base_url('panel/hasil-alumni/lamaran.php?'.http_build_query(['q'=>$q,'page'=>$peoplePage-1]))) ?>"><?= panel_icon('back') ?><span>Sebelumnya</span></a><?php else: ?><span class="news-page-arrow is-disabled" aria-disabled="true"><?= panel_icon('back') ?><span>Sebelumnya</span></span><?php endif; ?>
+<div class="news-page-numbers">
+<?php for($number=$pageStart;$number<=$pageEnd;$number++): ?><a class="news-page-number" href="<?= e(base_url('panel/hasil-alumni/lamaran.php?'.http_build_query(['q'=>$q,'page'=>$number]))) ?>" aria-label="Halaman <?= $number ?>" <?= $number===$peoplePage?'aria-current="page"':'' ?>><?= $number ?></a><?php endfor; ?>
+</div>
+<?php if($peoplePage<$peoplePages): ?><a class="news-page-arrow" rel="next" href="<?= e(base_url('panel/hasil-alumni/lamaran.php?'.http_build_query(['q'=>$q,'page'=>$peoplePage+1]))) ?>"><span>Berikutnya</span><?= panel_icon('next') ?></a><?php else: ?><span class="news-page-arrow is-disabled" aria-disabled="true"><span>Berikutnya</span><?= panel_icon('next') ?></span><?php endif; ?>
+</nav>
+
 <?php else:$applications=panel_query('SELECT r.*,l.perusahaan,l.posisi FROM alumni_application_results r JOIN lamaran l ON l.id=r.lamaran_id WHERE r.tracer_id=:id ORDER BY r.updated_at DESC',['id'=>$tracerId])->fetchAll();$jobs=panel_query("SELECT id,perusahaan,posisi FROM lowongan WHERE status='published' ORDER BY created_at DESC,id DESC")->fetchAll(); ?>
 <h2><?= e($owner['nama_lengkap']) ?></h2><p><a href="<?= e(base_url('panel/tracer-study/tautan.php?id='.$tracerId)) ?>">Buat / cabut tautan alumni Tahap 1</a></p><p>Pengelola mencatat lamaran awal atau menandai proses seleksi selesai. Alumni mengisi hasil akhirnya sendiri; tanggal batas pendaftaran tidak dianggap tanggal selesai seleksi.</p>
 <?php foreach($errors as $error): ?><p class="notice" role="alert"><?= e($error) ?></p><?php endforeach; ?>

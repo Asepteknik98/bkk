@@ -8,7 +8,7 @@ panel_start($user,'Rekap Tracer Study','tracer');
 ?>
 <?php $totalResponses = (int) array_sum($counts); $icons = ['bekerja'=>'lowongan','kuliah'=>'program','wirausaha'=>'mitra','mencari_kerja'=>'pengguna']; ?>
 <div class="tracer-report">
-<div class="page-actions"><div><p class="eyebrow">Pendataan alumni</p><h1><?= panel_icon('tracer') ?> Rekap Tracer Study</h1></div><div class="row-actions"><a class="button" href="<?= e(base_url('panel/tracer-study/tambah.php')) ?>">+ Tambah data alumni</a><a class="button secondary" href="<?= e(base_url('panel/tracer-study/?'.http_build_query($filters))) ?>"><?= panel_icon('pengguna') ?> Daftar respons</a><a class="button" href="<?= e(base_url('panel/tracer-study/export.php?'.http_build_query($filters))) ?>"><?= panel_icon('media') ?> Ekspor CSV</a></div></div>
+<div class="page-actions"><div><h1><?= panel_icon('tracer') ?> Rekap Tracer Study</h1></div><div class="row-actions"><a class="button" href="<?= e(base_url('panel/tracer-study/tambah.php')) ?>"><?= panel_icon('add') ?> Tambah alumni</a><a class="button secondary" href="<?= e(base_url('panel/tracer-study/?'.http_build_query($filters))) ?>"><?= panel_icon('pengguna') ?> Daftar respons</a><a class="button" href="<?= e(base_url('panel/tracer-study/export.php?'.http_build_query($filters))) ?>"><?= panel_icon('download') ?> Ekspor CSV</a></div></div>
 <?php tracer_filter_form($filters); ?>
 <div class="report-stats">
 <?php foreach ($labels as $status=>$label): $value = (int)($counts[$status]??0); ?>
@@ -23,7 +23,7 @@ panel_start($user,'Rekap Tracer Study','tracer');
 <?php endforeach; ?>
 <?php if (!$totalResponses): ?><p class="report-empty">Belum ada respons untuk filter ini.</p><?php endif; ?>
 </section>
-<section class="card report-table"><div class="report-panel-heading"><h2><?= panel_icon('berita') ?> Rincian respons</h2></div><div class="table-scroll"><table><thead><tr><th>Status kegiatan</th><th>Respons</th></tr></thead><tbody><?php foreach($labels as $status=>$label):?><tr><td><?= e($label) ?></td><td><?= (int)($counts[$status]??0) ?></td></tr><?php endforeach;?><tr><th>Total</th><td><strong><?= $totalResponses ?></strong></td></tr></tbody></table></div></section>
+<section class="card report-table"><div class="report-panel-heading"><h2><?= panel_icon('berita') ?> Rincian respons</h2></div><div class="table-scroll"><table><thead><tr><th><span><?= panel_icon('check-circle') ?> Status kegiatan</span></th><th><span><?= panel_icon('tracer') ?> Respons</span></th></tr></thead><tbody><?php foreach($labels as $status=>$label):?><tr><td><?= e($label) ?></td><td><?= (int)($counts[$status]??0) ?></td></tr><?php endforeach;?><tr><th>Total</th><td><strong><?= $totalResponses ?></strong></td></tr></tbody></table></div></section>
 </div>
 <p class="report-note">Rekap menghitung respons sesuai filter, bukan jumlah alumni unik. Pengiriman tambahan dapat tersimpan sebagai respons baru.</p>
 </div>
