@@ -1125,3 +1125,5 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 
 - Footer publik ditata ulang dengan kelas footer-neat: desktop brand/menu sejajar, HP menu 3 kolom (2 untuk layar sangat sempit), sosial wrap terpusat, copyright rapi; batik dan tinggi minimalis tetap. Ikon sosial tanpa URL valid tidak lagi ditampilkan sebagai link palsu. Footer panel teks terpusat dan membungkus.
 - Enam halaman tujuan footer HTTP 200; hasil render tidak mengandung href kosong/#. Lint PHP, struktur CSS dan diff lulus. URL sosial resmi yang belum diisi harus dilengkapi melalui Pengaturan; tujuan eksternal dan tata letak browser/perangkat fisik belum diuji.
+
+- Pengaturan Website memakai seluruh lebar panel; menu samping/header/isian/tombol diringkas. Hak cipta dibuat selebar baris agar tidak menyisakan sel kosong, textarea alamat/retensi dipendekkan, profil tetap lebih tinggi. HP menu dua kolom dan tombol 44px. Hapus petunjuk umum berulang, simpan per bagian/CSRF tetap. Lint PHP/struktur CSS/diff lulus; browser belum diuji.

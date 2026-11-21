@@ -16,7 +16,7 @@ panel_start($user,'Pengaturan - '.$section['label'],'pengaturan');
 ?>
 <div class="settings-page settings-separated">
     <div class="page-actions"><div><p class="eyebrow">Konfigurasi portal</p><h1><?= panel_icon('pengaturan') ?> Pengaturan Website</h1></div></div>
-    <p class="settings-note">Pilih bagian yang ingin diubah. Setiap bagian disimpan secara terpisah.</p>
+
     <div class="settings-workspace">
         <nav class="settings-category-list" aria-label="Bagian pengaturan">
             <?php foreach($sections as $key=>$item): ?><a href="<?= e(base_url('panel/pengaturan/?bagian='.$key)) ?>" <?= $sectionKey===$key?'aria-current="page"':'' ?>><?= panel_icon($item['icon']) ?><span><?= e($item['label']) ?></span><?= panel_icon('next') ?></a><?php endforeach; ?>
@@ -30,7 +30,7 @@ panel_start($user,'Pengaturan - '.$section['label'],'pengaturan');
                     <div class="settings-logo-grid"><div class="settings-logo-field"><?php management_image_field('bkk_logo','Logo BKK',setting('bkk_logo')); ?></div><div class="settings-logo-field"><?php management_image_field('school_logo','Logo sekolah',setting('school_logo')); ?></div></div>
                     <?php else: ?><div class="settings-fields">
                         <?php foreach($section['fields'] as $key): [$label,$max,$required]=$fields[$key];$multiline=in_array($key,['contact_address','profile_description','manager_address','privacy_retention','participant_classes','participant_departments','participant_years','participant_industries','participant_pkl_years'],true); ?>
-                        <div class="settings-field <?= $multiline?'settings-wide':'' ?>">
+                        <div class="settings-field <?= $multiline||$key==='copyright_owner'?'settings-wide':'' ?>">
                             <label for="<?= $key ?>"><?= str_starts_with($key,'social_')?social_icon($key):panel_icon(['site_name'=>'identity','school_name'=>'program','contact_phone'=>'phone','contact_email'=>'mail','contact_address'=>'location','profile_description'=>'message','participant_classes'=>'peserta','participant_departments'=>'program','participant_years'=>'calendar','participant_industries'=>'lowongan','participant_pkl_years'=>'calendar'][$key]??$section['icon']) ?> <?= e(str_starts_with($key,'social_')?social_networks()[$key]:$label) ?></label>
                             <?php if(str_starts_with($key,'participant_')): ?>
                             <div class="settings-choice-sheet">
