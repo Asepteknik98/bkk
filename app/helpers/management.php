@@ -60,6 +60,7 @@ function settings_fields(): array
         'profile_description'=>['Isi profil BKK (teks biasa)',50000,false],
         'participant_classes'=>['Pilihan kelas (satu per baris)',10000,false],
         'participant_departments'=>['Pilihan jurusan (satu per baris)',10000,false],
+        'participant_pkl_years'=>['Pilihan tahun PKL (satu per baris)',10000,false],
         'participant_industries'=>['Pilihan kelas industri (satu nama per baris)',10000,false],
         'participant_years'=>['Pilihan angkatan (tahun, satu per baris)',10000,false]];
 }
@@ -76,6 +77,7 @@ function settings_sections(): array
         'kelas'=>['label'=>'Pilihan Kelas','icon'=>'peserta','description'=>'Isi satu kelas per baris untuk pilihan pada formulir peserta. Nilai siswa lama tetap tersedia.','fields'=>['participant_classes']],
         'jurusan'=>['label'=>'Pilihan Jurusan','icon'=>'program','description'=>'Isi satu jurusan per baris untuk pilihan pada formulir peserta. Nilai siswa lama tetap tersedia.','fields'=>['participant_departments']],
         'kelas_industri'=>['label'=>'Pilihan Kelas Industri','icon'=>'lowongan','description'=>'Isi satu nama kelas industri per baris untuk dropdown siswa. Gunakan nama yang benar, bukan Ya/Tidak. Nilai siswa lama tetap tersimpan.','fields'=>['participant_industries']],
+        'tahun_pkl'=>['label'=>'Pilihan Tahun PKL','icon'=>'calendar','description'=>'Isi satu tahun atau tahun ajaran per baris, misalnya 2026 atau 2026/2027. Pilihan digunakan pada formulir siswa.','fields'=>['participant_pkl_years']],
         'angkatan'=>['label'=>'Pilihan Angkatan','icon'=>'calendar','description'=>'Isi satu tahun per baris, antara 1900 dan 2199. Tahun pada data lama tetap tersedia.','fields'=>['participant_years']],
     ];
 }

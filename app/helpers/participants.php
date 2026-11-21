@@ -87,7 +87,7 @@ function participant_option_lines(string $value, int $max, string $label): array
 
 function participant_choice_lists(bool $studentsReady=true): array
 {
-    $settings=panel_query("SELECT setting_key,setting_value FROM settings WHERE setting_key IN ('participant_classes','participant_departments','participant_years','participant_industries')")->fetchAll(PDO::FETCH_KEY_PAIR);
+    $settings=panel_query("SELECT setting_key,setting_value FROM settings WHERE setting_key IN ('participant_classes','participant_departments','participant_years','participant_industries','participant_pkl_years')")->fetchAll(PDO::FETCH_KEY_PAIR);
     $choices=[];
     foreach(['kelas'=>['participant_classes',80],'jurusan'=>['participant_departments',150],'angkatan'=>['participant_years',4]] as $field=>[$key,$max]){
         $choices[$field]=$field==='angkatan'?participant_year_options((string)($settings[$key]??'')):participant_option_lines((string)($settings[$key]??''),$max,$field);
@@ -99,6 +99,7 @@ function participant_choice_lists(bool $studentsReady=true): array
         }
     }
     $choices['kelas_industri']=participant_industry_options((string)($settings['participant_industries']??''));
+    $choices['tahun_pkl']=participant_pkl_year_options((string)($settings['participant_pkl_years']??''));
     return $choices;
 }
 
@@ -106,6 +107,20 @@ function participant_industry_options(string $value): array
 {
     $options=participant_option_lines($value,150,'kelas industri');
     foreach($options as $option){if(participant_industry_boolean($option)){throw new InvalidArgumentException('Pilihan kelas industri harus berupa nama, bukan Ya/Tidak.');}}
+    return $options;
+}
+
+function participant_pkl_year_valid(string $value): bool
+{
+    if(!preg_match('~^(19|20|21)[0-9]{2}(?:/(19|20|21)[0-9]{2})?$~D',$value)){return false;}
+    $years=explode('/',$value);
+    return count($years)===1||(int)$years[1]===(int)$years[0]+1;
+}
+
+function participant_pkl_year_options(string $value): array
+{
+    $options=participant_option_lines($value,9,'tahun PKL');
+    foreach($options as $option){if(!participant_pkl_year_valid($option)){throw new InvalidArgumentException('Tahun PKL harus 1900-2199 atau tahun ajaran berurutan, misalnya 2026/2027.');}}
     return $options;
 }
 
@@ -128,7 +143,7 @@ function participant_errors(array $data): array
     foreach(['nama','kelas'] as $key){if($data[$key]===''){$errors[]=participant_columns()[$key].' wajib diisi.';}}
     if(!preg_match('/^(19|20|21)[0-9]{2}$/D',$data['angkatan'])){$errors[]='Angkatan harus berupa tahun (1900–2199).';}
     if($data['email']!==''&&!filter_var($data['email'],FILTER_VALIDATE_EMAIL)){$errors[]='Email tidak valid.';}
-    if($data['tahun_pkl']!==''&&!preg_match('~^(?:19|20|21)[0-9]{2}(?:/(?:19|20|21)[0-9]{2})?$~D',$data['tahun_pkl'])){$errors[]='Tahun PKL harus seperti 2025 atau 2025/2026.';}
+    if($data['tahun_pkl']!==''&&!participant_pkl_year_valid($data['tahun_pkl'])){$errors[]='Tahun PKL harus seperti 2025 atau 2025/2026.';}
     return $errors;
 }
 

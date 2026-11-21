@@ -957,3 +957,10 @@ File halaman publik selain index.php ditunda sampai tahap implementasinya agar t
 - Form siswa memakai dropdown opsional dari pengaturan. Admin mendapat tautan pengaturan, staf mendapat petunjuk hubungi Admin. Nama lama di luar master tersedia khusus edit siswa itu, tidak menjadi pilihan siswa baru. Impor Excel memvalidasi nama terhadap master yang sama; kosong diterima.
 - File management.php, participants.php, participant-editor.php (helper/layout), panel/pengaturan/index.php dan simpan.php. Tidak perlu SQL baru. Cara pakai: Pengaturan > Pilihan Kelas Industri > isi nama sebenarnya satu per baris > Simpan > Tambah/Edit siswa.
 - Lint enam PHP/diff check lulus. Handler pengaturan asli dengan query simulasi memeriksa admin, CSRF, allowlist field, normalisasi duplikat dan penolakan boolean. Parser dan render formulir asli memverifikasi dropdown/selected/tautan tanpa input manual. Controller siswa asli menolak nama POST di luar master dan mempertahankan nama lama pada edit. Database/browser operasional belum diuji langsung pada perubahan ini.
+
+
+## Dropdown tahun PKL dari Pengaturan (21 November 2026)
+
+- Tahun PKL pada form siswa menjadi dropdown opsional dengan pilihan Belum ditentukan. Admin mengelola satu tahun/tahun ajaran per baris melalui Pengaturan > Pilihan Tahun PKL (participant_pkl_years), memakai sheet dan simpan bagian terpisah. Format 1900-2199 atau dua tahun berurutan seperti 2026/2027; duplikat dinormalisasi.
+- Form dan impor memvalidasi pilihan di server; tahun lama yang sah di luar master tetap tersedia khusus edit siswa itu. Tidak mengubah tanggal atau status penempatan PKL. File participants.php, management.php, participant-editor.php (helper/layout), panel/pengaturan/index.php dan simpan.php. Memakai tabel settings; tidak perlu SQL baru.
+- Lint enam PHP/diff check lulus. Parser, batas tahun/rentang invalid, render dropdown/selected/link pengaturan, dan handler simpan pengaturan asli dengan kueri simulasi (hanya key sasaran, normalisasi, rentang salah ditolak) lulus. Database/browser operasional belum diuji langsung pada perubahan ini.

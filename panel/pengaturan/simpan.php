@@ -15,10 +15,16 @@ try{
         if($legacy&&!array_key_exists($key,$_POST)){continue;}
         [$label,$max,$required]=$fields[$key];
         $value=input_text($_POST,$key);$data[$key]=$value;
-        if(in_array($key,['participant_classes','participant_departments','participant_years','participant_industries'],true)){
+        if(in_array($key,['participant_classes','participant_departments','participant_years','participant_industries','participant_pkl_years'],true)){
             if(isset($_POST[$key])&&!is_string($_POST[$key])){throw new InvalidArgumentException($label.' harus berupa teks.');}
             $value=array_key_exists($key,$_POST)?$value:setting($key);
-            $value=implode("\n",$key==='participant_years'?participant_year_options($value):($key==='participant_industries'?participant_industry_options($value):participant_option_lines($value,$key==='participant_classes'?80:150,$label)));
+            $options=match($key){
+                'participant_years'=>participant_year_options($value),
+                'participant_industries'=>participant_industry_options($value),
+                'participant_pkl_years'=>participant_pkl_year_options($value),
+                default=>participant_option_lines($value,$key==='participant_classes'?80:150,$label),
+            };
+            $value=implode("\n",$options);
             $data[$key]=$value;
         }
         if(!valid_text($value,$max,$required)){throw new InvalidArgumentException($label.' tidak valid atau terlalu panjang.');}

@@ -17,6 +17,7 @@ if($continuePkl){require_permission($user,'pkl');}
 if($ready&&$id){$row=panel_query('SELECT * FROM siswa WHERE id=:id',['id'=>$id])->fetch();if(!$row){panel_not_found();}$data=participant_input($row);}
 // Preserve the current legacy name for this edit only; new students use Settings choices.
 if($id&&$data['kelas_industri']!==''&&!participant_industry_boolean($data['kelas_industri'])&&!in_array($data['kelas_industri'],$participantChoices['kelas_industri'],true)){$participantChoices['kelas_industri'][]=$data['kelas_industri'];}
+if($id&&$data['tahun_pkl']!==''&&participant_pkl_year_valid($data['tahun_pkl'])&&!in_array($data['tahun_pkl'],$participantChoices['tahun_pkl'],true)){$participantChoices['tahun_pkl'][]=$data['tahun_pkl'];}
 if($_SERVER['REQUEST_METHOD']==='POST'){
     require_post_csrf();
     $action=input_text($_POST,'aksi');
@@ -32,6 +33,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             foreach($rows as $number=>$values){
                 $participant=participant_input(array_combine(array_keys(participant_columns()),$values));
                 $validation=participant_errors($participant);
+                if($participant['tahun_pkl']!==''&&!in_array($participant['tahun_pkl'],$participantChoices['tahun_pkl'],true)){$validation[]='Pilih tahun PKL yang sudah diatur di Pengaturan - Pilihan Tahun PKL.';}
                 if($participant['kelas_industri']!==''&&!in_array($participant['kelas_industri'],$participantChoices['kelas_industri'],true)){$validation[]='Pilih nama kelas industri yang sudah diatur di Pengaturan - Pilihan Kelas Industri.';}
                 if($validation){$errors[]='Baris data '.($number+1).': '.implode(' ',$validation);}
                 $participants[]=$participant;
@@ -50,7 +52,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         finally{if($temp&&is_file($temp)){unlink($temp);}}
     }else{
         $data=participant_input($_POST);$errors=participant_errors($data);
-        foreach(['kelas','jurusan','angkatan','kelas_industri'] as $choiceField){
+        foreach(['kelas','jurusan','angkatan','kelas_industri','tahun_pkl'] as $choiceField){
             if(isset($_POST[$choiceField])&&!is_string($_POST[$choiceField])){$errors[]='Pilihan '.$choiceField.' tidak valid.';}
             if($data[$choiceField]!==''&&!in_array($data[$choiceField],$participantChoices[$choiceField],true)){$errors[]='Pilih '.$choiceField.' dari daftar yang tersedia.';}
         }
